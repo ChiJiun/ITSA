@@ -1,5 +1,6 @@
 let rows = [], chart, top10 = [];
 const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); // 防止 CSV 內容被當 HTML
 const sum = (list, key) => list.reduce((s, r) => s + r[key], 0);
 
 // 1. 讀資料：PHP 回傳 [週, 關鍵字, 次數, ...]，轉成物件比較好讀
@@ -25,7 +26,7 @@ function draw() {
   $('kws').textContent = Object.keys(total).length;
   $('hot').textContent = top10[0]?.[0] || '-';
   $('table').innerHTML = '<tr><th>排名</th><th>關鍵字</th><th>次數</th></tr>' +
-    top10.map(([kw, c], i) => `<tr><td>${i + 1}</td><td>${kw}</td><td>${c}</td></tr>`).join('');
+    top10.map(([kw, c], i) => `<tr><td>${i + 1}</td><td>${esc(kw)}</td><td>${c}</td></tr>`).join('');
 
   // 長條圖：TOP 10 總次數；趨勢圖：TOP 5 關鍵字每週的次數變化
   const line = $('type').value === 'line';

@@ -375,6 +375,9 @@ const COLS = {
   results: { user_id: &#x27;&#x27;, item_id: &#x27;&#x27;, score: &#x27;&#x27; },
 };
 
+<i>// 跳脫 HTML：資料庫裡的文字不能被當成 HTML 執行</i>
+const esc = s =&gt; $(&#x27;&lt;div&gt;&#x27;).text(s ?? &#x27;&#x27;).html();
+
 <i>// 共用：呼叫 api.php，失敗時把後端訊息顯示出來</i>
 function api(a, data, ok) {
   $.post(&#x27;api.php?a=&#x27; + a, data, ok, &#x27;json&#x27;)
@@ -413,14 +416,14 @@ function loadMine() {
   show(&#x27;patient&#x27;);
   $.getJSON(&#x27;api.php?a=mine&#x27;, rows =&gt;
     $(&#x27;#mine&#x27;).html(&#x27;&lt;tr&gt;&lt;th&gt;項目&lt;/th&gt;&lt;th&gt;分數&lt;/th&gt;&lt;/tr&gt;&#x27; +
-      rows.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${r.name}&lt;/td&gt;&lt;td&gt;${r.score}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)));
+      rows.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${esc(r.name)}&lt;/td&gt;&lt;td&gt;${r.score}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)));
 }
 
 <i>// 醫檢員：每列都是 input，可直接改完按「存」；最後一列空白用來新增</i>
 function load(t, done) {
   $.getJSON(&#x27;api.php?a=list&amp;t=&#x27; + t, rows =&gt; {
     const cols = Object.keys(COLS[t]);
-    const cell = (r, c) =&gt; `&lt;td&gt;&lt;input data-c=&quot;${c}&quot; value=&quot;${String(r[c] ?? &#x27;&#x27;).replace(/&quot;/g, &#x27;&amp;quot;&#x27;)}&quot;&gt;&lt;/td&gt;`;
+    const cell = (r, c) =&gt; `&lt;td&gt;&lt;input data-c=&quot;${c}&quot; value=&quot;${esc(r[c]).replace(/&quot;/g, &#x27;&amp;quot;&#x27;)}&quot;&gt;&lt;/td&gt;`;
     const row = r =&gt; `&lt;tr data-id=&quot;${r.id || &#x27;&#x27;}&quot;&gt;&lt;td&gt;${r.id || &#x27;新增&#x27;}&lt;/td&gt;${cols.map(c =&gt; cell(r, c)).join(&#x27;&#x27;)}
       &lt;td&gt;&lt;button onclick=&quot;save(&#x27;${t}&#x27;, this)&quot;&gt;存&lt;/button&gt;${r.id ? `&lt;button onclick=&quot;del(&#x27;${t}&#x27;, ${r.id})&quot;&gt;刪&lt;/button&gt;` : &#x27;&#x27;}&lt;/td&gt;&lt;/tr&gt;`;
     $(&#x27;#&#x27; + t).html(`&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;${cols.map(c =&gt; `&lt;th&gt;${c}&lt;/th&gt;`).join(&#x27;&#x27;)}&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;` +
@@ -443,9 +446,9 @@ function del(t, id) {
 function loadAll() {
   load(&#x27;users&#x27;, users =&gt; load(&#x27;items&#x27;, items =&gt; load(&#x27;results&#x27;, results =&gt; {
     const score = (u, i) =&gt; results.find(r =&gt; r.user_id == u &amp;&amp; r.item_id == i)?.score ?? &#x27;-&#x27;;
-    $(&#x27;#pivot&#x27;).html(`&lt;tr&gt;&lt;th&gt;編號&lt;/th&gt;&lt;th&gt;姓名&lt;/th&gt;${items.map(i =&gt; `&lt;th&gt;${i.name}&lt;/th&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;` +
+    $(&#x27;#pivot&#x27;).html(`&lt;tr&gt;&lt;th&gt;編號&lt;/th&gt;&lt;th&gt;姓名&lt;/th&gt;${items.map(i =&gt; `&lt;th&gt;${esc(i.name)}&lt;/th&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;` +
       users.filter(u =&gt; u.role === &#x27;patient&#x27;).map(u =&gt;
-        `&lt;tr&gt;&lt;td&gt;${u.id}&lt;/td&gt;&lt;td&gt;${u.name}&lt;/td&gt;${items.map(i =&gt; `&lt;td&gt;${score(u.id, i.id)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`).join(&#x27;&#x27;));
+        `&lt;tr&gt;&lt;td&gt;${u.id}&lt;/td&gt;&lt;td&gt;${esc(u.name)}&lt;/td&gt;${items.map(i =&gt; `&lt;td&gt;${score(u.id, i.id)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`).join(&#x27;&#x27;));
   })));
 }</pre><div class="file">2024/p3-ans/team021.css</div><pre>body { font-family: sans-serif; background: #f5f7fa; color: #222; margin: 20px; }
 #msg { color: #c00; }
@@ -550,6 +553,7 @@ echo json_encode(array_map(&#x27;str_getcsv&#x27;, $lines), JSON_UNESCAPED_UNICO
 &lt;/body&gt;
 &lt;/html&gt;</pre><div class="file">2025/p2-ans/team111.js</div><pre>let rows = [], chart, top10 = [];
 const $ = id =&gt; document.getElementById(id);
+const esc = s =&gt; String(s).replace(/&amp;/g, &#x27;&amp;amp;&#x27;).replace(/&lt;/g, &#x27;&amp;lt;&#x27;); <i>// 防止 CSV 內容被當 HTML</i>
 const sum = (list, key) =&gt; list.reduce((s, r) =&gt; s + r[key], 0);
 
 <i>// 1. 讀資料：PHP 回傳 [週, 關鍵字, 次數, ...]，轉成物件比較好讀</i>
@@ -575,7 +579,7 @@ function draw() {
   $(&#x27;kws&#x27;).textContent = Object.keys(total).length;
   $(&#x27;hot&#x27;).textContent = top10[0]?.[0] || &#x27;-&#x27;;
   $(&#x27;table&#x27;).innerHTML = &#x27;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;關鍵字&lt;/th&gt;&lt;th&gt;次數&lt;/th&gt;&lt;/tr&gt;&#x27; +
-    top10.map(([kw, c], i) =&gt; `&lt;tr&gt;&lt;td&gt;${i + 1}&lt;/td&gt;&lt;td&gt;${kw}&lt;/td&gt;&lt;td&gt;${c}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;);
+    top10.map(([kw, c], i) =&gt; `&lt;tr&gt;&lt;td&gt;${i + 1}&lt;/td&gt;&lt;td&gt;${esc(kw)}&lt;/td&gt;&lt;td&gt;${c}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;);
 
   <i>// 長條圖：TOP 10 總次數；趨勢圖：TOP 5 關鍵字每週的次數變化</i>
   const line = $(&#x27;type&#x27;).value === &#x27;line&#x27;;

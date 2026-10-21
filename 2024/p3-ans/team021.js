@@ -5,6 +5,9 @@ const COLS = {
   results: { user_id: '', item_id: '', score: '' },
 };
 
+// 跳脫 HTML：資料庫裡的文字不能被當成 HTML 執行
+const esc = s => $('<div>').text(s ?? '').html();
+
 // 共用：呼叫 api.php，失敗時把後端訊息顯示出來
 function api(a, data, ok) {
   $.post('api.php?a=' + a, data, ok, 'json')
@@ -43,14 +46,14 @@ function loadMine() {
   show('patient');
   $.getJSON('api.php?a=mine', rows =>
     $('#mine').html('<tr><th>項目</th><th>分數</th></tr>' +
-      rows.map(r => `<tr><td>${r.name}</td><td>${r.score}</td></tr>`).join('')));
+      rows.map(r => `<tr><td>${esc(r.name)}</td><td>${r.score}</td></tr>`).join('')));
 }
 
 // 醫檢員：每列都是 input，可直接改完按「存」；最後一列空白用來新增
 function load(t, done) {
   $.getJSON('api.php?a=list&t=' + t, rows => {
     const cols = Object.keys(COLS[t]);
-    const cell = (r, c) => `<td><input data-c="${c}" value="${String(r[c] ?? '').replace(/"/g, '&quot;')}"></td>`;
+    const cell = (r, c) => `<td><input data-c="${c}" value="${esc(r[c]).replace(/"/g, '&quot;')}"></td>`;
     const row = r => `<tr data-id="${r.id || ''}"><td>${r.id || '新增'}</td>${cols.map(c => cell(r, c)).join('')}
       <td><button onclick="save('${t}', this)">存</button>${r.id ? `<button onclick="del('${t}', ${r.id})">刪</button>` : ''}</td></tr>`;
     $('#' + t).html(`<tr><th>id</th>${cols.map(c => `<th>${c}</th>`).join('')}<th></th></tr>` +
@@ -73,8 +76,8 @@ function del(t, id) {
 function loadAll() {
   load('users', users => load('items', items => load('results', results => {
     const score = (u, i) => results.find(r => r.user_id == u && r.item_id == i)?.score ?? '-';
-    $('#pivot').html(`<tr><th>編號</th><th>姓名</th>${items.map(i => `<th>${i.name}</th>`).join('')}</tr>` +
+    $('#pivot').html(`<tr><th>編號</th><th>姓名</th>${items.map(i => `<th>${esc(i.name)}</th>`).join('')}</tr>` +
       users.filter(u => u.role === 'patient').map(u =>
-        `<tr><td>${u.id}</td><td>${u.name}</td>${items.map(i => `<td>${score(u.id, i.id)}</td>`).join('')}</tr>`).join(''));
+        `<tr><td>${u.id}</td><td>${esc(u.name)}</td>${items.map(i => `<td>${score(u.id, i.id)}</td>`).join('')}</tr>`).join(''));
   })));
 }
