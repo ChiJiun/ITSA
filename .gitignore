@@ -1,0 +1,9 @@
+# 大型安裝檔與錄影（超過 GitHub 100MB 限制）
+*.zip
+*.exe
+*.mkv
+*.log
+2026/錄影工具/
+# 執行時產生
+node_modules/
+queue.db

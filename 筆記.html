@@ -1,0 +1,1101 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>ITSA 歷屆考古題筆記</title><style>
+@page { size: A4; margin: 8mm; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 8pt/1.3 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #111; background: #fff; }
+main { column-count: 2; column-gap: 5mm; column-rule: 1px solid #ccc; padding: 4mm; }
+h1 { font-size: 13pt; margin: 0 0 2mm; }
+h2 { font-size: 10pt; margin: 3mm 0 1mm; padding: 1mm 2mm; background: #222; color: #fff; }
+.head { break-inside: avoid; }
+ul { margin: 0.5mm 0 1mm; padding-left: 4mm; }
+.box { border: 1px solid #bbb; padding: 1mm 2mm; margin-bottom: 1mm; }
+.tips td { border-bottom: 1px dotted #bbb; padding: 0.3mm 1mm; vertical-align: top; }
+.tips td:first-child { font-weight: bold; white-space: nowrap; }
+.tips { border-collapse: collapse; width: 100%; margin-bottom: 2mm; }
+.file { font: bold 7.5pt monospace; background: #e8e8e8; padding: 0.5mm 1.5mm; margin-top: 1mm; break-after: avoid; }
+pre { margin: 0; padding: 1mm 1.5mm; border-left: 2px solid #999; font: 6.8pt/1.25 Consolas, "Courier New", monospace;
+      white-space: pre-wrap; word-break: break-all; }
+.doc { font-size: 7.5pt; padding: 1mm 0; }
+.md { border-collapse: collapse; width: 100%; margin: 0.5mm 0 1mm; }
+.md th, .md td { border: 1px solid #bbb; padding: 0.3mm 1mm; text-align: left; vertical-align: top; }
+.md th { background: #f0f0f0; }
+code { font: 7pt Consolas, monospace; }
+pre i { color: #0a6b2e; font-style: normal; }
+@media screen { main { max-width: 297mm; margin: auto; } }
+</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2024~2026）</h1><table class="tips"><tr><td>viewport</td><td>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt; 沒寫，手機的 @media 不會生效</td></tr><tr><td>表單</td><td>onsubmit=&quot;save(); return false&quot; 阻止換頁；required / pattern 讓瀏覽器先驗證</td></tr><tr><td>XSS</td><td>使用者輸入放進 innerHTML 前要跳脫（替換 &lt;，或 jQuery 的 $(&quot;&lt;div&gt;&quot;).text(s).html()）</td></tr><tr><td>PDO</td><td>prepare + execute 防 SQL injection；ERRMODE_EXCEPTION 才會丟錯；charset=utf8mb4 防亂碼</td></tr><tr><td>MySQL</td><td>INSERT IGNORE 遇到重複鍵就略過；UNIQUE / CHECK 讓資料庫幫你守規則</td></tr><tr><td>JSON</td><td>JSON.stringify 會丟掉 undefined 的欄位，要回傳空值請用 null</td></tr><tr><td>狀態碼</td><td>201 新增成功、204 無內容、400 參數錯、401 未登入、403 沒權限、409 狀態衝突</td></tr><tr><td>相對路徑</td><td>答案資料夾要自帶所有檔案，不能引用 ../p1-ref/…，否則不計分</td></tr></table><section><div class="head"><h2>2024 P1｜響應式 ITSA 首頁（HTML5 + CSS3，不可用 Bootstrap）</h2><div class="box"><b>題目重點</b><ul><li>&gt;900px：導覽列、頁首、內容區置中等寬；頁首灰底、圖片與文字不等高、報名按鈕</li><li>內容兩列圖文交疊：第一列圖左文右，第二列圖右文左</li><li>750~900px 滿版無左右邊界；&lt;750px 每個元素各佔一列</li></ul><b>解題思路</b><ul><li>.wrap{max-width:900px;margin:auto} 一行搞定置中，寬度不足時自然滿版</li><li>交疊＝文字框 margin 負值 + position:relative 疊到圖片上</li><li>第二列用 flex-direction:row-reverse 反轉，不必改 HTML</li><li>手機版 .txt{display:contents} 拆掉外框，h3 才能用 order 排到圖片上面</li></ul></div></div><div class="file">2024/p1-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  <i>&lt;!-- 沒有這行，手機會用桌機寬度顯示，@media 失效 --&gt;</i>
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;ITSA 2024&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <i>&lt;!-- a. 水平導覽列 --&gt;</i>
+  &lt;nav&gt;&lt;div class=&quot;wrap&quot;&gt;
+    &lt;b&gt;ITSA 2024&lt;/b&gt;
+    &lt;span&gt;&lt;a href=&quot;#&quot;&gt;最新消息&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;競賽須知&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;競賽報名&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;競賽時程&lt;/a&gt;&lt;/span&gt;
+  &lt;/div&gt;&lt;/nav&gt;
+
+  <i>&lt;!-- b. 頁首區（灰底）＋ c. 圖片往下凸出，和文字不等高 --&gt;</i>
+  &lt;header&gt;&lt;div class=&quot;wrap&quot;&gt;
+    &lt;div&gt;
+      &lt;h1&gt;全國大專校院程式設計極客挑戰賽&lt;/h1&gt;
+      &lt;p&gt;即日起至113年9月13日(五) 17:00止&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;img src=&quot;img.svg&quot; alt=&quot;&quot;&gt;
+  &lt;/div&gt;&lt;/header&gt;
+
+  &lt;main class=&quot;wrap&quot;&gt;
+    <i>&lt;!-- d. 報名按鈕 --&gt;</i>
+    &lt;button&gt;我要報名&lt;/button&gt;
+
+    <i>&lt;!-- e. 第一列：圖左、文右，文字框疊在圖上 --&gt;</i>
+    &lt;section class=&quot;row&quot;&gt;
+      &lt;img src=&quot;img.svg&quot; alt=&quot;&quot;&gt;
+      &lt;div class=&quot;txt&quot;&gt;
+        &lt;h3&gt;2023 - 成果展示70字&lt;/h3&gt;
+        &lt;p&gt;本屆競賽吸引全國百餘所大專校院隊伍參賽，選手在限時內完成網頁設計與系統開發題目，展現前端排版、資料庫設計與程式邏輯的實力，評審肯定作品兼具創意與實用價值，成果豐碩。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    <i>&lt;!-- f. 第二列：圖右、文左（CSS 用 row-reverse 反轉） --&gt;</i>
+    &lt;section class=&quot;row&quot;&gt;
+      &lt;img src=&quot;img.svg&quot; alt=&quot;&quot;&gt;
+      &lt;div class=&quot;txt&quot;&gt;
+        &lt;h3&gt;2022 - 成果展示70字&lt;/h3&gt;
+        &lt;p&gt;本屆競賽首度採線上與實體並行，參賽隊伍需在兩小時內完成響應式網頁與資料管理系統，選手們分工合作、互相支援，最終多支隊伍拿下滿分佳績，充分展現學生的創新能力。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/p1-ans/team021.css</div><pre>* { box-sizing: border-box; margin: 0; }
+body { font-family: sans-serif; background: #fff; color: #222; }
+img { width: 50%; display: block; }
+
+<i>/* 寬度 &gt; 900px：內容固定 900px，margin:auto 讓左右留白相等（置中） */</i>
+.wrap { max-width: 900px; margin: auto; }
+
+<i>/* a. 導覽列：flex + space-between 讓 logo 靠左、連結靠右 */</i>
+nav { background: #444; color: #fff; padding: 12px 0; }
+nav .wrap { display: flex; justify-content: space-between; }
+nav a { color: #fff; text-decoration: none; margin-left: 16px; }
+
+<i>/* b. 頁首灰底；c. 圖片用 margin-bottom 負值往下凸出灰底，與文字不等高 */</i>
+header { background: #ddd; padding-top: 20px; margin-bottom: 100px; }
+header .wrap { display: flex; justify-content: space-between; }
+header img { width: 40%; margin-bottom: -100px; }
+
+<i>/* d. 報名按鈕 */</i>
+button { background: #333; color: #fff; border: 0; padding: 10px 16px; margin: -80px 0 60px; }
+
+<i>/* e. 圖文交疊：文字框 margin-left 負值蓋到圖片上，relative 讓它疊在上層 */</i>
+.row { display: flex; align-items: flex-start; margin-bottom: 60px; }
+.txt { width: 55%; }
+.txt h3 { margin-left: 16px; }
+.txt p { background: #ddd; padding: 20px; margin: 16px 0 0 -10%; position: relative; }
+
+<i>/* f. 第二列左右反轉，負邊距改到右邊 */</i>
+.row:nth-of-type(2) { flex-direction: row-reverse; }
+.row:nth-of-type(2) p { margin: 16px -10% 0 0; }
+
+<i>/* 750px ~ 900px：滿版，左右無邊界距離（.wrap 本來就會變 100% 寬） */</i>
+
+<i>/* &lt; 750px：導覽列一列，其餘每個元素各佔一列 */</i>
+@media (max-width: 749px) {
+  header .wrap, .row, .row:nth-of-type(2) { flex-direction: column; }
+  header { margin-bottom: 0; padding: 20px 10px 0; }
+  nav { font-size: 13px; padding: 12px 10px; }
+  nav a { margin-left: 8px; }
+  h1 { font-size: 22px; }
+  img, header img { width: 100%; margin: 0; }
+  button { margin: 20px 10px; }
+  .row { margin: 0 10px 40px; }
+  <i>/* display:contents 拆掉 .txt 外框，h3 才能用 order 排到圖片上面 */</i>
+  .txt { display: contents; }
+  .txt h3 { margin: 0 0 10px; order: -1; }
+  .txt p, .row:nth-of-type(2) p { margin: 0; }
+}</pre></section><section><div class="head"><h2>2024 P2｜圖書管理系統（新增 / 列表 / 刪除 / 更新）</h2><div class="box"><b>題目重點</b><ul><li>輸入書名、作者、出版年份新增；表格列出全部；每列有刪除、更新按鈕</li></ul><b>解題思路</b><ul><li>資料放陣列，每次改完存 localStorage 再整張表重畫（render）</li><li>新增和更新共用同一個表單，用 editId 是否為 null 判斷模式</li><li>刪除＝filter 留下 id 不同的；更新＝map 換掉 id 相同的</li></ul></div></div><div class="file">2024/p2-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;圖書管理系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;圖書管理系統&lt;/h1&gt;
+  &lt;h2&gt;添加圖書&lt;/h2&gt;
+  <i>&lt;!-- onsubmit 交給 save()；return false 阻止表單換頁 --&gt;</i>
+  &lt;form onsubmit=&quot;save(); return false&quot;&gt;
+    書名:&lt;br&gt;&lt;input id=&quot;title&quot; required&gt;&lt;br&gt;
+    作者:&lt;br&gt;&lt;input id=&quot;author&quot; required&gt;&lt;br&gt;
+    出版年份:&lt;br&gt;&lt;input id=&quot;year&quot; type=&quot;number&quot; required&gt;&lt;br&gt;
+    &lt;button id=&quot;btn&quot;&gt;添加圖書&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;h2&gt;圖書列表&lt;/h2&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;書名&lt;/th&gt;&lt;th&gt;作者&lt;/th&gt;&lt;th&gt;出版年份&lt;/th&gt;&lt;th&gt;操作&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;tbody id=&quot;list&quot;&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/p2-ans/team021.js</div><pre><i>// 資料存在 localStorage，重新整理也不會消失</i>
+let books = JSON.parse(localStorage.books || &#x27;[]&#x27;);
+let nextId = Number(localStorage.nextId || 1);
+let editId = null; <i>// null = 新增模式；有值 = 正在更新哪一本</i>
+
+const $ = id =&gt; document.getElementById(id);
+const esc = s =&gt; String(s).replace(/&lt;/g, &#x27;&amp;lt;&#x27;); <i>// 防止輸入 &lt;script&gt; 被當成 HTML 執行</i>
+
+function store() {
+  localStorage.books = JSON.stringify(books);
+  localStorage.nextId = nextId;
+  render();
+}
+
+<i>// (2) 查看：把陣列畫成表格</i>
+function render() {
+  $(&#x27;list&#x27;).innerHTML = books.map(b =&gt; `
+    &lt;tr&gt;&lt;td&gt;${b.id}&lt;/td&gt;&lt;td&gt;${esc(b.title)}&lt;/td&gt;&lt;td&gt;${esc(b.author)}&lt;/td&gt;&lt;td&gt;${b.year}&lt;/td&gt;
+    &lt;td&gt;&lt;button onclick=&quot;del(${b.id})&quot;&gt;刪除&lt;/button&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;button onclick=&quot;edit(${b.id})&quot;&gt;更新&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;);
+}
+
+<i>// (1) 添加 / (4) 更新：同一個表單，看 editId 決定</i>
+function save() {
+  const b = { id: editId || nextId++, title: $(&#x27;title&#x27;).value, author: $(&#x27;author&#x27;).value, year: $(&#x27;year&#x27;).value };
+  if (editId) books = books.map(x =&gt; x.id === editId ? b : x);
+  else books.push(b);
+  editId = null;
+  $(&#x27;btn&#x27;).textContent = &#x27;添加圖書&#x27;;
+  document.forms[0].reset();
+  store();
+}
+
+<i>// (3) 刪除：filter 留下 id 不同的</i>
+function del(id) {
+  books = books.filter(b =&gt; b.id !== id);
+  store();
+}
+
+<i>// (4) 按「更新」：把資料帶回表單，按鈕改成「儲存更新」</i>
+function edit(id) {
+  const b = books.find(b =&gt; b.id === id);
+  $(&#x27;title&#x27;).value = b.title;
+  $(&#x27;author&#x27;).value = b.author;
+  $(&#x27;year&#x27;).value = b.year;
+  editId = id;
+  $(&#x27;btn&#x27;).textContent = &#x27;儲存更新&#x27;;
+}
+
+render();</pre><div class="file">2024/p2-ans/team021.css</div><pre>body { font-family: sans-serif; background: #fff; color: #222; margin: 20px; }
+input { margin-bottom: 6px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }</pre></section><section><div class="head"><h2>2024 P3｜健康度量管理系統（jQuery + PHP PDO + MySQL）</h2><div class="box"><b>題目重點</b><ul><li>人員（醫檢員/受檢者）、醫檢項目、檢查結果三張表，分數 1~10</li><li>醫檢員：註冊、登入、三張表新增/刪除/更新/查詢，同項目人員編號不重複</li><li>受檢者：首次登入強制改密碼（12 碼、大小寫英文 + 數字），之後單頁看全部分數</li><li>測試帳號：醫檢員 tech1/1234；受檢者 p1~p5/1234</li></ul><b>解題思路</b><ul><li>一支 api.php 用 ?a=動作 分流；表名、欄位走白名單，SQL 一律 prepare</li><li>results 加 UNIQUE(user_id,item_id) → 資料庫層保證不重複；CHECK 限制 1~10</li><li>save 有 id 就 UPDATE、沒有就 INSERT，三張表共用同一段程式</li><li>前端每列都是 input，改完按「存」；最後一列空白當新增列</li><li>密碼規則前端 pattern 先擋、後端 preg_match 再驗一次</li></ul></div></div><div class="file">2024/p3-ans/team021.sql</div><pre><i>-- 健康度量管理系統：人員 / 醫檢項目 / 檢查結果 三張表（第三正規化）</i>
+SET NAMES utf8mb4;
+CREATE DATABASE IF NOT EXISTS health DEFAULT CHARSET utf8mb4;
+USE health;
+DROP TABLE IF EXISTS results, items, users;
+
+<i>-- a. 人員：role 區分醫檢員(tech)/受檢者(patient)；must_change=1 代表第一次登入要強制改密碼</i>
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  account VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM(&#x27;tech&#x27;,&#x27;patient&#x27;) NOT NULL,
+  must_change TINYINT NOT NULL DEFAULT 1
+);
+
+<i>-- b. 醫檢項目：度量分數尺規 1~10</i>
+CREATE TABLE items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  min_score TINYINT NOT NULL DEFAULT 1,
+  max_score TINYINT NOT NULL DEFAULT 10
+);
+
+<i>-- c. 檢查結果：誰(user_id) 的 哪一項(item_id) 幾分</i>
+<i>--    UNIQUE(user_id,item_id) =&gt; 同一項目同一個人只會有一筆（人員編號不重複）</i>
+CREATE TABLE results (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  item_id INT NOT NULL,
+  score TINYINT NOT NULL CHECK (score BETWEEN 1 AND 10),
+  UNIQUE (user_id, item_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
+);
+
+<i>-- 模擬資料：3 位醫檢員、5 位受檢者（密碼為測試用明碼）</i>
+INSERT INTO users (name, account, password, role, must_change) VALUES
+(&#x27;王醫檢&#x27;, &#x27;tech1&#x27;, &#x27;1234&#x27;, &#x27;tech&#x27;, 0),
+(&#x27;李醫檢&#x27;, &#x27;tech2&#x27;, &#x27;1234&#x27;, &#x27;tech&#x27;, 0),
+(&#x27;陳醫檢&#x27;, &#x27;tech3&#x27;, &#x27;1234&#x27;, &#x27;tech&#x27;, 0),
+(&#x27;張小明&#x27;, &#x27;p1&#x27;, &#x27;1234&#x27;, &#x27;patient&#x27;, 1),
+(&#x27;林小華&#x27;, &#x27;p2&#x27;, &#x27;1234&#x27;, &#x27;patient&#x27;, 1),
+(&#x27;黃小美&#x27;, &#x27;p3&#x27;, &#x27;1234&#x27;, &#x27;patient&#x27;, 1),
+(&#x27;吳大同&#x27;, &#x27;p4&#x27;, &#x27;1234&#x27;, &#x27;patient&#x27;, 1),
+(&#x27;周小玉&#x27;, &#x27;p5&#x27;, &#x27;1234&#x27;, &#x27;patient&#x27;, 1);
+
+INSERT INTO items (name) VALUES (&#x27;血壓&#x27;), (&#x27;血糖&#x27;), (&#x27;膽固醇&#x27;), (&#x27;視力&#x27;), (&#x27;體脂肪&#x27;);
+
+<i>-- 5 位受檢者(id 4~8) × 5 項目，分數 1~10</i>
+INSERT INTO results (user_id, item_id, score)
+SELECT u.id, i.id, 1 + (u.id * 3 + i.id * 7) % 10 FROM users u, items i WHERE u.role = &#x27;patient&#x27;;</pre><div class="file">2024/p3-ans/api.php</div><pre>&lt;?php
+<i>// 所有請求都走這支：api.php?a=動作，回傳 JSON</i>
+session_start();
+header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
+$db = new PDO(&#x27;mysql:host=127.0.0.1;dbname=health;charset=utf8mb4&#x27;, &#x27;root&#x27;, &#x27;&#x27;, [
+  PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
+]);
+
+<i>// 白名單：可以被增刪改的表與欄位（避免 SQL injection 亂指定欄位）</i>
+$TABLES = [
+  &#x27;users&#x27;   =&gt; [&#x27;name&#x27;, &#x27;account&#x27;, &#x27;password&#x27;, &#x27;role&#x27;, &#x27;must_change&#x27;],
+  &#x27;items&#x27;   =&gt; [&#x27;name&#x27;, &#x27;min_score&#x27;, &#x27;max_score&#x27;],
+  &#x27;results&#x27; =&gt; [&#x27;user_id&#x27;, &#x27;item_id&#x27;, &#x27;score&#x27;],
+];
+
+function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
+function need($role) { if (($_SESSION[&#x27;role&#x27;] ?? &#x27;&#x27;) !== $role) out([&#x27;msg&#x27; =&gt; &#x27;沒有權限&#x27;], 403); }
+function q($sql, $args = []) { global $db; $s = $db-&gt;prepare($sql); $s-&gt;execute($args); return $s; }
+
+$a = $_GET[&#x27;a&#x27;] ?? &#x27;&#x27;;
+$p = $_POST;
+$t = $p[&#x27;t&#x27;] ?? $_GET[&#x27;t&#x27;] ?? &#x27;&#x27;;
+
+try {
+  switch ($a) {
+    case &#x27;login&#x27;:
+      $u = q(&#x27;SELECT * FROM users WHERE account=? AND password=?&#x27;, [$p[&#x27;account&#x27;], $p[&#x27;password&#x27;]])-&gt;fetch();
+      if (!$u) out([&#x27;msg&#x27; =&gt; &#x27;帳號或密碼錯誤&#x27;], 401);
+      $_SESSION = [&#x27;id&#x27; =&gt; $u[&#x27;id&#x27;], &#x27;role&#x27; =&gt; $u[&#x27;role&#x27;]];
+      out([&#x27;role&#x27; =&gt; $u[&#x27;role&#x27;], &#x27;must_change&#x27; =&gt; $u[&#x27;must_change&#x27;], &#x27;name&#x27; =&gt; $u[&#x27;name&#x27;]]);
+
+    case &#x27;register&#x27;: <i>// 醫檢員自行註冊</i>
+      q(&quot;INSERT INTO users (name, account, password, role, must_change) VALUES (?, ?, ?, &#x27;tech&#x27;, 0)&quot;,
+        [$p[&#x27;name&#x27;], $p[&#x27;account&#x27;], $p[&#x27;password&#x27;]]);
+      out([&#x27;msg&#x27; =&gt; &#x27;註冊成功，請登入&#x27;]);
+
+    case &#x27;logout&#x27;:
+      session_destroy();
+      out([&#x27;msg&#x27; =&gt; &#x27;已登出&#x27;]);
+
+    case &#x27;chpwd&#x27;: <i>// c. 受檢者第一次登入改密碼：大小寫英文 + 數字混合，共 12 碼</i>
+      if (!isset($_SESSION[&#x27;id&#x27;])) out([&#x27;msg&#x27; =&gt; &#x27;請先登入&#x27;], 401);
+      if (!preg_match(&#x27;/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{12}$/&#x27;, $p[&#x27;password&#x27;]))
+        out([&#x27;msg&#x27; =&gt; &#x27;密碼需為 12 碼，且包含大寫、小寫英文與數字&#x27;], 400);
+      q(&#x27;UPDATE users SET password=?, must_change=0 WHERE id=?&#x27;, [$p[&#x27;password&#x27;], $_SESSION[&#x27;id&#x27;]]);
+      out([&#x27;msg&#x27; =&gt; &#x27;密碼已更新&#x27;]);
+
+    case &#x27;mine&#x27;: <i>// d. 受檢者看自己的所有項目分數</i>
+      need(&#x27;patient&#x27;);
+      if (q(&#x27;SELECT must_change FROM users WHERE id=?&#x27;, [$_SESSION[&#x27;id&#x27;]])-&gt;fetchColumn()) out([&#x27;msg&#x27; =&gt; &#x27;請先更新密碼&#x27;], 403);
+      out(q(&#x27;SELECT i.name, r.score FROM results r JOIN items i ON i.id=r.item_id WHERE r.user_id=?&#x27;, [$_SESSION[&#x27;id&#x27;]])-&gt;fetchAll());
+
+    case &#x27;list&#x27;: <i>// b. 醫檢員查詢任一張表</i>
+      need(&#x27;tech&#x27;);
+      if (!isset($TABLES[$t])) out([&#x27;msg&#x27; =&gt; &#x27;表名錯誤&#x27;], 400);
+      out(q(&quot;SELECT * FROM $t ORDER BY id&quot;)-&gt;fetchAll());
+
+    case &#x27;save&#x27;: <i>// a. 新增（沒有 id）或更新（有 id）</i>
+      need(&#x27;tech&#x27;);
+      if (!isset($TABLES[$t])) out([&#x27;msg&#x27; =&gt; &#x27;表名錯誤&#x27;], 400);
+      $cols = $TABLES[$t];
+      $vals = array_map(fn($c) =&gt; $p[$c] ?? null, $cols);
+      if (empty($p[&#x27;id&#x27;])) {
+        q(&quot;INSERT INTO $t (&quot; . implode(&#x27;,&#x27;, $cols) . &#x27;) VALUES (&#x27; . implode(&#x27;,&#x27;, array_fill(0, count($cols), &#x27;?&#x27;)) . &#x27;)&#x27;, $vals);
+      } else {
+        q(&quot;UPDATE $t SET &quot; . implode(&#x27;=?,&#x27;, $cols) . &#x27;=? WHERE id=?&#x27;, [...$vals, $p[&#x27;id&#x27;]]);
+      }
+      out([&#x27;msg&#x27; =&gt; &#x27;已儲存&#x27;]);
+
+    case &#x27;del&#x27;: <i>// a. 刪除</i>
+      need(&#x27;tech&#x27;);
+      if (!isset($TABLES[$t])) out([&#x27;msg&#x27; =&gt; &#x27;表名錯誤&#x27;], 400);
+      q(&quot;DELETE FROM $t WHERE id=?&quot;, [$p[&#x27;id&#x27;]]);
+      out([&#x27;msg&#x27; =&gt; &#x27;已刪除&#x27;]);
+  }
+  out([&#x27;msg&#x27; =&gt; &#x27;未知動作&#x27;], 400);
+} catch (PDOException $e) {
+  out([&#x27;msg&#x27; =&gt; &#x27;資料錯誤：&#x27; . $e-&gt;getMessage()], 400); <i>// 例如帳號重複、分數超出 1~10</i>
+}</pre><div class="file">2024/p3-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;健康度量管理系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;健康度量管理系統&lt;/h1&gt;
+  &lt;p id=&quot;msg&quot;&gt;&lt;/p&gt;
+
+  <i>&lt;!-- 登入 / 註冊（醫檢員） --&gt;</i>
+  &lt;section id=&quot;login&quot;&gt;
+    &lt;input id=&quot;name&quot; placeholder=&quot;姓名（註冊用）&quot;&gt;
+    &lt;input id=&quot;account&quot; placeholder=&quot;帳號&quot;&gt;
+    &lt;input id=&quot;password&quot; type=&quot;password&quot; placeholder=&quot;密碼&quot;&gt;
+    &lt;button onclick=&quot;login()&quot;&gt;登入&lt;/button&gt;
+    &lt;button onclick=&quot;register()&quot;&gt;醫檢員註冊&lt;/button&gt;
+  &lt;/section&gt;
+
+  <i>&lt;!-- c. 受檢者第一次登入：強制改密碼 --&gt;</i>
+  &lt;section id=&quot;chpwd&quot; hidden&gt;
+    &lt;h2&gt;第一次登入，請更新密碼&lt;/h2&gt;
+    <i>&lt;!-- pattern：前端先擋一次，後端 PHP 再驗證一次 --&gt;</i>
+    &lt;input id=&quot;newpwd&quot; placeholder=&quot;12 碼，大小寫英文 + 數字&quot; pattern=&quot;(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{12}&quot;&gt;
+    &lt;button onclick=&quot;chpwd()&quot;&gt;更新密碼&lt;/button&gt;
+  &lt;/section&gt;
+
+  <i>&lt;!-- d. 受檢者：單一頁面顯示所有項目分數 --&gt;</i>
+  &lt;section id=&quot;patient&quot; hidden&gt;
+    &lt;h2&gt;我的檢查結果&lt;/h2&gt;
+    &lt;table id=&quot;mine&quot;&gt;&lt;/table&gt;
+  &lt;/section&gt;
+
+  <i>&lt;!-- a、b. 醫檢員：三張表的新增 / 刪除 / 更新 / 查詢 --&gt;</i>
+  &lt;section id=&quot;tech&quot; hidden&gt;
+    &lt;h2&gt;人員&lt;/h2&gt;&lt;table id=&quot;users&quot;&gt;&lt;/table&gt;
+    &lt;h2&gt;醫檢項目&lt;/h2&gt;&lt;table id=&quot;items&quot;&gt;&lt;/table&gt;
+    &lt;h2&gt;檢查結果&lt;/h2&gt;&lt;table id=&quot;results&quot;&gt;&lt;/table&gt;
+    &lt;h2&gt;檢查結果總表（每位受檢者一列）&lt;/h2&gt;&lt;table id=&quot;pivot&quot;&gt;&lt;/table&gt;
+  &lt;/section&gt;
+
+  &lt;button id=&quot;logout&quot; onclick=&quot;logout()&quot; hidden&gt;登出&lt;/button&gt;
+  &lt;script src=&quot;jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/p3-ans/team021.js</div><pre><i>// 每張表要顯示/編輯的欄位，以及「新增列」的預設值</i>
+const COLS = {
+  users:   { name: &#x27;&#x27;, account: &#x27;&#x27;, password: &#x27;1234&#x27;, role: &#x27;patient&#x27;, must_change: 1 },
+  items:   { name: &#x27;&#x27;, min_score: 1, max_score: 10 },
+  results: { user_id: &#x27;&#x27;, item_id: &#x27;&#x27;, score: &#x27;&#x27; },
+};
+
+<i>// 共用：呼叫 api.php，失敗時把後端訊息顯示出來</i>
+function api(a, data, ok) {
+  $.post(&#x27;api.php?a=&#x27; + a, data, ok, &#x27;json&#x27;)
+    .fail(x =&gt; $(&#x27;#msg&#x27;).text(x.responseJSON?.msg || &#x27;連線錯誤&#x27;));
+}
+
+<i>// 只顯示某一區，其他藏起來</i>
+function show(id) {
+  $(&#x27;section&#x27;).prop(&#x27;hidden&#x27;, true);
+  $(&#x27;#&#x27; + id).prop(&#x27;hidden&#x27;, false);
+  $(&#x27;#logout&#x27;).prop(&#x27;hidden&#x27;, id === &#x27;login&#x27;);
+}
+
+function login() {
+  api(&#x27;login&#x27;, { account: $(&#x27;#account&#x27;).val(), password: $(&#x27;#password&#x27;).val() }, r =&gt; {
+    $(&#x27;#msg&#x27;).text(&#x27;歡迎 &#x27; + r.name);
+    if (r.role === &#x27;tech&#x27;) { show(&#x27;tech&#x27;); loadAll(); }
+    else if (r.must_change == 1) show(&#x27;chpwd&#x27;);
+    else loadMine();
+  });
+}
+
+function register() {
+  api(&#x27;register&#x27;, { name: $(&#x27;#name&#x27;).val(), account: $(&#x27;#account&#x27;).val(), password: $(&#x27;#password&#x27;).val() },
+    r =&gt; $(&#x27;#msg&#x27;).text(r.msg));
+}
+
+function logout() { api(&#x27;logout&#x27;, {}, () =&gt; show(&#x27;login&#x27;)); }
+
+function chpwd() {
+  if (!$(&#x27;#newpwd&#x27;)[0].checkValidity()) return $(&#x27;#msg&#x27;).text(&#x27;密碼格式不符：需 12 碼且含大寫、小寫、數字&#x27;);
+  api(&#x27;chpwd&#x27;, { password: $(&#x27;#newpwd&#x27;).val() }, r =&gt; { $(&#x27;#msg&#x27;).text(r.msg); loadMine(); });
+}
+
+function loadMine() {
+  show(&#x27;patient&#x27;);
+  $.getJSON(&#x27;api.php?a=mine&#x27;, rows =&gt;
+    $(&#x27;#mine&#x27;).html(&#x27;&lt;tr&gt;&lt;th&gt;項目&lt;/th&gt;&lt;th&gt;分數&lt;/th&gt;&lt;/tr&gt;&#x27; +
+      rows.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${r.name}&lt;/td&gt;&lt;td&gt;${r.score}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)));
+}
+
+<i>// 醫檢員：每列都是 input，可直接改完按「存」；最後一列空白用來新增</i>
+function load(t, done) {
+  $.getJSON(&#x27;api.php?a=list&amp;t=&#x27; + t, rows =&gt; {
+    const cols = Object.keys(COLS[t]);
+    const cell = (r, c) =&gt; `&lt;td&gt;&lt;input data-c=&quot;${c}&quot; value=&quot;${String(r[c] ?? &#x27;&#x27;).replace(/&quot;/g, &#x27;&amp;quot;&#x27;)}&quot;&gt;&lt;/td&gt;`;
+    const row = r =&gt; `&lt;tr data-id=&quot;${r.id || &#x27;&#x27;}&quot;&gt;&lt;td&gt;${r.id || &#x27;新增&#x27;}&lt;/td&gt;${cols.map(c =&gt; cell(r, c)).join(&#x27;&#x27;)}
+      &lt;td&gt;&lt;button onclick=&quot;save(&#x27;${t}&#x27;, this)&quot;&gt;存&lt;/button&gt;${r.id ? `&lt;button onclick=&quot;del(&#x27;${t}&#x27;, ${r.id})&quot;&gt;刪&lt;/button&gt;` : &#x27;&#x27;}&lt;/td&gt;&lt;/tr&gt;`;
+    $(&#x27;#&#x27; + t).html(`&lt;tr&gt;&lt;th&gt;id&lt;/th&gt;${cols.map(c =&gt; `&lt;th&gt;${c}&lt;/th&gt;`).join(&#x27;&#x27;)}&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;` +
+      rows.map(row).join(&#x27;&#x27;) + row(COLS[t]));
+    done &amp;&amp; done(rows);
+  });
+}
+
+function save(t, btn) {
+  const tr = $(btn).closest(&#x27;tr&#x27;), data = { t, id: tr.data(&#x27;id&#x27;) };
+  tr.find(&#x27;input&#x27;).each((i, el) =&gt; data[el.dataset.c] = el.value);
+  api(&#x27;save&#x27;, data, r =&gt; { $(&#x27;#msg&#x27;).text(r.msg); loadAll(); });
+}
+
+function del(t, id) {
+  if (confirm(&#x27;確定刪除？&#x27;)) api(&#x27;del&#x27;, { t, id }, r =&gt; { $(&#x27;#msg&#x27;).text(r.msg); loadAll(); });
+}
+
+<i>// b. 總表：受檢者 × 項目，一人一列（人員編號不重複）</i>
+function loadAll() {
+  load(&#x27;users&#x27;, users =&gt; load(&#x27;items&#x27;, items =&gt; load(&#x27;results&#x27;, results =&gt; {
+    const score = (u, i) =&gt; results.find(r =&gt; r.user_id == u &amp;&amp; r.item_id == i)?.score ?? &#x27;-&#x27;;
+    $(&#x27;#pivot&#x27;).html(`&lt;tr&gt;&lt;th&gt;編號&lt;/th&gt;&lt;th&gt;姓名&lt;/th&gt;${items.map(i =&gt; `&lt;th&gt;${i.name}&lt;/th&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;` +
+      users.filter(u =&gt; u.role === &#x27;patient&#x27;).map(u =&gt;
+        `&lt;tr&gt;&lt;td&gt;${u.id}&lt;/td&gt;&lt;td&gt;${u.name}&lt;/td&gt;${items.map(i =&gt; `&lt;td&gt;${score(u.id, i.id)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`).join(&#x27;&#x27;));
+  })));
+}</pre><div class="file">2024/p3-ans/team021.css</div><pre>body { font-family: sans-serif; background: #f5f7fa; color: #222; margin: 20px; }
+#msg { color: #c00; }
+table { border-collapse: collapse; background: #fff; margin-bottom: 10px; }
+th, td { border: 1px solid #ccc; padding: 4px; }
+td input { width: 100px; }</pre></section><section><div class="head"><h2>2025 P1｜圖形化河內塔（拖放）</h2><div class="box"><b>題目重點</b><ul><li>3~9 個圓盤，拖放移動；顯示最少步數 2ⁿ−1 與目前步數</li><li>只能拿最上面的圓盤，大的不能疊在小的上；全部移到右柱即過關</li></ul><b>解題思路</b><ul><li>柱子用 flex-direction:column-reverse → appendChild 就是疊到最上面</li><li>最上面那塊＝lastElementChild，DOM 本身就是狀態，不用另存陣列</li><li>dragover 一定要 preventDefault，否則 drop 不會觸發</li></ul></div></div><div class="file">2025/p1-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;圖形化河內塔互動遊戲&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team111.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;河內塔遊戲&lt;/h1&gt;
+  &lt;p&gt;規則：一次移動一個圓盤，大圓盤不能放在小圓盤上；把全部圓盤移到最右邊的柱子&lt;/p&gt;
+  圓盤數量：&lt;select id=&quot;n&quot;&gt;&lt;/select&gt;
+  &lt;button onclick=&quot;start()&quot;&gt;開始遊戲&lt;/button&gt;
+  &lt;p&gt;最少步數：&lt;b id=&quot;min&quot;&gt;0&lt;/b&gt;｜移動步數：&lt;b id=&quot;moves&quot;&gt;0&lt;/b&gt;&lt;/p&gt;
+  <i>&lt;!-- 三根柱子；圓盤是柱子裡的 div，最後一個子元素 = 最上面那塊 --&gt;</i>
+  &lt;div id=&quot;game&quot;&gt;&lt;div class=&quot;peg&quot;&gt;&lt;/div&gt;&lt;div class=&quot;peg&quot;&gt;&lt;/div&gt;&lt;div class=&quot;peg&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;script src=&quot;team111.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2025/p1-ans/team111.css</div><pre>body { font-family: Arial, sans-serif; text-align: center; background: #f5f5f5; color: #222; }
+#game { display: flex; justify-content: center; gap: 20px; height: 320px; margin-top: 20px; }
+<i>/* column-reverse：第一個子元素在最下面，所以 appendChild 就是疊到最上面 */</i>
+.peg { width: 260px; background: linear-gradient(#555, #555) center / 12px 100% no-repeat, #ddd;
+       display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 10px; }
+.disk { height: 24px; margin-top: 2px; border-radius: 6px; cursor: grab; }</pre><div class="file">2025/p1-ans/team111.js</div><pre>const pegs = document.querySelectorAll(&#x27;.peg&#x27;);
+const $ = id =&gt; document.getElementById(id);
+let n, moves, dragging;
+
+<i>// 下拉選單放 3~9</i>
+for (let i = 3; i &lt;= 9; i++) $(&#x27;n&#x27;).add(new Option(i, i));
+
+function start() {
+  n = Number($(&#x27;n&#x27;).value);
+  moves = 0;
+  $(&#x27;moves&#x27;).textContent = 0;
+  $(&#x27;min&#x27;).textContent = 2 ** n - 1; <i>// 最少步數公式 2^n - 1</i>
+  pegs.forEach(p =&gt; p.innerHTML = &#x27;&#x27;);
+  for (let size = n; size &gt;= 1; size--) { <i>// 大的先放（在下面）</i>
+    const d = document.createElement(&#x27;div&#x27;);
+    d.className = &#x27;disk&#x27;;
+    d.dataset.size = size;
+    d.draggable = true;
+    d.style.width = size * 25 + 20 + &#x27;px&#x27;;
+    d.style.background = `hsl(${size * 40}, 70%, 55%)`;
+    pegs[0].appendChild(d);
+  }
+}
+
+<i>// 拖曳開始：只有柱子最上面那塊可以拿</i>
+document.addEventListener(&#x27;dragstart&#x27;, e =&gt; {
+  dragging = e.target;
+  if (dragging !== dragging.parentElement.lastElementChild) e.preventDefault();
+});
+
+pegs.forEach(peg =&gt; {
+  peg.addEventListener(&#x27;dragover&#x27;, e =&gt; e.preventDefault()); <i>// 不擋預設就無法 drop</i>
+  peg.addEventListener(&#x27;drop&#x27;, () =&gt; {
+    const top = peg.lastElementChild;
+    if (top === dragging || !dragging) return; <i>// 放回原柱不算一步</i>
+    if (top &amp;&amp; Number(top.dataset.size) &lt; Number(dragging.dataset.size)) return alert(&#x27;不能把大圓盤放在小圓盤上！&#x27;);
+    peg.appendChild(dragging);
+    $(&#x27;moves&#x27;).textContent = ++moves;
+    if (pegs[2].children.length === n)
+      setTimeout(() =&gt; alert(`完成！共 ${moves} 步（最少 ${2 ** n - 1} 步）`), 50);
+  });
+});
+
+start();</pre></section><section><div class="head"><h2>2025 P2｜詐騙關鍵字週報（CSV + Chart.js + PHP）</h2><div class="box"><b>題目重點</b><ul><li>讀 weekly_kw.csv（week, keyword, count, …），可選全部或單一週期</li><li>長條圖 / 趨勢圖切換，顯示 TOP 10 與統計卡，下載 CSV 與圖表 PNG</li><li>※ 原題 PDF 不在資料夾中，需求依先前作答與筆記整理</li></ul><b>解題思路</b><ul><li>PHP 只負責把 CSV 轉 JSON；統計全部在前端做</li><li>加總用物件當字典 total[kw] += count，再 Object.entries 排序取前 10</li><li>換圖前 chart.destroy()；PNG 用 chart.toBase64Image()</li><li>CSV 開頭加 \uFEFF（BOM），Excel 開中文才不會亂碼</li></ul></div></div><div class="file">2025/p2-ans/team111.php</div><pre>&lt;?php
+<i>// 讀 CSV → 轉成 JSON 陣列給前端：[[week, keyword, count, avg_risk, trend], ...]</i>
+header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
+$lines = file(&#x27;weekly_kw.csv&#x27;, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+array_shift($lines); <i>// 去掉標題列</i>
+echo json_encode(array_map(&#x27;str_getcsv&#x27;, $lines), JSON_UNESCAPED_UNICODE);</pre><div class="file">2025/p2-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;詐騙關鍵字週報生成系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team111.css&quot;&gt;
+  <i>&lt;!-- 比賽若不能上網，改成同資料夾的 chart.umd.min.js --&gt;</i>
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;詐騙關鍵字週報生成系統&lt;/h1&gt;
+  &lt;div class=&quot;bar&quot;&gt;
+    週期：&lt;select id=&quot;week&quot; onchange=&quot;draw()&quot;&gt;&lt;option value=&quot;&quot;&gt;全部週期&lt;/option&gt;&lt;/select&gt;
+    圖表：&lt;select id=&quot;type&quot; onchange=&quot;draw()&quot;&gt;&lt;option value=&quot;bar&quot;&gt;長條圖&lt;/option&gt;&lt;option value=&quot;line&quot;&gt;趨勢圖&lt;/option&gt;&lt;/select&gt;
+    &lt;button onclick=&quot;downloadCsv()&quot;&gt;下載週報 CSV&lt;/button&gt;
+    &lt;button onclick=&quot;downloadPng()&quot;&gt;下載圖表 PNG&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cards&quot;&gt;
+    &lt;div&gt;總週數&lt;b id=&quot;weeks&quot;&gt;&lt;/b&gt;&lt;/div&gt;
+    &lt;div&gt;關鍵字總數&lt;b id=&quot;kws&quot;&gt;&lt;/b&gt;&lt;/div&gt;
+    &lt;div&gt;最熱門關鍵字&lt;b id=&quot;hot&quot;&gt;&lt;/b&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;canvas id=&quot;chart&quot;&gt;&lt;/canvas&gt;
+  &lt;table id=&quot;table&quot;&gt;&lt;/table&gt;
+  &lt;script src=&quot;team111.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2025/p2-ans/team111.js</div><pre>let rows = [], chart, top10 = [];
+const $ = id =&gt; document.getElementById(id);
+const sum = (list, key) =&gt; list.reduce((s, r) =&gt; s + r[key], 0);
+
+<i>// 1. 讀資料：PHP 回傳 [週, 關鍵字, 次數, ...]，轉成物件比較好讀</i>
+fetch(&#x27;team111.php&#x27;).then(r =&gt; r.json()).then(data =&gt; {
+  rows = data.map(([week, kw, count]) =&gt; ({ week, kw, count: Number(count) }));
+  const weeks = [...new Set(rows.map(r =&gt; r.week))]; <i>// Set 去重複</i>
+  weeks.forEach(w =&gt; $(&#x27;week&#x27;).add(new Option(w, w)));
+  draw();
+});
+
+<i>// 2. 依目前選的週期算 TOP 10，畫圖和表格</i>
+function draw() {
+  const w = $(&#x27;week&#x27;).value;
+  const picked = rows.filter(r =&gt; !w || r.week === w);
+  const weeks = [...new Set(picked.map(r =&gt; r.week))];
+
+  <i>// 每個關鍵字加總次數 → 由大到小取前 10</i>
+  const total = {};
+  picked.forEach(r =&gt; total[r.kw] = (total[r.kw] || 0) + r.count);
+  top10 = Object.entries(total).sort((a, b) =&gt; b[1] - a[1]).slice(0, 10);
+
+  $(&#x27;weeks&#x27;).textContent = weeks.length;
+  $(&#x27;kws&#x27;).textContent = Object.keys(total).length;
+  $(&#x27;hot&#x27;).textContent = top10[0]?.[0] || &#x27;-&#x27;;
+  $(&#x27;table&#x27;).innerHTML = &#x27;&lt;tr&gt;&lt;th&gt;排名&lt;/th&gt;&lt;th&gt;關鍵字&lt;/th&gt;&lt;th&gt;次數&lt;/th&gt;&lt;/tr&gt;&#x27; +
+    top10.map(([kw, c], i) =&gt; `&lt;tr&gt;&lt;td&gt;${i + 1}&lt;/td&gt;&lt;td&gt;${kw}&lt;/td&gt;&lt;td&gt;${c}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;);
+
+  <i>// 長條圖：TOP 10 總次數；趨勢圖：TOP 5 關鍵字每週的次數變化</i>
+  const line = $(&#x27;type&#x27;).value === &#x27;line&#x27;;
+  const datasets = line
+    ? top10.slice(0, 5).map(([kw]) =&gt; ({
+        label: kw,
+        data: weeks.map(wk =&gt; sum(picked.filter(r =&gt; r.week === wk &amp;&amp; r.kw === kw), &#x27;count&#x27;)),
+      }))
+    : [{ label: &#x27;出現次數&#x27;, data: top10.map(t =&gt; t[1]) }];
+
+  if (chart) chart.destroy(); <i>// 換圖前要先銷毀舊圖</i>
+  chart = new Chart($(&#x27;chart&#x27;), {
+    type: line ? &#x27;line&#x27; : &#x27;bar&#x27;,
+    data: { labels: line ? weeks : top10.map(t =&gt; t[0]), datasets },
+    options: { plugins: { title: { display: true, text: `TOP 10 詐騙關鍵字（${w || &#x27;全部週期&#x27;}）` } } },
+  });
+}
+
+<i>// 3. 下載：用 Blob / dataURL 產生檔案，再用 &lt;a download&gt; 觸發下載</i>
+function save(url, name) {
+  const a = document.createElement(&#x27;a&#x27;);
+  a.href = url;
+  a.download = name;
+  a.click();
+}
+
+function downloadCsv() {
+  const csv = &#x27;\uFEFF排名,關鍵字,次數\n&#x27; + top10.map(([kw, c], i) =&gt; `${i + 1},${kw},${c}`).join(&#x27;\n&#x27;); <i>// \uFEFF 讓 Excel 不亂碼</i>
+  save(URL.createObjectURL(new Blob([csv], { type: &#x27;text/csv&#x27; })), `週報_${$(&#x27;week&#x27;).value || &#x27;全部&#x27;}.csv`);
+}
+
+function downloadPng() { save(chart.toBase64Image(), &#x27;chart.png&#x27;); }</pre><div class="file">2025/p2-ans/team111.css</div><pre>body { font-family: sans-serif; background: #f5f7fa; color: #222; max-width: 1100px; margin: auto; padding: 16px; }
+.bar, .cards { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.cards div { flex: 1; min-width: 150px; background: #fff; padding: 12px; text-align: center; border-radius: 8px; }
+.cards b { display: block; font-size: 28px; color: #1a73e8; }
+canvas { background: #fff; }
+table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 12px; }
+th, td { border: 1px solid #ddd; padding: 6px; }</pre></section><section><div class="head"><h2>2026 P1｜叫號與候位系統（Node.js + Express + SQLite）</h2><div class="box"><b>題目重點</b><ul><li>前台：選服務（一般 G / 開戶 A / 諮詢 C）取號，顯示號碼、目前叫號、等待清單，5 秒內自動更新</li><li>櫃台：admin/password123 登入，下一位、完成服務、歷史紀錄、登出銷毀 session</li><li>單一 FIFO 佇列；同時最多 1 筆服務中；違規回 409；服務非白名單回 400</li><li>號碼 前綴+3 位數，超過 999 變 A1000，存 DB 不重置；重啟後完整還原</li><li>執行：把 P1_Node離線套件.zip 的 node_modules 放進 p1-ans，npm start</li></ul><b>解題思路</b><ul><li>用 Node 22 內建 node:sqlite（同步 API），不用 callback，也不會有併發交錯</li><li>計數器一行：INSERT … ON CONFLICT DO UPDATE SET n=n+1 RETURNING n</li><li>時間存毫秒數字排序最準，輸出時才格式化成 YYYY/M/D HH:mm:ss</li><li>session 自己做：Set 存 sid，登出 delete → 舊 Cookie 重放也是 401</li><li>權限一定在伺服器檢查（auth middleware），前端停用按鈕只是輔助</li><li>前端 element id 別取 history、login 這種和全域變數撞名的名字</li></ul></div></div><div class="file">2026/p1-ans/app.js</div><pre><i>// 叫號與候位系統：Express + SQLite（Node 22 內建 node:sqlite，同步 API 最好寫）</i>
+const express = require(&#x27;express&#x27;);
+const crypto = require(&#x27;crypto&#x27;);
+const { DatabaseSync } = require(&#x27;node:sqlite&#x27;);
+
+const db = new DatabaseSync(__dirname + &#x27;/queue.db&#x27;);
+db.exec(`
+  CREATE TABLE IF NOT EXISTS counters (prefix TEXT PRIMARY KEY, n INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS tickets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,      -- 越早取號 id 越小
+    number TEXT NOT NULL UNIQUE,               -- A001、G012…
+    service TEXT NOT NULL,                     -- G / A / C
+    status TEXT NOT NULL DEFAULT &#x27;waiting&#x27;,    -- waiting → serving → completed
+    created_at INTEGER NOT NULL,               -- 時間存毫秒數字，排序最準
+    called_at INTEGER,
+    finished_at INTEGER
+  );
+  CREATE INDEX IF NOT EXISTS idx_status ON tickets(status, created_at);
+`);
+
+<i>// 服務白名單：代碼 → 名稱</i>
+const SERVICES = { G: &#x27;一般服務&#x27;, A: &#x27;開戶/申辦&#x27;, C: &#x27;諮詢&#x27; };
+const sessions = new Set(); <i>// 已登入的 session id（登出就刪掉）</i>
+
+const p2 = n =&gt; String(n).padStart(2, &#x27;0&#x27;);
+const fmt = t =&gt; {
+  if (!t) return null;
+  const d = new Date(t); <i>// 格式：2026/7/7 15:10:14</i>
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;
+};
+const view = t =&gt; !t ? null : { <i>// 查無資料回傳 null（JSON 才會有 current: null）</i>
+  number: t.number, service: SERVICES[t.service],
+  createdAt: fmt(t.created_at), calledAt: fmt(t.called_at), finishedAt: fmt(t.finished_at),
+};
+const all = (sql, ...a) =&gt; db.prepare(sql).all(...a).map(view);
+const current = () =&gt; view(db.prepare(&quot;SELECT * FROM tickets WHERE status=&#x27;serving&#x27;&quot;).get());
+const waiting = () =&gt; all(&quot;SELECT * FROM tickets WHERE status=&#x27;waiting&#x27; ORDER BY created_at, id&quot;);
+const history = () =&gt; all(&quot;SELECT * FROM tickets WHERE status=&#x27;completed&#x27; ORDER BY finished_at DESC, id DESC&quot;);
+
+const app = express();
+app.use(express.json(), express.urlencoded({ extended: false }), express.static(__dirname + &#x27;/public&#x27;));
+app.get(&#x27;/&#x27;, (req, res) =&gt; res.redirect(&#x27;/team123.html&#x27;));
+
+<i>// 公開 API</i>
+app.get(&#x27;/api/state&#x27;, (req, res) =&gt; res.json({ current: current(), waiting: waiting(), history: history() }));
+
+app.post(&#x27;/api/tickets&#x27;, (req, res) =&gt; {
+  const s = req.body.service;
+  <i>// 接受代碼(G/A/C)或中文名稱；不在白名單 → 400</i>
+  const code = SERVICES[s] ? s : Object.keys(SERVICES).find(k =&gt; SERVICES[k] === s);
+  if (!code) return res.status(400).json({ error: &#x27;服務類別錯誤&#x27; });
+  <i>// 計數器 +1 後取回（不存在就從 1 開始），序號存在 DB → 重開機也接續</i>
+  const { n } = db.prepare(&#x27;INSERT INTO counters VALUES (?, 1) ON CONFLICT(prefix) DO UPDATE SET n = n + 1 RETURNING n&#x27;).get(code);
+  const number = code + String(n).padStart(3, &#x27;0&#x27;); <i>// 1000 以上自然變 4 位數</i>
+  const now = Date.now();
+  db.prepare(&#x27;INSERT INTO tickets (number, service, created_at) VALUES (?, ?, ?)&#x27;).run(number, code, now);
+  res.status(201).json({ number, service: SERVICES[code], createdAt: fmt(now) });
+});
+
+<i>// 登入：成功就發一個隨機 sid 放進 Cookie</i>
+app.post(&#x27;/api/login&#x27;, (req, res) =&gt; {
+  if ((req.body.username ?? req.body.account) !== &#x27;admin&#x27; || req.body.password !== &#x27;password123&#x27;) return res.status(401).json({ error: &#x27;帳號或密碼錯誤&#x27; });
+  const sid = crypto.randomUUID();
+  sessions.add(sid);
+  res.cookie(&#x27;sid&#x27;, sid, { httpOnly: true, sameSite: &#x27;strict&#x27; }).json({ ok: true });
+});
+
+<i>// 管理 API 一律先檢查 session（伺服器端驗證，不是只藏按鈕）</i>
+const sidOf = req =&gt; (req.headers.cookie || &#x27;&#x27;).match(/(?:^|;\s*)sid=([^;]+)/)?.[1];
+const auth = (req, res, next) =&gt; sessions.has(sidOf(req)) ? next() : res.status(401).json({ error: &#x27;請先登入&#x27; });
+
+app.post(&#x27;/api/logout&#x27;, auth, (req, res) =&gt; {
+  sessions.delete(sidOf(req)); <i>// 伺服器端銷毀，舊 Cookie 重放也無效</i>
+  res.clearCookie(&#x27;sid&#x27;).status(204).end();
+});
+
+app.post(&#x27;/api/admin/next&#x27;, auth, (req, res) =&gt; {
+  if (current()) return res.status(409).json({ error: &#x27;請先完成目前服務&#x27; });
+  const t = db.prepare(&quot;SELECT id FROM tickets WHERE status=&#x27;waiting&#x27; ORDER BY created_at, id LIMIT 1&quot;).get();
+  if (!t) return res.status(409).json({ error: &#x27;目前無等待中的號碼&#x27; });
+  db.prepare(&quot;UPDATE tickets SET status=&#x27;serving&#x27;, called_at=? WHERE id=?&quot;).run(Date.now(), t.id);
+  res.json({ current: current() });
+});
+
+app.post(&#x27;/api/admin/complete&#x27;, auth, (req, res) =&gt; {
+  const r = db.prepare(&quot;UPDATE tickets SET status=&#x27;completed&#x27;, finished_at=? WHERE status=&#x27;serving&#x27;&quot;).run(Date.now());
+  if (!r.changes) return res.status(409).json({ error: &#x27;目前沒有服務中的號碼&#x27; });
+  res.json({ ok: true });
+});
+
+app.get(&#x27;/api/admin/history&#x27;, auth, (req, res) =&gt; res.json(history()));
+
+app.listen(3000, () =&gt; console.log(&#x27;http://localhost:3000&#x27;));</pre><div class="file">2026/p1-ans/package.json</div><pre>{
+  &quot;name&quot;: &quot;team123-queue&quot;,
+  &quot;private&quot;: true,
+  &quot;scripts&quot;: { &quot;start&quot;: &quot;node app.js&quot; },
+  &quot;dependencies&quot;: { &quot;express&quot;: &quot;4.22.3&quot; }
+}</pre><div class="file">2026/p1-ans/public/team123.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;叫號與候位系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-light&quot;&gt;
+  &lt;nav class=&quot;navbar bg-dark px-4&quot;&gt;&lt;span class=&quot;navbar-brand text-white&quot;&gt;叫號與候位系統 - 前台取號&lt;/span&gt;
+    &lt;a class=&quot;btn btn-outline-light btn-sm&quot; href=&quot;admin.html&quot;&gt;櫃台管理&lt;/a&gt;&lt;/nav&gt;
+  &lt;div class=&quot;container py-4&quot; style=&quot;max-width:700px&quot;&gt;
+    &lt;div class=&quot;card card-body mb-3&quot;&gt;
+      &lt;h5&gt;請選擇服務項目&lt;/h5&gt;
+      &lt;select id=&quot;service&quot; class=&quot;form-select mb-2&quot;&gt;
+        &lt;option value=&quot;G&quot;&gt;一般服務&lt;/option&gt;&lt;option value=&quot;A&quot;&gt;開戶/申辦&lt;/option&gt;&lt;option value=&quot;C&quot;&gt;諮詢&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;take()&quot;&gt;取得號碼&lt;/button&gt;
+      &lt;div id=&quot;ticket&quot; class=&quot;alert alert-success mt-3&quot; hidden&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card card-body mb-3 text-center&quot;&gt;&lt;h5&gt;目前叫號&lt;/h5&gt;&lt;h1 id=&quot;current&quot;&gt;&lt;/h1&gt;&lt;/div&gt;
+    &lt;div class=&quot;card card-body&quot;&gt;&lt;h5&gt;等待清單&lt;/h5&gt;
+      &lt;table class=&quot;table table-sm&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;號碼&lt;/th&gt;&lt;th&gt;服務項目&lt;/th&gt;&lt;th&gt;取號時間&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;waiting&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script src=&quot;common.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    async function take() {
+      const r = await fetch(&#x27;/api/tickets&#x27;, { method: &#x27;POST&#x27;, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27; },
+        body: JSON.stringify({ service: service.value }) });
+      const t = await r.json();
+      ticket.hidden = false;
+      ticket.innerHTML = `您的號碼：&lt;b class=&quot;fs-3&quot;&gt;${t.number}&lt;/b&gt;&lt;br&gt;服務項目：${t.service}&lt;br&gt;取號時間：${t.createdAt}`;
+      refresh(); <i>// b. 取號後立即更新</i>
+    }
+    <i>// c. 每 2 秒輪詢，別的分頁取號也會在 5 秒內出現</i>
+    async function refresh() {
+      const s = await (await fetch(&#x27;/api/state&#x27;)).json();
+      current.textContent = s.current ? `${s.current.number} (${s.current.service})` : &#x27;尚未叫號&#x27;;
+      waiting.innerHTML = rows(s.waiting, [&#x27;number&#x27;, &#x27;service&#x27;, &#x27;createdAt&#x27;], 3, &#x27;目前沒有等待中的號碼&#x27;);
+    }
+    refresh();
+    setInterval(refresh, 2000);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2026/p1-ans/public/admin.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;櫃台管理&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-light&quot;&gt;
+  &lt;nav class=&quot;navbar bg-dark px-4&quot;&gt;&lt;span class=&quot;navbar-brand text-white&quot;&gt;叫號與候位系統 - 櫃台管理&lt;/span&gt;
+    &lt;span id=&quot;bar&quot; hidden&gt;&lt;a class=&quot;btn btn-outline-light btn-sm&quot; href=&quot;team123.html&quot;&gt;前台取號&lt;/a&gt;
+      &lt;button class=&quot;btn btn-outline-light btn-sm&quot; onclick=&quot;logout()&quot;&gt;登出&lt;/button&gt;&lt;/span&gt;&lt;/nav&gt;
+
+  <i>&lt;!-- a. 未登入只顯示登入表單 --&gt;</i>
+  &lt;form id=&quot;loginForm&quot; class=&quot;container py-5&quot; style=&quot;max-width:400px&quot; onsubmit=&quot;login(); return false&quot; hidden&gt;
+    &lt;h4&gt;櫃台登入&lt;/h4&gt;
+    &lt;input id=&quot;u&quot; class=&quot;form-control mb-2&quot; placeholder=&quot;帳號&quot; required&gt;
+    &lt;input id=&quot;p&quot; class=&quot;form-control mb-2&quot; type=&quot;password&quot; placeholder=&quot;密碼&quot; required&gt;
+    &lt;button class=&quot;btn btn-primary w-100&quot;&gt;登入&lt;/button&gt;
+    &lt;div id=&quot;err&quot; class=&quot;text-danger mt-2&quot;&gt;&lt;/div&gt;
+  &lt;/form&gt;
+
+  <i>&lt;!-- b. 登入後的管理畫面 --&gt;</i>
+  &lt;div id=&quot;panel&quot; class=&quot;container-fluid py-4&quot; hidden&gt;
+    &lt;div class=&quot;row g-3&quot;&gt;
+      &lt;div class=&quot;col-lg-6&quot;&gt;
+        &lt;div class=&quot;card card-body mb-3&quot;&gt;&lt;h5&gt;目前服務中的號碼&lt;/h5&gt;
+          &lt;h2 id=&quot;current&quot; class=&quot;text-center my-3&quot;&gt;&lt;/h2&gt;
+          &lt;div class=&quot;row g-2&quot;&gt;
+            &lt;div class=&quot;col&quot;&gt;&lt;button id=&quot;next&quot; class=&quot;btn btn-primary w-100&quot; onclick=&quot;act(&#x27;next&#x27;)&quot;&gt;下一位&lt;/button&gt;&lt;/div&gt;
+            &lt;div class=&quot;col&quot;&gt;&lt;button id=&quot;done&quot; class=&quot;btn btn-success w-100&quot; onclick=&quot;act(&#x27;complete&#x27;)&quot;&gt;完成服務&lt;/button&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div id=&quot;msg&quot; class=&quot;text-danger mt-2&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card card-body&quot;&gt;&lt;h5&gt;等待清單&lt;/h5&gt;
+          &lt;table class=&quot;table table-sm&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;號碼&lt;/th&gt;&lt;th&gt;服務項目&lt;/th&gt;&lt;th&gt;取號時間&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;waiting&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;col-lg-6&quot;&gt;
+        &lt;div class=&quot;card card-body&quot;&gt;&lt;h5&gt;歷史紀錄&lt;/h5&gt;
+          &lt;table class=&quot;table table-sm text-nowrap&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;號碼&lt;/th&gt;&lt;th&gt;服務項目&lt;/th&gt;&lt;th&gt;取號時間&lt;/th&gt;&lt;th&gt;叫號時間&lt;/th&gt;&lt;th&gt;完成時間&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;hist&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script src=&quot;common.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const post = (url, body) =&gt; fetch(url, { method: &#x27;POST&#x27;, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, body: JSON.stringify(body) });
+    const show = on =&gt; { loginForm.hidden = on; panel.hidden = bar.hidden = !on; };
+
+    async function refresh() {
+      const h = await fetch(&#x27;/api/admin/history&#x27;); <i>// 401 → 代表沒登入</i>
+      if (h.status === 401) return show(false);
+      show(true);
+      const s = await (await fetch(&#x27;/api/state&#x27;)).json();
+      current.textContent = s.current ? `${s.current.number} (${s.current.service})` : &#x27;尚無服務中的號碼&#x27;;
+      next.disabled = !!s.current;  <i>// 有人在服務中 → 下一位停用</i>
+      done.disabled = !s.current;   <i>// 沒人在服務中 → 完成服務停用</i>
+      waiting.innerHTML = rows(s.waiting, [&#x27;number&#x27;, &#x27;service&#x27;, &#x27;createdAt&#x27;], 3, &#x27;目前無等待中的號碼&#x27;);
+      hist.innerHTML = rows(await h.json(), [&#x27;number&#x27;, &#x27;service&#x27;, &#x27;createdAt&#x27;, &#x27;calledAt&#x27;, &#x27;finishedAt&#x27;], 5, &#x27;尚無歷史紀錄&#x27;);
+    }
+
+    async function login() {
+      const r = await post(&#x27;/api/login&#x27;, { username: u.value, password: p.value });
+      err.textContent = r.ok ? &#x27;&#x27; : &#x27;帳號或密碼錯誤&#x27;;
+      refresh();
+    }
+
+    <i>// c、e. 下一位 / 完成服務；409 時顯示後端給的訊息</i>
+    async function act(type) {
+      const r = await post(&#x27;/api/admin/&#x27; + type);
+      msg.textContent = r.ok ? &#x27;&#x27; : (await r.json()).error;
+      refresh();
+    }
+
+    async function logout() { await post(&#x27;/api/logout&#x27;); show(false); }
+
+    refresh();
+    setInterval(refresh, 2000);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2026/p1-ans/public/common.js</div><pre><i>// 把陣列轉成 &lt;tr&gt;；空陣列顯示提示</i>
+function rows(list, keys, cols, empty) {
+  if (!list.length) return `&lt;tr&gt;&lt;td colspan=&quot;${cols}&quot; class=&quot;text-muted&quot;&gt;${empty}&lt;/td&gt;&lt;/tr&gt;`;
+  return list.map(t =&gt; &#x27;&lt;tr&gt;&#x27; + keys.map(k =&gt; `&lt;td&gt;${t[k] ?? &#x27;&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;) + &#x27;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;);
+}</pre><div class="file">2026/p1-ans/系統設計文件.md</div><div class="doc"><b>叫號與候位系統：系統設計文件（team123）</b><div>啟動：<code>npm start</code>，開啟 http://localhost:3000 。需要 Node 22 以上（使用內建 <code>node:sqlite</code>）與 express。</div><div>櫃台帳密：admin / password123</div><b>API 一覽表</b><table class="md"><tr><th>方法</th><th>路徑</th><th>需登入</th><th>主要回應</th></tr><tr><td>GET</td><td>/api/state</td><td>否</td><td>200 <code>{ current, waiting[], history[] }</code></td></tr><tr><td>POST</td><td>/api/tickets</td><td>否</td><td>201 <code>{ number, service, createdAt }</code>；service 非 G/A/C 或中文名稱 → 400</td></tr><tr><td>POST</td><td>/api/login</td><td>否</td><td>200 + Set-Cookie(sid)；失敗 401</td></tr><tr><td>POST</td><td>/api/logout</td><td>是</td><td>204，伺服器端刪除 session；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/next</td><td>是</td><td>200 <code>{ current }</code>；已有服務中或無等待者 → 409；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/complete</td><td>是</td><td>200；無服務中號碼 → 409；未登入 401</td></tr><tr><td>GET</td><td>/api/admin/history</td><td>是</td><td>200 <code>[ … ]</code>（完成時間新→舊）；未登入 401</td></tr></table><b>資料表結構（queue.db）</b><table class="md"><tr><th>資料表</th><th>欄位</th><th>型別</th><th>說明</th></tr><tr><td>counters</td><td>prefix</td><td>TEXT PK</td><td>G / A / C</td></tr><tr><td></td><td>n</td><td>INTEGER</td><td>該類別目前最後號碼，不重置</td></tr><tr><td>tickets</td><td>id</td><td>INTEGER PK AUTOINCREMENT</td><td>取號先後</td></tr><tr><td></td><td>number</td><td>TEXT UNIQUE</td><td>例 A001、C1000</td></tr><tr><td></td><td>service</td><td>TEXT</td><td>G / A / C</td></tr><tr><td></td><td>status</td><td>TEXT</td><td>waiting → serving → completed</td></tr><tr><td></td><td>created_at / called_at / finished_at</td><td>INTEGER</td><td>毫秒時間戳，顯示時轉 YYYY/M/D HH:mm:ss</td></tr></table><div>索引：<code>idx_status (status, created_at)</code>，加速「等待中且最早」的查詢。</div></div></section><section><div class="head"><h2>2026 P2｜GamersHub 玩家組隊與行事曆（Bootstrap 5 + jQuery + PHP）</h2><div class="box"><b>題目重點</b><ul><li>左「控制面板」右「大廳/行事曆」，&lt;992px 上下堆疊；SPA 不重整</li><li>未登入直接開大廳或 API → 跳回登入；玩家 A、B 資料各自隔離</li><li>新增喜愛遊戲（不存在就建立）→ 標籤、發布選單、快速過濾同步多一項；移除後該遊戲公告消失</li><li>招募中 → 達下限「已成局招募」→ 達上限淡出消失，並出現在每位成員的行事曆</li><li>測試帳號 faker / caps / tenz / s1mple，密碼 1234</li></ul><b>解題思路</b><ul><li>col-lg-4 / col-lg-8：lg 斷點剛好是 992px</li><li>所有查詢都 WHERE user_id = session 的 uid → 天生資料隔離</li><li>一個 load() 抓全部資料、重畫所有區塊 → 三個選單自然同步</li><li>狀態用一句 UPDATE … CASE 依人數重算；join 回傳 full 時先 fadeOut 再重畫</li><li>未登入：AJAX 回 401；瀏覽器直接開回 302（401 不會跟著 Location 跳）</li><li>Font Awesome 的 CSS 寫 ../webfonts/，所以 all.min.css 要放在 css/ 子資料夾</li></ul></div></div><div class="file">2026/p2-ans/api.php</div><pre>&lt;?php
+<i>// GamerHub API：api.php?a=動作</i>
+session_start();
+header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
+$host = &#x27;127.0.0.1&#x27;; $db = &#x27;gamer_hub&#x27;; $user = &#x27;root&#x27;; $pass = &#x27;&#x27;; $charset = &#x27;utf8mb4&#x27;;
+$pdo = new PDO(&quot;mysql:host=$host;dbname=$db;charset=$charset&quot;, $user, $pass, [
+  PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
+]);
+
+function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
+function q($sql, $args = []) { global $pdo; $s = $pdo-&gt;prepare($sql); $s-&gt;execute($args); return $s; }
+
+$a = $_GET[&#x27;a&#x27;] ?? &#x27;&#x27;;
+$p = $_POST;
+
+if ($a === &#x27;login&#x27;) {
+  $u = q(&#x27;SELECT id, nickname FROM users WHERE username=? AND password=?&#x27;, [$p[&#x27;username&#x27;] ?? &#x27;&#x27;, $p[&#x27;password&#x27;] ?? &#x27;&#x27;])-&gt;fetch();
+  if (!$u) out([&#x27;msg&#x27; =&gt; &#x27;帳號或密碼錯誤&#x27;], 401);
+  $_SESSION[&#x27;uid&#x27;] = $u[&#x27;id&#x27;];
+  out($u);
+}
+
+<i>// (2)a. 沒登入：瀏覽器直接開網址 → 轉回登入頁；AJAX 呼叫 → 401，前端再切回登入畫面</i>
+$uid = $_SESSION[&#x27;uid&#x27;] ?? null;
+if (!$uid) {
+  if (($_SERVER[&#x27;HTTP_X_REQUESTED_WITH&#x27;] ?? &#x27;&#x27;) !== &#x27;XMLHttpRequest&#x27;) { header(&#x27;Location: team123.html&#x27;); exit; } <i>// 302 跳轉</i>
+  out([&#x27;msg&#x27; =&gt; &#x27;請先登入&#x27;], 401);
+}
+
+<i>// 依人數決定狀態：滿員 full、達門檻 formed、其他 open</i>
+function refreshStatus($id) {
+  q(&quot;UPDATE announcements a SET status = CASE
+       WHEN (SELECT COUNT(*) FROM announcement_participants WHERE announcement_id=a.id) &gt;= a.max_players THEN &#x27;full&#x27;
+       WHEN (SELECT COUNT(*) FROM announcement_participants WHERE announcement_id=a.id) &gt;= a.min_players THEN &#x27;formed&#x27;
+       ELSE &#x27;open&#x27; END WHERE id=?&quot;, [$id]);
+  return q(&#x27;SELECT status FROM announcements WHERE id=?&#x27;, [$id])-&gt;fetchColumn();
+}
+
+switch ($a) {
+  case &#x27;logout&#x27;:
+    session_destroy();
+    out([&#x27;ok&#x27; =&gt; true]);
+
+  case &#x27;data&#x27;: <i>// 一次拿齊畫面需要的資料；全部都以 $uid 過濾 → (2)b. 不同玩家看到不同內容</i>
+    $me = q(&#x27;SELECT nickname FROM users WHERE id=?&#x27;, [$uid])-&gt;fetch();
+    $favs = q(&#x27;SELECT g.id, g.game_name FROM user_games ug JOIN games g ON g.id=ug.game_id WHERE ug.user_id=? ORDER BY g.game_name&#x27;, [$uid])-&gt;fetchAll();
+    <i>// 大廳：未滿員的公告，附上人數、隊長暱稱、我是否已加入</i>
+    $anns = q(&quot;SELECT a.*, g.game_name, u.nickname host,
+        (SELECT COUNT(*) FROM announcement_participants WHERE announcement_id=a.id) cnt,
+        EXISTS(SELECT 1 FROM announcement_participants WHERE announcement_id=a.id AND user_id=?) joined
+      FROM announcements a JOIN games g ON g.id=a.game_id JOIN users u ON u.id=a.host_id
+      WHERE a.status &lt;&gt; &#x27;full&#x27; ORDER BY a.event_time&quot;, [$uid])-&gt;fetchAll();
+    <i>// (4)b. 行事曆：我有參加、且已成局或滿員</i>
+    $cal = q(&quot;SELECT a.event_time, g.game_name, u.nickname host,
+        (SELECT COUNT(*) FROM announcement_participants WHERE announcement_id=a.id) cnt
+      FROM announcement_participants ap JOIN announcements a ON a.id=ap.announcement_id
+      JOIN games g ON g.id=a.game_id JOIN users u ON u.id=a.host_id
+      WHERE ap.user_id=? AND a.status IN (&#x27;formed&#x27;,&#x27;full&#x27;) ORDER BY a.event_time&quot;, [$uid])-&gt;fetchAll();
+    out([&#x27;me&#x27; =&gt; $me, &#x27;favs&#x27; =&gt; $favs, &#x27;anns&#x27; =&gt; $anns, &#x27;cal&#x27; =&gt; $cal]);
+
+  case &#x27;addfav&#x27;: <i>// (3)a. 遊戲不存在就先建立，再加進我的清單（IGNORE：重複不報錯）</i>
+    $name = trim($p[&#x27;name&#x27;] ?? &#x27;&#x27;);
+    if ($name === &#x27;&#x27;) out([&#x27;msg&#x27; =&gt; &#x27;請輸入遊戲名稱&#x27;], 400);
+    q(&#x27;INSERT IGNORE INTO games (game_name) VALUES (?)&#x27;, [$name]);
+    $gid = q(&#x27;SELECT id FROM games WHERE game_name=?&#x27;, [$name])-&gt;fetchColumn();
+    q(&#x27;INSERT IGNORE INTO user_games VALUES (?, ?)&#x27;, [$uid, $gid]);
+    out([&#x27;ok&#x27; =&gt; true]);
+
+  case &#x27;delfav&#x27;: <i>// (3)b. 移除喜愛遊戲</i>
+    q(&#x27;DELETE FROM user_games WHERE user_id=? AND game_id=?&#x27;, [$uid, $p[&#x27;game_id&#x27;]]);
+    out([&#x27;ok&#x27; =&gt; true]);
+
+  case &#x27;post&#x27;: <i>// 發布公告：隊長自己也算一個名額</i>
+    if ($p[&#x27;min&#x27;] &lt; 2 || $p[&#x27;max&#x27;] &lt; $p[&#x27;min&#x27;]) out([&#x27;msg&#x27; =&gt; &#x27;人數設定錯誤&#x27;], 400);
+    q(&#x27;INSERT INTO announcements (host_id, game_id, event_time, min_players, max_players) VALUES (?, ?, ?, ?, ?)&#x27;,
+      [$uid, $p[&#x27;game_id&#x27;], $p[&#x27;event_time&#x27;], $p[&#x27;min&#x27;], $p[&#x27;max&#x27;]]);
+    $id = $pdo-&gt;lastInsertId();
+    q(&#x27;INSERT INTO announcement_participants (announcement_id, user_id) VALUES (?, ?)&#x27;, [$id, $uid]);
+    out([&#x27;status&#x27; =&gt; refreshStatus($id)]);
+
+  case &#x27;join&#x27;: <i>// (4)a. 加入 → 重算狀態，回傳新狀態給前端決定要不要淡出</i>
+    if (q(&#x27;SELECT status FROM announcements WHERE id=?&#x27;, [$p[&#x27;id&#x27;]])-&gt;fetchColumn() === &#x27;full&#x27;) out([&#x27;msg&#x27; =&gt; &#x27;已滿員&#x27;], 409);
+    q(&#x27;INSERT IGNORE INTO announcement_participants (announcement_id, user_id) VALUES (?, ?)&#x27;, [$p[&#x27;id&#x27;], $uid]);
+    out([&#x27;status&#x27; =&gt; refreshStatus($p[&#x27;id&#x27;])]);
+}
+out([&#x27;msg&#x27; =&gt; &#x27;未知動作&#x27;], 400);</pre><div class="file">2026/p2-ans/team123.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-TW&quot; data-bs-theme=&quot;dark&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;GamerHub&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/all.min.css&quot;&gt; <i>&lt;!-- 字型路徑是 ../webfonts，所以 CSS 要放在子資料夾 --&gt;</i>
+  &lt;style&gt;.ann { border-left: 4px solid #0dcaf0 !important; }&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <i>&lt;!-- 登入畫面 --&gt;</i>
+  &lt;form id=&quot;loginView&quot; class=&quot;container py-5&quot; style=&quot;max-width:400px&quot; onsubmit=&quot;login(); return false&quot;&gt;
+    &lt;h3 class=&quot;text-info mb-3&quot;&gt;&lt;i class=&quot;fa-solid fa-paper-plane&quot;&gt;&lt;/i&gt; GamerHub&lt;/h3&gt;
+    &lt;input id=&quot;username&quot; class=&quot;form-control mb-2&quot; placeholder=&quot;帳號（如 faker）&quot; required&gt;
+    &lt;input id=&quot;password&quot; class=&quot;form-control mb-2&quot; type=&quot;password&quot; placeholder=&quot;密碼（1234）&quot; required&gt;
+    &lt;button class=&quot;btn btn-info w-100&quot;&gt;登入&lt;/button&gt;
+    &lt;div id=&quot;err&quot; class=&quot;text-danger mt-2&quot;&gt;&lt;/div&gt;
+  &lt;/form&gt;
+
+  <i>&lt;!-- 大廳：用 d-none 切換顯示，不換頁 → (1)b. SPA --&gt;</i>
+  &lt;div id=&quot;mainView&quot; class=&quot;d-none&quot;&gt;
+    &lt;nav class=&quot;navbar bg-body-tertiary px-3&quot;&gt;
+      &lt;span class=&quot;navbar-brand text-info&quot;&gt;&lt;i class=&quot;fa-solid fa-paper-plane&quot;&gt;&lt;/i&gt; GamerHub&lt;/span&gt;
+      &lt;span&gt;歡迎回來 - &lt;b id=&quot;nick&quot;&gt;&lt;/b&gt; &lt;button class=&quot;btn btn-outline-danger btn-sm&quot; onclick=&quot;logout()&quot;&gt;登出&lt;/button&gt;&lt;/span&gt;
+    &lt;/nav&gt;
+    <i>&lt;!-- (1)a. col-lg-*：≥992px 左右兩欄，&lt;992px 自動上下堆疊各佔 100% --&gt;</i>
+    &lt;div class=&quot;container-fluid row g-3 p-3 m-0&quot;&gt;
+      &lt;div class=&quot;col-lg-4&quot;&gt;
+        &lt;div class=&quot;card card-body mb-3&quot;&gt;
+          &lt;h5 class=&quot;text-info&quot;&gt;&lt;i class=&quot;fa-solid fa-heart&quot;&gt;&lt;/i&gt; 我的喜愛清單&lt;/h5&gt;
+          &lt;div class=&quot;input-group mb-2&quot;&gt;
+            &lt;input id=&quot;favName&quot; class=&quot;form-control&quot; placeholder=&quot;輸入遊戲名稱，如：黑神話：悟空&quot;&gt;
+            &lt;button class=&quot;btn btn-outline-info&quot; onclick=&quot;addFav()&quot;&gt;&lt;i class=&quot;fa-solid fa-plus&quot;&gt;&lt;/i&gt; 加入&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div id=&quot;favs&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;card card-body&quot;&gt;
+          &lt;h5 class=&quot;text-warning&quot;&gt;&lt;i class=&quot;fa-solid fa-bullhorn&quot;&gt;&lt;/i&gt; 發布組隊大廳公告&lt;/h5&gt;
+          &lt;label&gt;選擇遊戲項目&lt;/label&gt;&lt;select id=&quot;postGame&quot; class=&quot;form-select mb-2&quot;&gt;&lt;/select&gt;
+          &lt;label&gt;預計開打時段&lt;/label&gt;&lt;input id=&quot;postTime&quot; type=&quot;datetime-local&quot; class=&quot;form-control mb-2&quot;&gt;
+          &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;col&quot;&gt;&lt;label&gt;最少成局人數 (Min)&lt;/label&gt;&lt;input id=&quot;postMin&quot; type=&quot;number&quot; value=&quot;2&quot; min=&quot;2&quot; class=&quot;form-control&quot;&gt;&lt;/div&gt;
+            &lt;div class=&quot;col&quot;&gt;&lt;label&gt;最大滿員人數 (Max)&lt;/label&gt;&lt;input id=&quot;postMax&quot; type=&quot;number&quot; value=&quot;4&quot; min=&quot;2&quot; class=&quot;form-control&quot;&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;button class=&quot;btn btn-warning mt-3&quot; onclick=&quot;post()&quot;&gt;&lt;i class=&quot;fa-solid fa-paper-plane&quot;&gt;&lt;/i&gt; 廣播號召隊友&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;col-lg-8&quot;&gt;
+        &lt;ul class=&quot;nav nav-tabs mb-3&quot;&gt;
+          &lt;li class=&quot;nav-item&quot;&gt;&lt;a class=&quot;nav-link active&quot; href=&quot;#&quot; data-tab=&quot;lobby&quot;&gt;&lt;i class=&quot;fa-solid fa-tower-broadcast&quot;&gt;&lt;/i&gt; 大廳組隊看板&lt;/a&gt;&lt;/li&gt;
+          &lt;li class=&quot;nav-item&quot;&gt;&lt;a class=&quot;nav-link text-warning&quot; href=&quot;#&quot; data-tab=&quot;calendar&quot;&gt;&lt;i class=&quot;fa-solid fa-calendar-days&quot;&gt;&lt;/i&gt; 我的遊戲行事曆&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div id=&quot;lobby&quot;&gt;
+          &lt;div class=&quot;d-flex justify-content-between mb-2&quot;&gt;
+            &lt;h4&gt;&lt;i class=&quot;fa-solid fa-satellite-dish&quot;&gt;&lt;/i&gt; 目前進行中的招募公告&lt;/h4&gt;
+            &lt;div&gt;&lt;i class=&quot;fa-solid fa-filter&quot;&gt;&lt;/i&gt; 快速過濾：&lt;select id=&quot;filter&quot; class=&quot;form-select form-select-sm d-inline w-auto&quot; onchange=&quot;drawLobby()&quot;&gt;&lt;/select&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div id=&quot;cards&quot; class=&quot;row g-3&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;calendar&quot; class=&quot;d-none card card-body&quot;&gt;
+          &lt;h4 class=&quot;text-warning&quot;&gt;已成局事件戰報 (Time Table)&lt;/h4&gt;
+          &lt;table class=&quot;table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;時段&lt;/th&gt;&lt;th&gt;遊戲品項&lt;/th&gt;&lt;th&gt;發起/隊員&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody id=&quot;cal&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script src=&quot;jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2026/p2-ans/app.js</div><pre>let data = {}; <i>// 後端回來的 { me, favs, anns, cal }</i>
+
+<i>// 文字跳脫：玩家輸入的遊戲名稱不能被當 HTML 執行</i>
+const esc = s =&gt; $(&#x27;&lt;div&gt;&#x27;).text(s).html();
+
+<i>// 共用：呼叫 API；401 代表沒登入 → 回登入畫面</i>
+function api(a, body) {
+  return $.post(&#x27;api.php?a=&#x27; + a, body).fail(x =&gt; {
+    if (x.status === 401) showLogin();
+    else alert(x.responseJSON?.msg || &#x27;發生錯誤&#x27;);
+  });
+}
+
+function showLogin() { $(&#x27;#mainView&#x27;).addClass(&#x27;d-none&#x27;); $(&#x27;#loginView&#x27;).removeClass(&#x27;d-none&#x27;); }
+
+function login() {
+  api(&#x27;login&#x27;, { username: $(&#x27;#username&#x27;).val(), password: $(&#x27;#password&#x27;).val() })
+    .done(load)
+    .fail(() =&gt; $(&#x27;#err&#x27;).text(&#x27;帳號或密碼錯誤&#x27;));
+}
+
+function logout() { api(&#x27;logout&#x27;).done(showLogin); }
+
+<i>// 重新抓資料並畫整個畫面（不重整網頁）</i>
+function load() {
+  return api(&#x27;data&#x27;).done(d =&gt; {
+    data = d;
+    $(&#x27;#loginView&#x27;).addClass(&#x27;d-none&#x27;);
+    $(&#x27;#mainView&#x27;).removeClass(&#x27;d-none&#x27;);
+    $(&#x27;#nick&#x27;).text(d.me.nickname);
+
+    <i>// (3)a. 喜愛清單標籤 + 兩個下拉選單，都用同一份 favs 產生 → 新增後三處同步</i>
+    $(&#x27;#favs&#x27;).html(d.favs.map(g =&gt;
+      `&lt;span class=&quot;badge bg-info text-dark me-1 mb-1&quot;&gt;${esc(g.game_name)}
+        &lt;a href=&quot;#&quot; class=&quot;text-dark&quot; onclick=&quot;delFav(${g.id}); return false&quot;&gt;✕&lt;/a&gt;&lt;/span&gt;`).join(&#x27;&#x27;));
+    const opts = d.favs.map(g =&gt; `&lt;option value=&quot;${g.id}&quot;&gt;${esc(g.game_name)}&lt;/option&gt;`).join(&#x27;&#x27;);
+    $(&#x27;#postGame&#x27;).html(&#x27;&lt;option value=&quot;&quot;&gt;-- 請選擇遊戲 --&lt;/option&gt;&#x27; + opts);
+    const keep = $(&#x27;#filter&#x27;).val(); <i>// 重畫選單後保留原本的過濾選擇</i>
+    $(&#x27;#filter&#x27;).html(&#x27;&lt;option value=&quot;&quot;&gt;全部&lt;/option&gt;&#x27; + opts).val(keep);
+    if (!$(&#x27;#filter&#x27;).val()) $(&#x27;#filter&#x27;).val(&#x27;&#x27;);
+
+    drawLobby();
+    <i>// (4)b. 行事曆只有已成局 / 滿員（後端已過濾）</i>
+    $(&#x27;#cal&#x27;).html(d.cal.map(e =&gt; `&lt;tr&gt;
+      &lt;td class=&quot;text-warning&quot;&gt;&lt;i class=&quot;fa-regular fa-clock&quot;&gt;&lt;/i&gt; ${e.event_time}&lt;/td&gt;
+      &lt;td&gt;&lt;span class=&quot;badge text-bg-secondary&quot;&gt;${esc(e.game_name)}&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;b class=&quot;text-info&quot;&gt;${esc(e.host)}&lt;/b&gt; 與另外 ${e.cnt - 1} 人&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)
+      || &#x27;&lt;tr&gt;&lt;td colspan=&quot;3&quot; class=&quot;text-muted&quot;&gt;尚無已成局的事件&lt;/td&gt;&lt;/tr&gt;&#x27;);
+  });
+}
+
+<i>// (3)b. 大廳只顯示「我喜愛的遊戲」，再依快速過濾篩選</i>
+function drawLobby() {
+  const f = $(&#x27;#filter&#x27;).val();
+  const list = data.anns.filter(a =&gt; data.favs.some(g =&gt; g.id == a.game_id) &amp;&amp; (!f || a.game_id == f));
+  $(&#x27;#cards&#x27;).html(list.map(a =&gt; `
+    &lt;div class=&quot;col-md-6&quot; id=&quot;ann${a.id}&quot;&gt;&lt;div class=&quot;card card-body ann&quot;&gt;
+      &lt;div class=&quot;d-flex justify-content-between&quot;&gt;
+        &lt;h5 class=&quot;text-info&quot;&gt;&lt;i class=&quot;fa-solid fa-crosshairs&quot;&gt;&lt;/i&gt; ${esc(a.game_name)}&lt;/h5&gt;
+        ${a.status === &#x27;formed&#x27;
+          ? &#x27;&lt;span class=&quot;badge bg-success align-self-start&quot;&gt;&lt;i class=&quot;fa-solid fa-fire&quot;&gt;&lt;/i&gt; 已成局招募&lt;/span&gt;&#x27;
+          : &#x27;&lt;span class=&quot;badge bg-primary align-self-start&quot;&gt;&lt;i class=&quot;fa-solid fa-user-plus&quot;&gt;&lt;/i&gt; 招募中&lt;/span&gt;&#x27;}
+      &lt;/div&gt;
+      &lt;div&gt;&lt;i class=&quot;fa-regular fa-calendar&quot;&gt;&lt;/i&gt; 時段: ${a.event_time}&lt;/div&gt;
+      &lt;div&gt;&lt;i class=&quot;fa-solid fa-crown text-warning&quot;&gt;&lt;/i&gt; 發起隊長: ${esc(a.host)}&lt;/div&gt;
+      &lt;div class=&quot;d-flex justify-content-between&quot;&gt;&lt;span&gt;成局門檻: ${a.min_players}人&lt;/span&gt;&lt;b&gt;${a.cnt} / ${a.max_players} 人&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;progress my-2&quot; style=&quot;height:6px&quot;&gt;&lt;div class=&quot;progress-bar bg-info&quot; style=&quot;width:${a.cnt / a.max_players * 100}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      ${a.joined == 1
+        ? &#x27;&lt;button class=&quot;btn btn-secondary btn-sm&quot; disabled&gt;&lt;i class=&quot;fa-solid fa-check&quot;&gt;&lt;/i&gt; 你已在隊伍中&lt;/button&gt;&#x27;
+        : `&lt;button class=&quot;btn btn-info btn-sm&quot; onclick=&quot;join(${a.id})&quot;&gt;&lt;i class=&quot;fa-solid fa-right-to-bracket&quot;&gt;&lt;/i&gt; 我加入&lt;/button&gt;`}
+    &lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;) || &#x27;&lt;p class=&quot;text-muted&quot;&gt;目前沒有招募公告&lt;/p&gt;&#x27;);
+}
+
+function addFav() {
+  api(&#x27;addfav&#x27;, { name: $(&#x27;#favName&#x27;).val() }).done(() =&gt; { $(&#x27;#favName&#x27;).val(&#x27;&#x27;); load(); });
+}
+
+function delFav(id) { api(&#x27;delfav&#x27;, { game_id: id }).done(load); }
+
+function post() {
+  const time = $(&#x27;#postTime&#x27;).val();
+  if (!$(&#x27;#postGame&#x27;).val() || !time) return alert(&#x27;請選擇遊戲與時段&#x27;);
+  api(&#x27;post&#x27;, { game_id: $(&#x27;#postGame&#x27;).val(), event_time: time.replace(&#x27;T&#x27;, &#x27; &#x27;) + &#x27;:00&#x27;, min: $(&#x27;#postMin&#x27;).val(), max: $(&#x27;#postMax&#x27;).val() })
+    .done(load);
+}
+
+<i>// (4)a. 加入後若滿員 → 字卡淡出再重畫；否則直接重畫（狀態文字會變成已成局）</i>
+function join(id) {
+  api(&#x27;join&#x27;, { id }).done(r =&gt; r.status === &#x27;full&#x27; ? $(&#x27;#ann&#x27; + id).fadeOut(600, load) : load());
+}
+
+<i>// 頁籤切換：只切 d-none，不換頁</i>
+$(&#x27;[data-tab]&#x27;).on(&#x27;click&#x27;, function (e) {
+  e.preventDefault();
+  $(&#x27;[data-tab]&#x27;).removeClass(&#x27;active&#x27;);
+  $(this).addClass(&#x27;active&#x27;);
+  $(&#x27;#lobby, #calendar&#x27;).addClass(&#x27;d-none&#x27;);
+  $(&#x27;#&#x27; + this.dataset.tab).removeClass(&#x27;d-none&#x27;);
+});
+
+<i>// 開頁先試著拿資料：有登入就進大廳，沒登入 api() 會切回登入畫面</i>
+load();</pre><div class="file">2026/p2-ans/系統設計文件.md</div><div class="doc"><b>GamerHub：系統設計文件（team123）</b><div>環境：XAMPP（Apache + PHP + MySQL）。先在 phpMyAdmin 匯入 <code>gamershub.sql</code>，再開 http://localhost/…/p2-ans/team123.html</div><div>測試帳號：faker / caps / tenz / s1mple，密碼皆 1234</div><table class="md"><tr><th>檔案</th><th>用途</th></tr><tr><td>team123.html</td><td>單頁畫面：登入、喜愛清單、發布公告、大廳、行事曆</td></tr><tr><td>app.js</td><td>jQuery：呼叫 API、畫畫面、頁籤切換、淡出動畫</td></tr><tr><td>api.php</td><td>後端 API（PDO），未登入一律擋下</td></tr><tr><td>css/all.min.css + webfonts/</td><td>Font Awesome（CSS 內寫 ../webfonts，所以放 css/ 子資料夾）</td></tr></table><b>API（api.php?a=…）</b><table class="md"><tr><th>a</th><th>方法</th><th>參數</th><th>說明</th></tr><tr><td>login</td><td>POST</td><td>username, password</td><td>成功寫入 session；失敗 401</td></tr><tr><td>logout</td><td>POST</td><td></td><td>銷毀 session</td></tr><tr><td>data</td><td>POST</td><td></td><td>回傳 me、favs、anns（未滿員）、cal（已成局/滿員且我有參加）</td></tr><tr><td>addfav</td><td>POST</td><td>name</td><td>遊戲不存在先 INSERT IGNORE 進 games，再加入 user_games</td></tr><tr><td>delfav</td><td>POST</td><td>game_id</td><td>移除喜愛遊戲</td></tr><tr><td>post</td><td>POST</td><td>game_id, event_time, min, max</td><td>新增公告，隊長同時寫入參與者</td></tr><tr><td>join</td><td>POST</td><td>id</td><td>加入後重算狀態，回傳 open / formed / full；已滿員 409</td></tr></table><div>未登入：AJAX 回 401（前端切回登入畫面）；瀏覽器直接開網址 → 302 跳回 team123.html。</div><div>狀態規則：人數 ≥ max → full；人數 ≥ min → formed；其他 → open。</div></div></section></main></body></html>

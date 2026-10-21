@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <!-- 沒有這行，手機會用桌機寬度顯示，@media 失效 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ITSA 2024</title>
+  <link rel="stylesheet" href="team021.css">
+</head>
+<body>
+  <!-- a. 水平導覽列 -->
+  <nav><div class="wrap">
+    <b>ITSA 2024</b>
+    <span><a href="#">最新消息</a><a href="#">競賽須知</a><a href="#">競賽報名</a><a href="#">競賽時程</a></span>
+  </div></nav>
+
+  <!-- b. 頁首區（灰底）＋ c. 圖片往下凸出，和文字不等高 -->
+  <header><div class="wrap">
+    <div>
+      <h1>全國大專校院程式設計極客挑戰賽</h1>
+      <p>即日起至113年9月13日(五) 17:00止</p>
+    </div>
+    <img src="img.svg" alt="">
+  </div></header>
+
+  <main class="wrap">
+    <!-- d. 報名按鈕 -->
+    <button>我要報名</button>
+
+    <!-- e. 第一列：圖左、文右，文字框疊在圖上 -->
+    <section class="row">
+      <img src="img.svg" alt="">
+      <div class="txt">
+        <h3>2023 - 成果展示70字</h3>
+        <p>本屆競賽吸引全國百餘所大專校院隊伍參賽，選手在限時內完成網頁設計與系統開發題目，展現前端排版、資料庫設計與程式邏輯的實力，評審肯定作品兼具創意與實用價值，成果豐碩。</p>
+      </div>
+    </section>
+
+    <!-- f. 第二列：圖右、文左（CSS 用 row-reverse 反轉） -->
+    <section class="row">
+      <img src="img.svg" alt="">
+      <div class="txt">
+        <h3>2022 - 成果展示70字</h3>
+        <p>本屆競賽首度採線上與實體並行，參賽隊伍需在兩小時內完成響應式網頁與資料管理系統，選手們分工合作、互相支援，最終多支隊伍拿下滿分佳績，充分展現學生的創新能力。</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

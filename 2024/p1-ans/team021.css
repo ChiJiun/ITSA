@@ -1,0 +1,47 @@
+* { box-sizing: border-box; margin: 0; }
+body { font-family: sans-serif; background: #fff; color: #222; }
+img { width: 50%; display: block; }
+
+/* 寬度 > 900px：內容固定 900px，margin:auto 讓左右留白相等（置中） */
+.wrap { max-width: 900px; margin: auto; }
+
+/* a. 導覽列：flex + space-between 讓 logo 靠左、連結靠右 */
+nav { background: #444; color: #fff; padding: 12px 0; }
+nav .wrap { display: flex; justify-content: space-between; }
+nav a { color: #fff; text-decoration: none; margin-left: 16px; }
+
+/* b. 頁首灰底；c. 圖片用 margin-bottom 負值往下凸出灰底，與文字不等高 */
+header { background: #ddd; padding-top: 20px; margin-bottom: 100px; }
+header .wrap { display: flex; justify-content: space-between; }
+header img { width: 40%; margin-bottom: -100px; }
+
+/* d. 報名按鈕 */
+button { background: #333; color: #fff; border: 0; padding: 10px 16px; margin: -80px 0 60px; }
+
+/* e. 圖文交疊：文字框 margin-left 負值蓋到圖片上，relative 讓它疊在上層 */
+.row { display: flex; align-items: flex-start; margin-bottom: 60px; }
+.txt { width: 55%; }
+.txt h3 { margin-left: 16px; }
+.txt p { background: #ddd; padding: 20px; margin: 16px 0 0 -10%; position: relative; }
+
+/* f. 第二列左右反轉，負邊距改到右邊 */
+.row:nth-of-type(2) { flex-direction: row-reverse; }
+.row:nth-of-type(2) p { margin: 16px -10% 0 0; }
+
+/* 750px ~ 900px：滿版，左右無邊界距離（.wrap 本來就會變 100% 寬） */
+
+/* < 750px：導覽列一列，其餘每個元素各佔一列 */
+@media (max-width: 749px) {
+  header .wrap, .row, .row:nth-of-type(2) { flex-direction: column; }
+  header { margin-bottom: 0; padding: 20px 10px 0; }
+  nav { font-size: 13px; padding: 12px 10px; }
+  nav a { margin-left: 8px; }
+  h1 { font-size: 22px; }
+  img, header img { width: 100%; margin: 0; }
+  button { margin: 20px 10px; }
+  .row { margin: 0 10px 40px; }
+  /* display:contents 拆掉 .txt 外框，h3 才能用 order 排到圖片上面 */
+  .txt { display: contents; }
+  .txt h3 { margin: 0 0 10px; order: -1; }
+  .txt p, .row:nth-of-type(2) p { margin: 0; }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>健康度量管理系統</title>
+  <link rel="stylesheet" href="team021.css">
+</head>
+<body>
+  <h1>健康度量管理系統</h1>
+  <p id="msg"></p>
+
+  <!-- 登入 / 註冊（醫檢員） -->
+  <section id="login">
+    <input id="name" placeholder="姓名（註冊用）">
+    <input id="account" placeholder="帳號">
+    <input id="password" type="password" placeholder="密碼">
+    <button onclick="login()">登入</button>
+    <button onclick="register()">醫檢員註冊</button>
+  </section>
+
+  <!-- c. 受檢者第一次登入：強制改密碼 -->
+  <section id="chpwd" hidden>
+    <h2>第一次登入，請更新密碼</h2>
+    <!-- pattern：前端先擋一次，後端 PHP 再驗證一次 -->
+    <input id="newpwd" placeholder="12 碼，大小寫英文 + 數字" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{12}">
+    <button onclick="chpwd()">更新密碼</button>
+  </section>
+
+  <!-- d. 受檢者：單一頁面顯示所有項目分數 -->
+  <section id="patient" hidden>
+    <h2>我的檢查結果</h2>
+    <table id="mine"></table>
+  </section>
+
+  <!-- a、b. 醫檢員：三張表的新增 / 刪除 / 更新 / 查詢 -->
+  <section id="tech" hidden>
+    <h2>人員</h2><table id="users"></table>
+    <h2>醫檢項目</h2><table id="items"></table>
+    <h2>檢查結果</h2><table id="results"></table>
+    <h2>檢查結果總表（每位受檢者一列）</h2><table id="pivot"></table>
+  </section>
+
+  <button id="logout" onclick="logout()" hidden>登出</button>
+  <script src="jquery-3.7.1.min.js"></script>
+  <script src="team021.js"></script>
+</body>
+</html>

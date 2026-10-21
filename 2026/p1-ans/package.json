@@ -1,0 +1,6 @@
+{
+  "name": "team123-queue",
+  "private": true,
+  "scripts": { "start": "node app.js" },
+  "dependencies": { "express": "4.22.3" }
+}

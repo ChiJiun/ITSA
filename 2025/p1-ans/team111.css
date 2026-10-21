@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; text-align: center; background: #f5f5f5; color: #222; }
+#game { display: flex; justify-content: center; gap: 20px; height: 320px; margin-top: 20px; }
+/* column-reverse：第一個子元素在最下面，所以 appendChild 就是疊到最上面 */
+.peg { width: 260px; background: linear-gradient(#555, #555) center / 12px 100% no-repeat, #ddd;
+       display: flex; flex-direction: column-reverse; align-items: center; padding-bottom: 10px; }
+.disk { height: 24px; margin-top: 2px; border-radius: 6px; cursor: grab; }

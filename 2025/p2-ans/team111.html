@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>詐騙關鍵字週報生成系統</title>
+  <link rel="stylesheet" href="team111.css">
+  <!-- 比賽若不能上網，改成同資料夾的 chart.umd.min.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <h1>詐騙關鍵字週報生成系統</h1>
+  <div class="bar">
+    週期：<select id="week" onchange="draw()"><option value="">全部週期</option></select>
+    圖表：<select id="type" onchange="draw()"><option value="bar">長條圖</option><option value="line">趨勢圖</option></select>
+    <button onclick="downloadCsv()">下載週報 CSV</button>
+    <button onclick="downloadPng()">下載圖表 PNG</button>
+  </div>
+  <div class="cards">
+    <div>總週數<b id="weeks"></b></div>
+    <div>關鍵字總數<b id="kws"></b></div>
+    <div>最熱門關鍵字<b id="hot"></b></div>
+  </div>
+  <canvas id="chart"></canvas>
+  <table id="table"></table>
+  <script src="team111.js"></script>
+</body>
+</html>

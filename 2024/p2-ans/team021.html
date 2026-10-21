@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>圖書管理系統</title>
+  <link rel="stylesheet" href="team021.css">
+</head>
+<body>
+  <h1>圖書管理系統</h1>
+  <h2>添加圖書</h2>
+  <!-- onsubmit 交給 save()；return false 阻止表單換頁 -->
+  <form onsubmit="save(); return false">
+    書名:<br><input id="title" required><br>
+    作者:<br><input id="author" required><br>
+    出版年份:<br><input id="year" type="number" required><br>
+    <button id="btn">添加圖書</button>
+  </form>
+  <h2>圖書列表</h2>
+  <table>
+    <tr><th>ID</th><th>書名</th><th>作者</th><th>出版年份</th><th>操作</th><th></th></tr>
+    <tbody id="list"></tbody>
+  </table>
+  <script src="team021.js"></script>
+</body>
+</html>

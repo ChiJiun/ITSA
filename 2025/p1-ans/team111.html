@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>圖形化河內塔互動遊戲</title>
+  <link rel="stylesheet" href="team111.css">
+</head>
+<body>
+  <h1>河內塔遊戲</h1>
+  <p>規則：一次移動一個圓盤，大圓盤不能放在小圓盤上；把全部圓盤移到最右邊的柱子</p>
+  圓盤數量：<select id="n"></select>
+  <button onclick="start()">開始遊戲</button>
+  <p>最少步數：<b id="min">0</b>｜移動步數：<b id="moves">0</b></p>
+  <!-- 三根柱子；圓盤是柱子裡的 div，最後一個子元素 = 最上面那塊 -->
+  <div id="game"><div class="peg"></div><div class="peg"></div><div class="peg"></div></div>
+  <script src="team111.js"></script>
+</body>
+</html>

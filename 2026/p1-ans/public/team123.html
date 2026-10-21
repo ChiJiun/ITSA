@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>叫號與候位系統</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <nav class="navbar bg-dark px-4"><span class="navbar-brand text-white">叫號與候位系統 - 前台取號</span>
+    <a class="btn btn-outline-light btn-sm" href="admin.html">櫃台管理</a></nav>
+  <div class="container py-4" style="max-width:700px">
+    <div class="card card-body mb-3">
+      <h5>請選擇服務項目</h5>
+      <select id="service" class="form-select mb-2">
+        <option value="G">一般服務</option><option value="A">開戶/申辦</option><option value="C">諮詢</option>
+      </select>
+      <button class="btn btn-primary" onclick="take()">取得號碼</button>
+      <div id="ticket" class="alert alert-success mt-3" hidden></div>
+    </div>
+    <div class="card card-body mb-3 text-center"><h5>目前叫號</h5><h1 id="current"></h1></div>
+    <div class="card card-body"><h5>等待清單</h5>
+      <table class="table table-sm"><thead><tr><th>號碼</th><th>服務項目</th><th>取號時間</th></tr></thead><tbody id="waiting"></tbody></table>
+    </div>
+  </div>
+  <script src="common.js"></script>
+  <script>
+    async function take() {
+      const r = await fetch('/api/tickets', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service: service.value }) });
+      const t = await r.json();
+      ticket.hidden = false;
+      ticket.innerHTML = `您的號碼：<b class="fs-3">${t.number}</b><br>服務項目：${t.service}<br>取號時間：${t.createdAt}`;
+      refresh(); // b. 取號後立即更新
+    }
+    // c. 每 2 秒輪詢，別的分頁取號也會在 5 秒內出現
+    async function refresh() {
+      const s = await (await fetch('/api/state')).json();
+      current.textContent = s.current ? `${s.current.number} (${s.current.service})` : '尚未叫號';
+      waiting.innerHTML = rows(s.waiting, ['number', 'service', 'createdAt'], 3, '目前沒有等待中的號碼');
+    }
+    refresh();
+    setInterval(refresh, 2000);
+  </script>
+</body>
+</html>

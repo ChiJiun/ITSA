@@ -1,0 +1,4 @@
+body { font-family: sans-serif; background: #fff; color: #222; margin: 20px; }
+input { margin-bottom: 6px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }

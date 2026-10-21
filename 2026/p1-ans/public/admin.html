@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>櫃台管理</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <nav class="navbar bg-dark px-4"><span class="navbar-brand text-white">叫號與候位系統 - 櫃台管理</span>
+    <span id="bar" hidden><a class="btn btn-outline-light btn-sm" href="team123.html">前台取號</a>
+      <button class="btn btn-outline-light btn-sm" onclick="logout()">登出</button></span></nav>
+
+  <!-- a. 未登入只顯示登入表單 -->
+  <form id="loginForm" class="container py-5" style="max-width:400px" onsubmit="login(); return false" hidden>
+    <h4>櫃台登入</h4>
+    <input id="u" class="form-control mb-2" placeholder="帳號" required>
+    <input id="p" class="form-control mb-2" type="password" placeholder="密碼" required>
+    <button class="btn btn-primary w-100">登入</button>
+    <div id="err" class="text-danger mt-2"></div>
+  </form>
+
+  <!-- b. 登入後的管理畫面 -->
+  <div id="panel" class="container-fluid py-4" hidden>
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card card-body mb-3"><h5>目前服務中的號碼</h5>
+          <h2 id="current" class="text-center my-3"></h2>
+          <div class="row g-2">
+            <div class="col"><button id="next" class="btn btn-primary w-100" onclick="act('next')">下一位</button></div>
+            <div class="col"><button id="done" class="btn btn-success w-100" onclick="act('complete')">完成服務</button></div>
+          </div>
+          <div id="msg" class="text-danger mt-2"></div>
+        </div>
+        <div class="card card-body"><h5>等待清單</h5>
+          <table class="table table-sm"><thead><tr><th>號碼</th><th>服務項目</th><th>取號時間</th></tr></thead><tbody id="waiting"></tbody></table></div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card card-body"><h5>歷史紀錄</h5>
+          <table class="table table-sm text-nowrap"><thead><tr><th>號碼</th><th>服務項目</th><th>取號時間</th><th>叫號時間</th><th>完成時間</th></tr></thead><tbody id="hist"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+  <script src="common.js"></script>
+  <script>
+    const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const show = on => { loginForm.hidden = on; panel.hidden = bar.hidden = !on; };
+
+    async function refresh() {
+      const h = await fetch('/api/admin/history'); // 401 → 代表沒登入
+      if (h.status === 401) return show(false);
+      show(true);
+      const s = await (await fetch('/api/state')).json();
+      current.textContent = s.current ? `${s.current.number} (${s.current.service})` : '尚無服務中的號碼';
+      next.disabled = !!s.current;  // 有人在服務中 → 下一位停用
+      done.disabled = !s.current;   // 沒人在服務中 → 完成服務停用
+      waiting.innerHTML = rows(s.waiting, ['number', 'service', 'createdAt'], 3, '目前無等待中的號碼');
+      hist.innerHTML = rows(await h.json(), ['number', 'service', 'createdAt', 'calledAt', 'finishedAt'], 5, '尚無歷史紀錄');
+    }
+
+    async function login() {
+      const r = await post('/api/login', { username: u.value, password: p.value });
+      err.textContent = r.ok ? '' : '帳號或密碼錯誤';
+      refresh();
+    }
+
+    // c、e. 下一位 / 完成服務；409 時顯示後端給的訊息
+    async function act(type) {
+      const r = await post('/api/admin/' + type);
+      msg.textContent = r.ok ? '' : (await r.json()).error;
+      refresh();
+    }
+
+    async function logout() { await post('/api/logout'); show(false); }
+
+    refresh();
+    setInterval(refresh, 2000);
+  </script>
+</body>
+</html>

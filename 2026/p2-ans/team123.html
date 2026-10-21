@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GamerHub</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="css/all.min.css"> <!-- 字型路徑是 ../webfonts，所以 CSS 要放在子資料夾 -->
+  <style>.ann { border-left: 4px solid #0dcaf0 !important; }</style>
+</head>
+<body>
+  <!-- 登入畫面 -->
+  <form id="loginView" class="container py-5" style="max-width:400px" onsubmit="login(); return false">
+    <h3 class="text-info mb-3"><i class="fa-solid fa-paper-plane"></i> GamerHub</h3>
+    <input id="username" class="form-control mb-2" placeholder="帳號（如 faker）" required>
+    <input id="password" class="form-control mb-2" type="password" placeholder="密碼（1234）" required>
+    <button class="btn btn-info w-100">登入</button>
+    <div id="err" class="text-danger mt-2"></div>
+  </form>
+
+  <!-- 大廳：用 d-none 切換顯示，不換頁 → (1)b. SPA -->
+  <div id="mainView" class="d-none">
+    <nav class="navbar bg-body-tertiary px-3">
+      <span class="navbar-brand text-info"><i class="fa-solid fa-paper-plane"></i> GamerHub</span>
+      <span>歡迎回來 - <b id="nick"></b> <button class="btn btn-outline-danger btn-sm" onclick="logout()">登出</button></span>
+    </nav>
+    <!-- (1)a. col-lg-*：≥992px 左右兩欄，<992px 自動上下堆疊各佔 100% -->
+    <div class="container-fluid row g-3 p-3 m-0">
+      <div class="col-lg-4">
+        <div class="card card-body mb-3">
+          <h5 class="text-info"><i class="fa-solid fa-heart"></i> 我的喜愛清單</h5>
+          <div class="input-group mb-2">
+            <input id="favName" class="form-control" placeholder="輸入遊戲名稱，如：黑神話：悟空">
+            <button class="btn btn-outline-info" onclick="addFav()"><i class="fa-solid fa-plus"></i> 加入</button>
+          </div>
+          <div id="favs"></div>
+        </div>
+        <div class="card card-body">
+          <h5 class="text-warning"><i class="fa-solid fa-bullhorn"></i> 發布組隊大廳公告</h5>
+          <label>選擇遊戲項目</label><select id="postGame" class="form-select mb-2"></select>
+          <label>預計開打時段</label><input id="postTime" type="datetime-local" class="form-control mb-2">
+          <div class="row">
+            <div class="col"><label>最少成局人數 (Min)</label><input id="postMin" type="number" value="2" min="2" class="form-control"></div>
+            <div class="col"><label>最大滿員人數 (Max)</label><input id="postMax" type="number" value="4" min="2" class="form-control"></div>
+          </div>
+          <button class="btn btn-warning mt-3" onclick="post()"><i class="fa-solid fa-paper-plane"></i> 廣播號召隊友</button>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item"><a class="nav-link active" href="#" data-tab="lobby"><i class="fa-solid fa-tower-broadcast"></i> 大廳組隊看板</a></li>
+          <li class="nav-item"><a class="nav-link text-warning" href="#" data-tab="calendar"><i class="fa-solid fa-calendar-days"></i> 我的遊戲行事曆</a></li>
+        </ul>
+        <div id="lobby">
+          <div class="d-flex justify-content-between mb-2">
+            <h4><i class="fa-solid fa-satellite-dish"></i> 目前進行中的招募公告</h4>
+            <div><i class="fa-solid fa-filter"></i> 快速過濾：<select id="filter" class="form-select form-select-sm d-inline w-auto" onchange="drawLobby()"></select></div>
+          </div>
+          <div id="cards" class="row g-3"></div>
+        </div>
+        <div id="calendar" class="d-none card card-body">
+          <h4 class="text-warning">已成局事件戰報 (Time Table)</h4>
+          <table class="table"><thead><tr><th>時段</th><th>遊戲品項</th><th>發起/隊員</th></tr></thead><tbody id="cal"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery-3.7.1.min.js"></script>
+  <script src="bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
