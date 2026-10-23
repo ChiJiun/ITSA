@@ -148,7 +148,7 @@ PROBLEMS = [
       '/admin 問答新增、編輯（更新／取消）、刪除，預設 4 筆；管理 API 都要驗登入',
       '/ 對話頁：Enter 或按鈕送出，查無回「很抱歉，我無法回答這個問題。」，自動捲到最底'],
      ['手寫 HS256：hash_hmac("sha256", header.payload, 金鑰, true) + base64url；驗證用 hash_equals 並檢查 exp',
-      '金鑰第一次執行時用 random_bytes 產生存成 secret.txt，不寫死在程式（寫死＝看得到原始碼就能偽造 token）',
+      '金鑰第一次執行時用 random_bytes 產生，存成 secret.php（return 字串），從網址開只會執行、看不到內容',
       '登入回傳 token（exp＝現在 + 600 秒），前端存 localStorage，呼叫 API 帶 Authorization: Bearer',
       '前端 setTimeout(logout, exp*1000 − Date.now()) 自動登出；API 回 401 也導回登入頁',
       '密碼用 password_hash 存、password_verify 比對',

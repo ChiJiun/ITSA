@@ -1303,7 +1303,7 @@ td input { width: 100px; }</pre></section><section class="final"><h2>2024 決賽
   render();
 })();
 &lt;/script&gt;</pre><div class="file">2024/final-p1/team021.css</div><pre>.ef-filter { background: #0d6efd; color: #fff; padding: 8px; }
-.ef-list   { background: #198754; color: #fff; padding: 8px; }</pre></section><section class="final"><h2>2024 決賽 P3｜聊天對話框後端與前端整合（PHP + MySQL + JWT）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>/login 管理員登入，錯誤 alert「使用者或密碼錯誤！」；admin/password 存在資料庫</li><li>JWT 驗證，10 分鐘自動登出回 /login；未登入進 /admin 跳回 /login</li><li>/admin 問答新增、編輯（更新／取消）、刪除，預設 4 筆；管理 API 都要驗登入</li><li>/ 對話頁：Enter 或按鈕送出，查無回「很抱歉，我無法回答這個問題。」，自動捲到最底</li></ul></div><div class="idea"><b>解題思路</b><ul><li>手寫 HS256：hash_hmac(&quot;sha256&quot;, header.payload, 金鑰, true) + base64url；驗證用 hash_equals 並檢查 exp</li><li>金鑰第一次執行時用 random_bytes 產生存成 secret.txt，不寫死在程式（寫死＝看得到原始碼就能偽造 token）</li><li>登入回傳 token（exp＝現在 + 600 秒），前端存 localStorage，呼叫 API 帶 Authorization: Bearer</li><li>前端 setTimeout(logout, exp*1000 − Date.now()) 自動登出；API 回 401 也導回登入頁</li><li>密碼用 password_hash 存、password_verify 比對</li><li>/login、/admin：XAMPP 用 .htaccess RewriteRule，PHP 內建伺服器用 router.php</li><li>用 form submit 處理 Enter（不會誤送輸入法選字）；訊息用 textContent，scrollTop = scrollHeight 捲到底</li></ul></div></div><div class="file">2024/final-p3/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+.ef-list   { background: #198754; color: #fff; padding: 8px; }</pre></section><section class="final"><h2>2024 決賽 P3｜聊天對話框後端與前端整合（PHP + MySQL + JWT）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>/login 管理員登入，錯誤 alert「使用者或密碼錯誤！」；admin/password 存在資料庫</li><li>JWT 驗證，10 分鐘自動登出回 /login；未登入進 /admin 跳回 /login</li><li>/admin 問答新增、編輯（更新／取消）、刪除，預設 4 筆；管理 API 都要驗登入</li><li>/ 對話頁：Enter 或按鈕送出，查無回「很抱歉，我無法回答這個問題。」，自動捲到最底</li></ul></div><div class="idea"><b>解題思路</b><ul><li>手寫 HS256：hash_hmac(&quot;sha256&quot;, header.payload, 金鑰, true) + base64url；驗證用 hash_equals 並檢查 exp</li><li>金鑰第一次執行時用 random_bytes 產生，存成 secret.php（return 字串），從網址開只會執行、看不到內容</li><li>登入回傳 token（exp＝現在 + 600 秒），前端存 localStorage，呼叫 API 帶 Authorization: Bearer</li><li>前端 setTimeout(logout, exp*1000 − Date.now()) 自動登出；API 回 401 也導回登入頁</li><li>密碼用 password_hash 存、password_verify 比對</li><li>/login、/admin：XAMPP 用 .htaccess RewriteRule，PHP 內建伺服器用 router.php</li><li>用 form submit 處理 Enter（不會誤送輸入法選字）；訊息用 textContent，scrollTop = scrollHeight 捲到底</li></ul></div></div><div class="file">2024/final-p3/team021.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-Hant&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -1487,9 +1487,11 @@ $pdo = new PDO(&#x27;mysql:host=127.0.0.1;dbname=chat;charset=utf8mb4&#x27;, &#x
   PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
   PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
 ]);
-<i>// 簽章金鑰：第一次執行時隨機產生並存檔；不能寫死在程式裡，否則看得到原始碼的人都能偽造 token</i>
-if (!is_file(__DIR__ . &#x27;/secret.txt&#x27;)) file_put_contents(__DIR__ . &#x27;/secret.txt&#x27;, bin2hex(random_bytes(32)));
-define(&#x27;SECRET&#x27;, file_get_contents(__DIR__ . &#x27;/secret.txt&#x27;));
+<i>// 簽章金鑰：第一次執行時隨機產生；不能寫死在程式裡，否則看得到原始碼的人都能偽造 token</i>
+<i>// 存成 .php（return 字串）：有人從網址開 secret.php 只會執行、看不到內容；存 .txt 會被直接下載</i>
+$keyFile = __DIR__ . &#x27;/secret.php&#x27;;
+if (!is_file($keyFile)) file_put_contents($keyFile, &quot;&lt;?php return &#x27;&quot; . bin2hex(random_bytes(32)) . &quot;&#x27;;&quot;);
+define(&#x27;SECRET&#x27;, require $keyFile);
 
 function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
 function q($sql, $args = []) { global $pdo; $s = $pdo-&gt;prepare($sql); $s-&gt;execute($args); return $s; }

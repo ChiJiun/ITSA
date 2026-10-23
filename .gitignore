@@ -10,4 +10,4 @@ queue.db
 # 執行時產生：上傳的圖片（保留空資料夾）、JWT 金鑰
 2021/final-p3/uploads/*
 !2021/final-p3/uploads/.gitkeep
-2024/final-p3/secret.txt
+2024/final-p3/secret.php

@@ -5,9 +5,11 @@ $pdo = new PDO('mysql:host=127.0.0.1;dbname=chat;charset=utf8mb4', 'root', '', [
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
   PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
-// 簽章金鑰：第一次執行時隨機產生並存檔；不能寫死在程式裡，否則看得到原始碼的人都能偽造 token
-if (!is_file(__DIR__ . '/secret.txt')) file_put_contents(__DIR__ . '/secret.txt', bin2hex(random_bytes(32)));
-define('SECRET', file_get_contents(__DIR__ . '/secret.txt'));
+// 簽章金鑰：第一次執行時隨機產生；不能寫死在程式裡，否則看得到原始碼的人都能偽造 token
+// 存成 .php（return 字串）：有人從網址開 secret.php 只會執行、看不到內容；存 .txt 會被直接下載
+$keyFile = __DIR__ . '/secret.php';
+if (!is_file($keyFile)) file_put_contents($keyFile, "<?php return '" . bin2hex(random_bytes(32)) . "';");
+define('SECRET', require $keyFile);
 
 function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
 function q($sql, $args = []) { global $pdo; $s = $pdo->prepare($sql); $s->execute($args); return $s; }
