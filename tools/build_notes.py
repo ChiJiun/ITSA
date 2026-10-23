@@ -146,10 +146,13 @@ def section(title, folder, spec, ideas, files):
 
 
 CSS = '''
-@page { size: A4; margin: 8mm; }
+@page { size: A4; margin: 7mm; }
 * { box-sizing: border-box; }
 body { margin: 0; font: 8pt/1.3 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #111; background: #fff; }
-main { column-count: 2; column-gap: 5mm; column-rule: 1px solid #ccc; padding: 4mm; }
+main { padding: 0 2mm; }
+/* 每題一個雙欄區塊；從第二題開始強制換頁 → 不同題目不會印在同一頁 */
+section { column-count: 2; column-gap: 5mm; column-rule: 1px solid #ccc; }
+section + section { break-before: page; }
 h1 { font-size: 13pt; margin: 0 0 2mm; }
 h2 { font-size: 10pt; margin: 3mm 0 1mm; padding: 1mm 2mm; background: #222; color: #fff; }
 .head { break-inside: avoid; }
@@ -159,11 +162,11 @@ ul { margin: 0.5mm 0 1mm; padding-left: 4mm; }
 .tips td:first-child { font-weight: bold; white-space: nowrap; }
 .tips { border-collapse: collapse; width: 100%; margin-bottom: 2mm; }
 .file { font: bold 7.5pt monospace; background: #e8e8e8; padding: 0.5mm 1.5mm; margin-top: 1mm; break-after: avoid; }
-pre { margin: 0; padding: 1mm 1.5mm; border-left: 2px solid #999; font: 6.8pt/1.25 Consolas, "Courier New", monospace;
+pre { margin: 0; padding: 1mm 1.5mm; border-left: 2px solid #999; font: 6.6pt/1.2 Consolas, "Courier New", monospace;
       white-space: pre-wrap; word-break: break-all; }
-.doc { font-size: 7.5pt; padding: 1mm 0; }
+.doc { font-size: 6.8pt; line-height: 1.2; padding: 0.5mm 0; }
 .md { border-collapse: collapse; width: 100%; margin: 0.5mm 0 1mm; }
-.md th, .md td { border: 1px solid #bbb; padding: 0.3mm 1mm; text-align: left; vertical-align: top; }
+.md th, .md td { border: 1px solid #bbb; padding: 0 1mm; text-align: left; vertical-align: top; }
 .md th { background: #f0f0f0; }
 code { font: 7pt Consolas, monospace; }
 pre i { color: #0a6b2e; font-style: normal; }
