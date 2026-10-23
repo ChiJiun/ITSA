@@ -1,4 +1,4 @@
-# 讀取各題答案原始碼，產生可列印的 筆記.html（A4、雙欄、小字）
+# 讀取各題答案原始碼，產生可列印的 筆記.html（A4、每題分頁、灰階區分）
 # 用法：python tools/build_notes.py
 import html
 import re
@@ -139,38 +139,47 @@ def section(title, folder, spec, ideas, files):
         src = (ROOT / folder / f).read_text(encoding='utf-8').strip()
         body = md(src) if f.endswith('.md') else f'<pre>{highlight(src, Path(f).suffix)}</pre>'
         codes += f'<div class="file">{folder}/{f}</div>{body}'
-    # 標題和重點框包在一起 break-inside:avoid，避免標題孤零零留在欄底
-    return (f'<section><div class="head"><h2>{html.escape(title)}</h2>'
-            f'<div class="box"><b>題目重點</b><ul>{li(spec)}</ul><b>解題思路</b><ul>{li(ideas)}</ul></div></div>'
+    return (f'<section><h2>{html.escape(title)}</h2><div class="head">'
+            f'<div class="spec"><b>題目重點</b><ul>{li(spec)}</ul></div><div class="idea"><b>解題思路</b><ul>{li(ideas)}</ul></div></div>'
             f'{codes}</section>')
 
 
 CSS = '''
-@page { size: A4; margin: 7mm; }
-* { box-sizing: border-box; }
-body { margin: 0; font: 8pt/1.3 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #111; background: #fff; }
-main { padding: 0 2mm; }
-/* 每題一個雙欄區塊；從第二題開始強制換頁 → 不同題目不會印在同一頁 */
-section { column-count: 2; column-gap: 5mm; column-rule: 1px solid #ccc; }
-section + section { break-before: page; }
-h1 { font-size: 13pt; margin: 0 0 2mm; }
-h2 { font-size: 10pt; margin: 3mm 0 1mm; padding: 1mm 2mm; background: #222; color: #fff; }
-.head { break-inside: avoid; }
-ul { margin: 0.5mm 0 1mm; padding-left: 4mm; }
-.box { border: 1px solid #bbb; padding: 1mm 2mm; margin-bottom: 1mm; }
-.tips td { border-bottom: 1px dotted #bbb; padding: 0.3mm 1mm; vertical-align: top; }
-.tips td:first-child { font-weight: bold; white-space: nowrap; }
-.tips { border-collapse: collapse; width: 100%; margin-bottom: 2mm; }
-.file { font: bold 7.5pt monospace; background: #e8e8e8; padding: 0.5mm 1.5mm; margin-top: 1mm; break-after: avoid; }
-pre { margin: 0; padding: 1mm 1.5mm; border-left: 2px solid #999; font: 6.6pt/1.2 Consolas, "Courier New", monospace;
+/* A4 直式；灰階深淺做區分，黑白列印也分得出來 */
+@page { size: A4; margin: 10mm 10mm 10mm 12mm; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; } /* 列印時保留背景色 */
+body { margin: 0; font: 10pt/1.5 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #000; background: #fff; }
+main { max-width: 188mm; margin: auto; }
+section + section { break-before: page; }   /* 每題從新的一頁開始 */
+h1 { font-size: 16pt; margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 2.5px solid #000; }
+h2 { font-size: 13pt; margin: 0 0 2.5mm; padding: 1.5mm 3mm; background: #000; color: #fff; break-after: avoid; }
+ul { margin: 1mm 0 0; padding-left: 5mm; }
+li { margin-bottom: 0.5mm; }
+/* 題目重點（淺灰底）與解題思路（白底粗左線）並排 */
+.head { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 3mm; break-inside: avoid; }
+.spec, .idea { padding: 2mm 3mm; font-size: 9.5pt; line-height: 1.45; }
+.spec { background: #e6e6e6; }
+.idea { border: 1px solid #999; border-left: 5px solid #000; }
+.spec b, .idea b { font-size: 10.5pt; }
+/* 共用陷阱表：斑馬紋 */
+.tips { border-collapse: collapse; width: 100%; margin-bottom: 5mm; font-size: 9.5pt; }
+.tips td { padding: 1mm 2mm; vertical-align: top; border-bottom: 1px solid #bbb; }
+.tips tr:nth-child(odd) td { background: #f0f0f0; }
+.tips td:first-child { font-weight: bold; white-space: nowrap; width: 18mm; }
+/* 檔名：中灰底白字；程式碼：灰色左線 */
+.file { font: bold 9pt Consolas, monospace; background: #555; color: #fff; padding: 1mm 3mm; margin-top: 3mm; break-after: avoid; }
+pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; font: 8.5pt/1.3 Consolas, "Courier New", monospace;
       white-space: pre-wrap; word-break: break-all; }
-.doc { font-size: 6.8pt; line-height: 1.2; padding: 0.5mm 0; }
-.md { border-collapse: collapse; width: 100%; margin: 0.5mm 0 1mm; }
-.md th, .md td { border: 1px solid #bbb; padding: 0 1mm; text-align: left; vertical-align: top; }
-.md th { background: #f0f0f0; }
-code { font: 7pt Consolas, monospace; }
-pre i { color: #0a6b2e; font-style: normal; }
-@media screen { main { max-width: 297mm; margin: auto; } }
+/* 註解：淺灰底＋斜體＋深灰字，和程式碼一眼分開 */
+pre i { background: #e3e3e3; color: #333; font-style: italic; }
+.doc { font-size: 9pt; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; }
+.doc > b { display: block; margin-top: 1.5mm; }
+.md { border-collapse: collapse; width: 100%; margin: 1mm 0 2mm; }
+.md th, .md td { border: 1px solid #888; padding: 0.6mm 1.5mm; text-align: left; vertical-align: top; }
+.md th { background: #d0d0d0; }
+.md tr:nth-child(even) td { background: #f2f2f2; }
+code { font: 8.5pt Consolas, monospace; background: #e6e6e6; padding: 0 1mm; }
+@media screen { body { padding: 10mm 0; } }
 '''
 
 

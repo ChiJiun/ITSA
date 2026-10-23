@@ -1,30 +1,40 @@
 <!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>ITSA 歷屆考古題筆記</title><style>
-@page { size: A4; margin: 7mm; }
-* { box-sizing: border-box; }
-body { margin: 0; font: 8pt/1.3 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #111; background: #fff; }
-main { padding: 0 2mm; }
-/* 每題一個雙欄區塊；從第二題開始強制換頁 → 不同題目不會印在同一頁 */
-section { column-count: 2; column-gap: 5mm; column-rule: 1px solid #ccc; }
-section + section { break-before: page; }
-h1 { font-size: 13pt; margin: 0 0 2mm; }
-h2 { font-size: 10pt; margin: 3mm 0 1mm; padding: 1mm 2mm; background: #222; color: #fff; }
-.head { break-inside: avoid; }
-ul { margin: 0.5mm 0 1mm; padding-left: 4mm; }
-.box { border: 1px solid #bbb; padding: 1mm 2mm; margin-bottom: 1mm; }
-.tips td { border-bottom: 1px dotted #bbb; padding: 0.3mm 1mm; vertical-align: top; }
-.tips td:first-child { font-weight: bold; white-space: nowrap; }
-.tips { border-collapse: collapse; width: 100%; margin-bottom: 2mm; }
-.file { font: bold 7.5pt monospace; background: #e8e8e8; padding: 0.5mm 1.5mm; margin-top: 1mm; break-after: avoid; }
-pre { margin: 0; padding: 1mm 1.5mm; border-left: 2px solid #999; font: 6.6pt/1.2 Consolas, "Courier New", monospace;
+/* A4 直式；灰階深淺做區分，黑白列印也分得出來 */
+@page { size: A4; margin: 10mm 10mm 10mm 12mm; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; } /* 列印時保留背景色 */
+body { margin: 0; font: 10pt/1.5 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #000; background: #fff; }
+main { max-width: 188mm; margin: auto; }
+section + section { break-before: page; }   /* 每題從新的一頁開始 */
+h1 { font-size: 16pt; margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 2.5px solid #000; }
+h2 { font-size: 13pt; margin: 0 0 2.5mm; padding: 1.5mm 3mm; background: #000; color: #fff; break-after: avoid; }
+ul { margin: 1mm 0 0; padding-left: 5mm; }
+li { margin-bottom: 0.5mm; }
+/* 題目重點（淺灰底）與解題思路（白底粗左線）並排 */
+.head { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 3mm; break-inside: avoid; }
+.spec, .idea { padding: 2mm 3mm; font-size: 9.5pt; line-height: 1.45; }
+.spec { background: #e6e6e6; }
+.idea { border: 1px solid #999; border-left: 5px solid #000; }
+.spec b, .idea b { font-size: 10.5pt; }
+/* 共用陷阱表：斑馬紋 */
+.tips { border-collapse: collapse; width: 100%; margin-bottom: 5mm; font-size: 9.5pt; }
+.tips td { padding: 1mm 2mm; vertical-align: top; border-bottom: 1px solid #bbb; }
+.tips tr:nth-child(odd) td { background: #f0f0f0; }
+.tips td:first-child { font-weight: bold; white-space: nowrap; width: 18mm; }
+/* 檔名：中灰底白字；程式碼：灰色左線 */
+.file { font: bold 9pt Consolas, monospace; background: #555; color: #fff; padding: 1mm 3mm; margin-top: 3mm; break-after: avoid; }
+pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; font: 8.5pt/1.3 Consolas, "Courier New", monospace;
       white-space: pre-wrap; word-break: break-all; }
-.doc { font-size: 6.8pt; line-height: 1.2; padding: 0.5mm 0; }
-.md { border-collapse: collapse; width: 100%; margin: 0.5mm 0 1mm; }
-.md th, .md td { border: 1px solid #bbb; padding: 0 1mm; text-align: left; vertical-align: top; }
-.md th { background: #f0f0f0; }
-code { font: 7pt Consolas, monospace; }
-pre i { color: #0a6b2e; font-style: normal; }
-@media screen { main { max-width: 297mm; margin: auto; } }
-</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2024~2026）</h1><table class="tips"><tr><td>viewport</td><td>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt; 沒寫，手機的 @media 不會生效</td></tr><tr><td>表單</td><td>onsubmit=&quot;save(); return false&quot; 阻止換頁；required / pattern 讓瀏覽器先驗證</td></tr><tr><td>XSS</td><td>使用者輸入放進 innerHTML 前要跳脫（替換 &lt;，或 jQuery 的 $(&quot;&lt;div&gt;&quot;).text(s).html()）</td></tr><tr><td>PDO</td><td>prepare + execute 防 SQL injection；ERRMODE_EXCEPTION 才會丟錯；charset=utf8mb4 防亂碼</td></tr><tr><td>MySQL</td><td>INSERT IGNORE 遇到重複鍵就略過；UNIQUE / CHECK 讓資料庫幫你守規則</td></tr><tr><td>JSON</td><td>JSON.stringify 會丟掉 undefined 的欄位，要回傳空值請用 null</td></tr><tr><td>狀態碼</td><td>201 新增成功、204 無內容、400 參數錯、401 未登入、403 沒權限、409 狀態衝突</td></tr><tr><td>相對路徑</td><td>答案資料夾要自帶所有檔案，不能引用 ../p1-ref/…，否則不計分</td></tr></table><section><div class="head"><h2>2024 P1｜響應式 ITSA 首頁（HTML5 + CSS3，不可用 Bootstrap）</h2><div class="box"><b>題目重點</b><ul><li>&gt;900px：導覽列、頁首、內容區置中等寬；頁首灰底、圖片與文字不等高、報名按鈕</li><li>內容兩列圖文交疊：第一列圖左文右，第二列圖右文左</li><li>750~900px 滿版無左右邊界；&lt;750px 每個元素各佔一列</li></ul><b>解題思路</b><ul><li>.wrap{max-width:900px;margin:auto} 一行搞定置中，寬度不足時自然滿版</li><li>交疊＝文字框 margin 負值 + position:relative 疊到圖片上</li><li>第二列用 flex-direction:row-reverse 反轉，不必改 HTML</li><li>手機版 .txt{display:contents} 拆掉外框，h3 才能用 order 排到圖片上面</li></ul></div></div><div class="file">2024/p1-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+/* 註解：淺灰底＋斜體＋深灰字，和程式碼一眼分開 */
+pre i { background: #e3e3e3; color: #333; font-style: italic; }
+.doc { font-size: 9pt; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; }
+.doc > b { display: block; margin-top: 1.5mm; }
+.md { border-collapse: collapse; width: 100%; margin: 1mm 0 2mm; }
+.md th, .md td { border: 1px solid #888; padding: 0.6mm 1.5mm; text-align: left; vertical-align: top; }
+.md th { background: #d0d0d0; }
+.md tr:nth-child(even) td { background: #f2f2f2; }
+code { font: 8.5pt Consolas, monospace; background: #e6e6e6; padding: 0 1mm; }
+@media screen { body { padding: 10mm 0; } }
+</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2024~2026）</h1><table class="tips"><tr><td>viewport</td><td>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt; 沒寫，手機的 @media 不會生效</td></tr><tr><td>表單</td><td>onsubmit=&quot;save(); return false&quot; 阻止換頁；required / pattern 讓瀏覽器先驗證</td></tr><tr><td>XSS</td><td>使用者輸入放進 innerHTML 前要跳脫（替換 &lt;，或 jQuery 的 $(&quot;&lt;div&gt;&quot;).text(s).html()）</td></tr><tr><td>PDO</td><td>prepare + execute 防 SQL injection；ERRMODE_EXCEPTION 才會丟錯；charset=utf8mb4 防亂碼</td></tr><tr><td>MySQL</td><td>INSERT IGNORE 遇到重複鍵就略過；UNIQUE / CHECK 讓資料庫幫你守規則</td></tr><tr><td>JSON</td><td>JSON.stringify 會丟掉 undefined 的欄位，要回傳空值請用 null</td></tr><tr><td>狀態碼</td><td>201 新增成功、204 無內容、400 參數錯、401 未登入、403 沒權限、409 狀態衝突</td></tr><tr><td>相對路徑</td><td>答案資料夾要自帶所有檔案，不能引用 ../p1-ref/…，否則不計分</td></tr></table><section><h2>2024 P1｜響應式 ITSA 首頁（HTML5 + CSS3，不可用 Bootstrap）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>&gt;900px：導覽列、頁首、內容區置中等寬；頁首灰底、圖片與文字不等高、報名按鈕</li><li>內容兩列圖文交疊：第一列圖左文右，第二列圖右文左</li><li>750~900px 滿版無左右邊界；&lt;750px 每個元素各佔一列</li></ul></div><div class="idea"><b>解題思路</b><ul><li>.wrap{max-width:900px;margin:auto} 一行搞定置中，寬度不足時自然滿版</li><li>交疊＝文字框 margin 負值 + position:relative 疊到圖片上</li><li>第二列用 flex-direction:row-reverse 反轉，不必改 HTML</li><li>手機版 .txt{display:contents} 拆掉外框，h3 才能用 order 排到圖片上面</li></ul></div></div><div class="file">2024/p1-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-TW&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -118,7 +128,7 @@ button { background: #333; color: #fff; border: 0; padding: 10px 16px; margin: -
   .txt { display: contents; }
   .txt h3 { margin: 0 0 10px; order: -1; }
   .txt p, .row:nth-of-type(2) p { margin: 0; }
-}</pre></section><section><div class="head"><h2>2024 P2｜圖書管理系統（新增 / 列表 / 刪除 / 更新）</h2><div class="box"><b>題目重點</b><ul><li>輸入書名、作者、出版年份新增；表格列出全部；每列有刪除、更新按鈕</li></ul><b>解題思路</b><ul><li>資料放陣列，每次改完存 localStorage 再整張表重畫（render）</li><li>新增和更新共用同一個表單，用 editId 是否為 null 判斷模式</li><li>刪除＝filter 留下 id 不同的；更新＝map 換掉 id 相同的</li></ul></div></div><div class="file">2024/p2-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+}</pre></section><section><h2>2024 P2｜圖書管理系統（新增 / 列表 / 刪除 / 更新）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>輸入書名、作者、出版年份新增；表格列出全部；每列有刪除、更新按鈕</li></ul></div><div class="idea"><b>解題思路</b><ul><li>資料放陣列，每次改完存 localStorage 再整張表重畫（render）</li><li>新增和更新共用同一個表單，用 editId 是否為 null 判斷模式</li><li>刪除＝filter 留下 id 不同的；更新＝map 換掉 id 相同的</li></ul></div></div><div class="file">2024/p2-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-TW&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -194,7 +204,7 @@ function edit(id) {
 render();</pre><div class="file">2024/p2-ans/team021.css</div><pre>body { font-family: sans-serif; background: #fff; color: #222; margin: 20px; }
 input { margin-bottom: 6px; }
 table { width: 100%; border-collapse: collapse; }
-th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }</pre></section><section><div class="head"><h2>2024 P3｜健康度量管理系統（jQuery + PHP PDO + MySQL）</h2><div class="box"><b>題目重點</b><ul><li>人員（醫檢員/受檢者）、醫檢項目、檢查結果三張表，分數 1~10</li><li>醫檢員：註冊、登入、三張表新增/刪除/更新/查詢，同項目人員編號不重複</li><li>受檢者：首次登入強制改密碼（12 碼、大小寫英文 + 數字），之後單頁看全部分數</li><li>測試帳號：醫檢員 tech1/1234；受檢者 p1~p5/1234</li></ul><b>解題思路</b><ul><li>一支 api.php 用 ?a=動作 分流；表名、欄位走白名單，SQL 一律 prepare</li><li>results 加 UNIQUE(user_id,item_id) → 資料庫層保證不重複；CHECK 限制 1~10</li><li>save 有 id 就 UPDATE、沒有就 INSERT，三張表共用同一段程式</li><li>前端每列都是 input，改完按「存」；最後一列空白當新增列</li><li>密碼規則前端 pattern 先擋、後端 preg_match 再驗一次</li></ul></div></div><div class="file">2024/p3-ans/team021.sql</div><pre><i>-- 健康度量管理系統：人員 / 醫檢項目 / 檢查結果 三張表（第三正規化）</i>
+th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }</pre></section><section><h2>2024 P3｜健康度量管理系統（jQuery + PHP PDO + MySQL）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>人員（醫檢員/受檢者）、醫檢項目、檢查結果三張表，分數 1~10</li><li>醫檢員：註冊、登入、三張表新增/刪除/更新/查詢，同項目人員編號不重複</li><li>受檢者：首次登入強制改密碼（12 碼、大小寫英文 + 數字），之後單頁看全部分數</li><li>測試帳號：醫檢員 tech1/1234；受檢者 p1~p5/1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>一支 api.php 用 ?a=動作 分流；表名、欄位走白名單，SQL 一律 prepare</li><li>results 加 UNIQUE(user_id,item_id) → 資料庫層保證不重複；CHECK 限制 1~10</li><li>save 有 id 就 UPDATE、沒有就 INSERT，三張表共用同一段程式</li><li>前端每列都是 input，改完按「存」；最後一列空白當新增列</li><li>密碼規則前端 pattern 先擋、後端 preg_match 再驗一次</li></ul></div></div><div class="file">2024/p3-ans/team021.sql</div><pre><i>-- 健康度量管理系統：人員 / 醫檢項目 / 檢查結果 三張表（第三正規化）</i>
 SET NAMES utf8mb4;
 CREATE DATABASE IF NOT EXISTS health DEFAULT CHARSET utf8mb4;
 USE health;
@@ -457,7 +467,7 @@ function loadAll() {
 #msg { color: #c00; }
 table { border-collapse: collapse; background: #fff; margin-bottom: 10px; }
 th, td { border: 1px solid #ccc; padding: 4px; }
-td input { width: 100px; }</pre></section><section><div class="head"><h2>2025 P1｜圖形化河內塔（拖放）</h2><div class="box"><b>題目重點</b><ul><li>3~9 個圓盤，拖放移動；顯示最少步數 2ⁿ−1 與目前步數</li><li>只能拿最上面的圓盤，大的不能疊在小的上；全部移到右柱即過關</li></ul><b>解題思路</b><ul><li>柱子用 flex-direction:column-reverse → appendChild 就是疊到最上面</li><li>最上面那塊＝lastElementChild，DOM 本身就是狀態，不用另存陣列</li><li>dragover 一定要 preventDefault，否則 drop 不會觸發</li></ul></div></div><div class="file">2025/p1-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
+td input { width: 100px; }</pre></section><section><h2>2025 P1｜圖形化河內塔（拖放）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>3~9 個圓盤，拖放移動；顯示最少步數 2ⁿ−1 與目前步數</li><li>只能拿最上面的圓盤，大的不能疊在小的上；全部移到右柱即過關</li></ul></div><div class="idea"><b>解題思路</b><ul><li>柱子用 flex-direction:column-reverse → appendChild 就是疊到最上面</li><li>最上面那塊＝lastElementChild，DOM 本身就是狀態，不用另存陣列</li><li>dragover 一定要 preventDefault，否則 drop 不會觸發</li></ul></div></div><div class="file">2025/p1-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-Hant&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -522,7 +532,7 @@ pegs.forEach(peg =&gt; {
   });
 });
 
-start();</pre></section><section><div class="head"><h2>2025 P2｜詐騙關鍵字週報（CSV + Chart.js + PHP）</h2><div class="box"><b>題目重點</b><ul><li>讀 weekly_kw.csv（week, keyword, count, …），可選全部或單一週期</li><li>長條圖 / 趨勢圖切換，顯示 TOP 10 與統計卡，下載 CSV 與圖表 PNG</li><li>※ 原題 PDF 不在資料夾中，需求依先前作答與筆記整理</li></ul><b>解題思路</b><ul><li>PHP 只負責把 CSV 轉 JSON；統計全部在前端做</li><li>加總用物件當字典 total[kw] += count，再 Object.entries 排序取前 10</li><li>換圖前 chart.destroy()；PNG 用 chart.toBase64Image()</li><li>CSV 開頭加 \uFEFF（BOM），Excel 開中文才不會亂碼</li></ul></div></div><div class="file">2025/p2-ans/team111.php</div><pre>&lt;?php
+start();</pre></section><section><h2>2025 P2｜詐騙關鍵字週報（CSV + Chart.js + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>讀 weekly_kw.csv（week, keyword, count, …），可選全部或單一週期</li><li>長條圖 / 趨勢圖切換，顯示 TOP 10 與統計卡，下載 CSV 與圖表 PNG</li><li>※ 原題 PDF 不在資料夾中，需求依先前作答與筆記整理</li></ul></div><div class="idea"><b>解題思路</b><ul><li>PHP 只負責把 CSV 轉 JSON；統計全部在前端做</li><li>加總用物件當字典 total[kw] += count，再 Object.entries 排序取前 10</li><li>換圖前 chart.destroy()；PNG 用 chart.toBase64Image()</li><li>CSV 開頭加 \uFEFF（BOM），Excel 開中文才不會亂碼</li></ul></div></div><div class="file">2025/p2-ans/team111.php</div><pre>&lt;?php
 <i>// 讀 CSV → 轉成 JSON 陣列給前端：[[week, keyword, count, avg_risk, trend], ...]</i>
 header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
 $lines = file(&#x27;weekly_kw.csv&#x27;, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -620,7 +630,7 @@ function downloadPng() { save(chart.toBase64Image(), &#x27;chart.png&#x27;); }</
 .cards b { display: block; font-size: 28px; color: #1a73e8; }
 canvas { background: #fff; }
 table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 12px; }
-th, td { border: 1px solid #ddd; padding: 6px; }</pre></section><section><div class="head"><h2>2026 P1｜叫號與候位系統（Node.js + Express + SQLite）</h2><div class="box"><b>題目重點</b><ul><li>前台：選服務（一般 G / 開戶 A / 諮詢 C）取號，顯示號碼、目前叫號、等待清單，5 秒內自動更新</li><li>櫃台：admin/password123 登入，下一位、完成服務、歷史紀錄、登出銷毀 session</li><li>單一 FIFO 佇列；同時最多 1 筆服務中；違規回 409；服務非白名單回 400</li><li>號碼 前綴+3 位數，超過 999 變 A1000，存 DB 不重置；重啟後完整還原</li><li>執行：把 P1_Node離線套件.zip 的 node_modules 放進 p1-ans，npm start</li></ul><b>解題思路</b><ul><li>用 Node 22 內建 node:sqlite（同步 API），不用 callback，也不會有併發交錯</li><li>計數器一行：INSERT … ON CONFLICT DO UPDATE SET n=n+1 RETURNING n</li><li>時間存毫秒數字排序最準，輸出時才格式化成 YYYY/M/D HH:mm:ss</li><li>session 自己做：Set 存 sid，登出 delete → 舊 Cookie 重放也是 401</li><li>權限一定在伺服器檢查（auth middleware），前端停用按鈕只是輔助</li><li>前端 element id 別取 history、login 這種和全域變數撞名的名字</li></ul></div></div><div class="file">2026/p1-ans/app.js</div><pre><i>// 叫號與候位系統：Express + SQLite（Node 22 內建 node:sqlite，同步 API 最好寫）</i>
+th, td { border: 1px solid #ddd; padding: 6px; }</pre></section><section><h2>2026 P1｜叫號與候位系統（Node.js + Express + SQLite）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>前台：選服務（一般 G / 開戶 A / 諮詢 C）取號，顯示號碼、目前叫號、等待清單，5 秒內自動更新</li><li>櫃台：admin/password123 登入，下一位、完成服務、歷史紀錄、登出銷毀 session</li><li>單一 FIFO 佇列；同時最多 1 筆服務中；違規回 409；服務非白名單回 400</li><li>號碼 前綴+3 位數，超過 999 變 A1000，存 DB 不重置；重啟後完整還原</li><li>執行：把 P1_Node離線套件.zip 的 node_modules 放進 p1-ans，npm start</li></ul></div><div class="idea"><b>解題思路</b><ul><li>用 Node 22 內建 node:sqlite（同步 API），不用 callback，也不會有併發交錯</li><li>計數器一行：INSERT … ON CONFLICT DO UPDATE SET n=n+1 RETURNING n</li><li>時間存毫秒數字排序最準，輸出時才格式化成 YYYY/M/D HH:mm:ss</li><li>session 自己做：Set 存 sid，登出 delete → 舊 Cookie 重放也是 401</li><li>權限一定在伺服器檢查（auth middleware），前端停用按鈕只是輔助</li><li>前端 element id 別取 history、login 這種和全域變數撞名的名字</li></ul></div></div><div class="file">2026/p1-ans/app.js</div><pre><i>// 叫號與候位系統：Express + SQLite（Node 22 內建 node:sqlite，同步 API 最好寫）</i>
 const express = require(&#x27;express&#x27;);
 const crypto = require(&#x27;crypto&#x27;);
 const { DatabaseSync } = require(&#x27;node:sqlite&#x27;);
@@ -845,7 +855,7 @@ app.listen(3000, () =&gt; console.log(&#x27;http://localhost:3000&#x27;));</pre>
 function rows(list, keys, cols, empty) {
   if (!list.length) return `&lt;tr&gt;&lt;td colspan=&quot;${cols}&quot; class=&quot;text-muted&quot;&gt;${empty}&lt;/td&gt;&lt;/tr&gt;`;
   return list.map(t =&gt; &#x27;&lt;tr&gt;&#x27; + keys.map(k =&gt; `&lt;td&gt;${t[k] ?? &#x27;&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;) + &#x27;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;);
-}</pre><div class="file">2026/p1-ans/系統設計文件.md</div><div class="doc"><b>叫號與候位系統：系統設計文件（team123）</b><div>啟動：<code>npm start</code>，開啟 http://localhost:3000 。需要 Node 22 以上（使用內建 <code>node:sqlite</code>）與 express。</div><div>櫃台帳密：admin / password123</div><b>API 一覽表</b><table class="md"><tr><th>方法</th><th>路徑</th><th>需登入</th><th>主要回應</th></tr><tr><td>GET</td><td>/api/state</td><td>否</td><td>200 <code>{ current, waiting[], history[] }</code></td></tr><tr><td>POST</td><td>/api/tickets</td><td>否</td><td>201 <code>{ number, service, createdAt }</code>；service 非 G/A/C 或中文名稱 → 400</td></tr><tr><td>POST</td><td>/api/login</td><td>否</td><td>200 + Set-Cookie(sid)；失敗 401</td></tr><tr><td>POST</td><td>/api/logout</td><td>是</td><td>204，伺服器端刪除 session；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/next</td><td>是</td><td>200 <code>{ current }</code>；已有服務中或無等待者 → 409；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/complete</td><td>是</td><td>200；無服務中號碼 → 409；未登入 401</td></tr><tr><td>GET</td><td>/api/admin/history</td><td>是</td><td>200 <code>[ … ]</code>（完成時間新→舊）；未登入 401</td></tr></table><b>資料表結構（queue.db）</b><table class="md"><tr><th>資料表</th><th>欄位</th><th>型別</th><th>說明</th></tr><tr><td>counters</td><td>prefix</td><td>TEXT PK</td><td>G / A / C</td></tr><tr><td></td><td>n</td><td>INTEGER</td><td>該類別目前最後號碼，不重置</td></tr><tr><td>tickets</td><td>id</td><td>INTEGER PK AUTOINCREMENT</td><td>取號先後</td></tr><tr><td></td><td>number</td><td>TEXT UNIQUE</td><td>例 A001、C1000</td></tr><tr><td></td><td>service</td><td>TEXT</td><td>G / A / C</td></tr><tr><td></td><td>status</td><td>TEXT</td><td>waiting → serving → completed</td></tr><tr><td></td><td>created_at / called_at / finished_at</td><td>INTEGER</td><td>毫秒時間戳，顯示時轉 YYYY/M/D HH:mm:ss</td></tr></table><div>索引：<code>idx_status (status, created_at)</code>，加速「等待中且最早」的查詢。</div></div></section><section><div class="head"><h2>2026 P2｜GamersHub 玩家組隊與行事曆（Bootstrap 5 + jQuery + PHP）</h2><div class="box"><b>題目重點</b><ul><li>左「控制面板」右「大廳/行事曆」，&lt;992px 上下堆疊；SPA 不重整</li><li>未登入直接開大廳或 API → 跳回登入；玩家 A、B 資料各自隔離</li><li>新增喜愛遊戲（不存在就建立）→ 標籤、發布選單、快速過濾同步多一項；移除後該遊戲公告消失</li><li>招募中 → 達下限「已成局招募」→ 達上限淡出消失，並出現在每位成員的行事曆</li><li>測試帳號 faker / caps / tenz / s1mple，密碼 1234</li></ul><b>解題思路</b><ul><li>col-lg-4 / col-lg-8：lg 斷點剛好是 992px</li><li>所有查詢都 WHERE user_id = session 的 uid → 天生資料隔離</li><li>一個 load() 抓全部資料、重畫所有區塊 → 三個選單自然同步</li><li>狀態用一句 UPDATE … CASE 依人數重算；join 回傳 full 時先 fadeOut 再重畫</li><li>未登入：AJAX 回 401；瀏覽器直接開回 302（401 不會跟著 Location 跳）</li><li>Font Awesome 的 CSS 寫 ../webfonts/，所以 all.min.css 要放在 css/ 子資料夾</li></ul></div></div><div class="file">2026/p2-ans/api.php</div><pre>&lt;?php
+}</pre><div class="file">2026/p1-ans/系統設計文件.md</div><div class="doc"><b>叫號與候位系統：系統設計文件（team123）</b><div>啟動：<code>npm start</code>，開啟 http://localhost:3000 。需要 Node 22 以上（使用內建 <code>node:sqlite</code>）與 express。</div><div>櫃台帳密：admin / password123</div><b>API 一覽表</b><table class="md"><tr><th>方法</th><th>路徑</th><th>需登入</th><th>主要回應</th></tr><tr><td>GET</td><td>/api/state</td><td>否</td><td>200 <code>{ current, waiting[], history[] }</code></td></tr><tr><td>POST</td><td>/api/tickets</td><td>否</td><td>201 <code>{ number, service, createdAt }</code>；service 非 G/A/C 或中文名稱 → 400</td></tr><tr><td>POST</td><td>/api/login</td><td>否</td><td>200 + Set-Cookie(sid)；失敗 401</td></tr><tr><td>POST</td><td>/api/logout</td><td>是</td><td>204，伺服器端刪除 session；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/next</td><td>是</td><td>200 <code>{ current }</code>；已有服務中或無等待者 → 409；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/complete</td><td>是</td><td>200；無服務中號碼 → 409；未登入 401</td></tr><tr><td>GET</td><td>/api/admin/history</td><td>是</td><td>200 <code>[ … ]</code>（完成時間新→舊）；未登入 401</td></tr></table><b>資料表結構（queue.db）</b><table class="md"><tr><th>資料表</th><th>欄位</th><th>型別</th><th>說明</th></tr><tr><td>counters</td><td>prefix</td><td>TEXT PK</td><td>G / A / C</td></tr><tr><td></td><td>n</td><td>INTEGER</td><td>該類別目前最後號碼，不重置</td></tr><tr><td>tickets</td><td>id</td><td>INTEGER PK AUTOINCREMENT</td><td>取號先後</td></tr><tr><td></td><td>number</td><td>TEXT UNIQUE</td><td>例 A001、C1000</td></tr><tr><td></td><td>service</td><td>TEXT</td><td>G / A / C</td></tr><tr><td></td><td>status</td><td>TEXT</td><td>waiting → serving → completed</td></tr><tr><td></td><td>created_at / called_at / finished_at</td><td>INTEGER</td><td>毫秒時間戳，顯示時轉 YYYY/M/D HH:mm:ss</td></tr></table><div>索引：<code>idx_status (status, created_at)</code>，加速「等待中且最早」的查詢。</div></div></section><section><h2>2026 P2｜GamersHub 玩家組隊與行事曆（Bootstrap 5 + jQuery + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>左「控制面板」右「大廳/行事曆」，&lt;992px 上下堆疊；SPA 不重整</li><li>未登入直接開大廳或 API → 跳回登入；玩家 A、B 資料各自隔離</li><li>新增喜愛遊戲（不存在就建立）→ 標籤、發布選單、快速過濾同步多一項；移除後該遊戲公告消失</li><li>招募中 → 達下限「已成局招募」→ 達上限淡出消失，並出現在每位成員的行事曆</li><li>測試帳號 faker / caps / tenz / s1mple，密碼 1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>col-lg-4 / col-lg-8：lg 斷點剛好是 992px</li><li>所有查詢都 WHERE user_id = session 的 uid → 天生資料隔離</li><li>一個 load() 抓全部資料、重畫所有區塊 → 三個選單自然同步</li><li>狀態用一句 UPDATE … CASE 依人數重算；join 回傳 full 時先 fadeOut 再重畫</li><li>未登入：AJAX 回 401；瀏覽器直接開回 302（401 不會跟著 Location 跳）</li><li>Font Awesome 的 CSS 寫 ../webfonts/，所以 all.min.css 要放在 css/ 子資料夾</li></ul></div></div><div class="file">2026/p2-ans/api.php</div><pre>&lt;?php
 <i>// GamerHub API：api.php?a=動作</i>
 session_start();
 header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
