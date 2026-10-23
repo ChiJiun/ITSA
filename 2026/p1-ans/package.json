@@ -1,6 +1,7 @@
 {
   "name": "team123-queue",
   "private": true,
+  "engines": { "node": ">=22.13" },
   "scripts": { "start": "node app.js" },
   "dependencies": { "express": "4.22.3" }
 }

@@ -4,6 +4,8 @@ import html
 import re
 from pathlib import Path
 
+from cheatsheet import CHEATSHEET
+
 ROOT = Path(__file__).resolve().parent.parent
 
 # 每題：標題、題目重點、解題思路、要印的檔案
@@ -78,17 +80,6 @@ PROBLEMS = [
      ['api.php', 'team123.html', 'app.js', '系統設計文件.md']),
 ]
 
-TIPS = [
-    ('viewport', '<meta name="viewport" content="width=device-width, initial-scale=1"> 沒寫，手機的 @media 不會生效'),
-    ('表單', 'onsubmit="save(); return false" 阻止換頁；required / pattern 讓瀏覽器先驗證'),
-    ('XSS', '使用者輸入放進 innerHTML 前要跳脫（替換 <，或 jQuery 的 $("<div>").text(s).html()）'),
-    ('PDO', 'prepare + execute 防 SQL injection；ERRMODE_EXCEPTION 才會丟錯；charset=utf8mb4 防亂碼'),
-    ('MySQL', 'INSERT IGNORE 遇到重複鍵就略過；UNIQUE / CHECK 讓資料庫幫你守規則'),
-    ('JSON', 'JSON.stringify 會丟掉 undefined 的欄位，要回傳空值請用 null'),
-    ('狀態碼', '201 新增成功、204 無內容、400 參數錯、401 未登入、403 沒權限、409 狀態衝突'),
-    ('相對路徑', '答案資料夾要自帶所有檔案，不能引用 ../p1-ref/…，否則不計分'),
-]
-
 # 註解上色：先 escape，再把註解包成 <i>
 COMMENT = {
     '.js': [r'(^|\s)(//.*)$', r'/\*.*?\*/'],
@@ -132,6 +123,14 @@ def md(text):
     return '<div class="doc">' + ''.join(out) + '</div>'
 
 
+def cheatsheet():
+    rows = lambda items: ''.join(f'<tr><td><pre class="syn">{html.escape(code)}</pre></td><td>{html.escape(desc)}</td></tr>'
+                                 for code, desc in items)
+    return ('<section><h2>常用語法速查</h2>' +
+            ''.join(f'<h3>{html.escape(cat)}</h3><table class="cheat">{rows(items)}</table>' for cat, items in CHEATSHEET) +
+            '</section>')
+
+
 def section(title, folder, spec, ideas, files):
     li = lambda xs: ''.join(f'<li>{html.escape(x)}</li>' for x in xs)
     codes = ''
@@ -161,18 +160,20 @@ li { margin-bottom: 0.5mm; }
 .spec { background: #e6e6e6; }
 .idea { border: 1px solid #999; border-left: 5px solid #000; }
 .spec b, .idea b { font-size: 10.5pt; }
-/* 共用陷阱表：斑馬紋 */
-.tips { border-collapse: collapse; width: 100%; margin-bottom: 5mm; font-size: 9.5pt; }
-.tips td { padding: 1mm 2mm; vertical-align: top; border-bottom: 1px solid #bbb; }
-.tips tr:nth-child(odd) td { background: #f0f0f0; }
-.tips td:first-child { font-weight: bold; white-space: nowrap; width: 18mm; }
+/* 常用語法：分類標題深灰底；語法欄淺灰底等寬字；列與列之間斑馬紋 */
+h3 { font-size: 11pt; margin: 3mm 0 0; padding: 1mm 3mm; background: #444; color: #fff; break-after: avoid; }
+.cheat { border-collapse: collapse; width: 100%; font-size: 9.5pt; }
+.cheat td { border: 1px solid #999; padding: 0.6mm 2mm; vertical-align: top; line-height: 1.35; }
+.cheat td:first-child { width: 60%; background: #ececec; }
+.cheat tr { break-inside: avoid; }
+pre.syn { border: 0; padding: 0; font-size: 8.5pt; }
 /* 檔名：中灰底白字；程式碼：灰色左線 */
 .file { font: bold 9pt Consolas, monospace; background: #555; color: #fff; padding: 1mm 3mm; margin-top: 3mm; break-after: avoid; }
-pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; font: 8.5pt/1.3 Consolas, "Courier New", monospace;
+pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; font: 8.5pt/1.25 Consolas, "Courier New", monospace;
       white-space: pre-wrap; word-break: break-all; }
 /* 註解：淺灰底＋斜體＋深灰字，和程式碼一眼分開 */
 pre i { background: #e3e3e3; color: #333; font-style: italic; }
-.doc { font-size: 9pt; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; }
+.doc { font-size: 8.5pt; line-height: 1.35; padding: 1mm 3mm; border: 1px solid #555; border-top: 0; }
 .doc > b { display: block; margin-top: 1.5mm; }
 .md { border-collapse: collapse; width: 100%; margin: 1mm 0 2mm; }
 .md th, .md td { border: 1px solid #888; padding: 0.6mm 1.5mm; text-align: left; vertical-align: top; }
@@ -184,11 +185,10 @@ code { font: 8.5pt Consolas, monospace; background: #e6e6e6; padding: 0 1mm; }
 
 
 def build():
-    tips = ''.join(f'<tr><td>{html.escape(k)}</td><td>{html.escape(v)}</td></tr>' for k, v in TIPS)
-    body = ''.join(section(*p) for p in PROBLEMS)
+    body = cheatsheet() + ''.join(section(*p) for p in PROBLEMS)
     page = (f'<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>ITSA 歷屆考古題筆記</title>'
             f'<style>{CSS}</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2024~2026）</h1>'
-            f'<table class="tips">{tips}</table>{body}</main></body></html>')
+            f'{body}</main></body></html>')
     (ROOT / '筆記.html').write_text(page, encoding='utf-8')
     print('寫入', ROOT / '筆記.html')
 

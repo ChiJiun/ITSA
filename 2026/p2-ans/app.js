@@ -34,8 +34,10 @@ function load() {
       `<span class="badge bg-info text-dark me-1 mb-1">${esc(g.game_name)}
         <a href="#" class="text-dark" onclick="delFav(${g.id}); return false">✕</a></span>`).join(''));
     const opts = d.favs.map(g => `<option value="${g.id}">${esc(g.game_name)}</option>`).join('');
-    $('#postGame').html('<option value="">-- 請選擇遊戲 --</option>' + opts);
-    const keep = $('#filter').val(); // 重畫選單後保留原本的過濾選擇
+    // 重畫選單後保留原本的選擇（每 3 秒自動更新時才不會把使用者選的值洗掉）
+    const keepPost = $('#postGame').val(), keep = $('#filter').val();
+    $('#postGame').html('<option value="">-- 請選擇遊戲 --</option>' + opts).val(keepPost);
+    if (!$('#postGame').val()) $('#postGame').val('');
     $('#filter').html('<option value="">全部</option>' + opts).val(keep);
     if (!$('#filter').val()) $('#filter').val('');
 
@@ -96,7 +98,11 @@ $('[data-tab]').on('click', function (e) {
   $(this).addClass('active');
   $('#lobby, #calendar').addClass('d-none');
   $('#' + this.dataset.tab).removeClass('d-none');
+  load(); // 切頁籤時抓最新資料
 });
+
+// 每 3 秒自動更新：別的玩家加入、公告滿員時，自己的大廳與行事曆也會同步（只在已登入時）
+setInterval(() => $('#mainView').hasClass('d-none') || load(), 3000);
 
 // 開頁先試著拿資料：有登入就進大廳，沒登入 api() 會切回登入畫面
 load();

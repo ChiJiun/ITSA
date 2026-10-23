@@ -1,8 +1,13 @@
-// 每張表要顯示/編輯的欄位，以及「新增列」的預設值
+// 每張表的欄位：[中文表頭, 新增列的預設值]
 const COLS = {
-  users:   { name: '', account: '', password: '1234', role: 'patient', must_change: 1 },
-  items:   { name: '', min_score: 1, max_score: 10 },
-  results: { user_id: '', item_id: '', score: '' },
+  users:   { name: ['姓名', ''], account: ['帳號', ''], password: ['密碼', '1234'], role: ['角色', 'patient'], must_change: ['需改密碼', '1'] },
+  items:   { name: ['項目名稱', ''], min_score: ['最低分', '1'], max_score: ['最高分', '10'] },
+  results: { user_id: ['受檢者', ''], item_id: ['醫檢項目', ''], score: ['分數(1~10)', ''] },
+};
+// 這些欄位用下拉選單；user_id、item_id 的選項在 loadAll() 讀完資料後補上
+const OPTS = {
+  role: [['tech', '醫檢員'], ['patient', '受檢者']],
+  must_change: [['1', '是'], ['0', '否']],
 };
 
 // 跳脫 HTML：資料庫裡的文字不能被當成 HTML 執行
@@ -53,18 +58,22 @@ function loadMine() {
 function load(t, done) {
   $.getJSON('api.php?a=list&t=' + t, rows => {
     const cols = Object.keys(COLS[t]);
-    const cell = (r, c) => `<td><input data-c="${c}" value="${esc(r[c]).replace(/"/g, '&quot;')}"></td>`;
+    const input = (c, v) => OPTS[c]
+      ? `<select data-c="${c}">${OPTS[c].map(([k, txt]) => `<option value="${k}" ${k == v ? 'selected' : ''}>${esc(txt)}</option>`).join('')}</select>`
+      : `<input data-c="${c}" value="${esc(v).replace(/"/g, '&quot;')}">`;
+    const cell = (r, c) => `<td>${input(c, r[c])}</td>`;
     const row = r => `<tr data-id="${r.id || ''}"><td>${r.id || '新增'}</td>${cols.map(c => cell(r, c)).join('')}
-      <td><button onclick="save('${t}', this)">存</button>${r.id ? `<button onclick="del('${t}', ${r.id})">刪</button>` : ''}</td></tr>`;
-    $('#' + t).html(`<tr><th>id</th>${cols.map(c => `<th>${c}</th>`).join('')}<th></th></tr>` +
-      rows.map(row).join('') + row(COLS[t]));
+      <td><button onclick="save('${t}', this)">${r.id ? '存' : '新增'}</button>${r.id ? `<button onclick="del('${t}', ${r.id})">刪</button>` : ''}</td></tr>`;
+    const blank = Object.fromEntries(cols.map(c => [c, COLS[t][c][1]])); // 新增列用預設值
+    $('#' + t).html(`<tr><th>編號</th>${cols.map(c => `<th>${COLS[t][c][0]}</th>`).join('')}<th></th></tr>` +
+      rows.map(row).join('') + row(blank));
     done && done(rows);
   });
 }
 
 function save(t, btn) {
   const tr = $(btn).closest('tr'), data = { t, id: tr.data('id') };
-  tr.find('input').each((i, el) => data[el.dataset.c] = el.value);
+  tr.find('[data-c]').each((i, el) => data[el.dataset.c] = el.value); // input 和 select 都抓
   api('save', data, r => { $('#msg').text(r.msg); loadAll(); });
 }
 
@@ -74,10 +83,15 @@ function del(t, id) {
 
 // b. 總表：受檢者 × 項目，一人一列（人員編號不重複）
 function loadAll() {
-  load('users', users => load('items', items => load('results', results => {
-    const score = (u, i) => results.find(r => r.user_id == u && r.item_id == i)?.score ?? '-';
-    $('#pivot').html(`<tr><th>編號</th><th>姓名</th>${items.map(i => `<th>${esc(i.name)}</th>`).join('')}</tr>` +
-      users.filter(u => u.role === 'patient').map(u =>
-        `<tr><td>${u.id}</td><td>${esc(u.name)}</td>${items.map(i => `<td>${score(u.id, i.id)}</td>`).join('')}</tr>`).join(''));
-  })));
+  load('users', users => load('items', items => {
+    // 讀完人員、項目後，產生檢查結果表要用的下拉選項（只列受檢者）
+    OPTS.user_id = users.filter(u => u.role === 'patient').map(u => [u.id, `${u.id} ${u.name}`]);
+    OPTS.item_id = items.map(i => [i.id, `${i.id} ${i.name}`]);
+    load('results', results => {
+      const score = (u, i) => results.find(r => r.user_id == u && r.item_id == i)?.score ?? '-';
+      $('#pivot').html(`<tr><th>編號</th><th>姓名</th>${items.map(i => `<th>${esc(i.name)}</th>`).join('')}</tr>` +
+        users.filter(u => u.role === 'patient').map(u =>
+          `<tr><td>${u.id}</td><td>${esc(u.name)}</td>${items.map(i => `<td>${score(u.id, i.id)}</td>`).join('')}</tr>`).join(''));
+    });
+  }));
 }

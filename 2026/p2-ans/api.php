@@ -80,8 +80,16 @@ switch ($a) {
     out(['status' => refreshStatus($id)]);
 
   case 'join': // (4)a. 加入 → 重算狀態，回傳新狀態給前端決定要不要淡出
-    if (q('SELECT status FROM announcements WHERE id=?', [$p['id']])->fetchColumn() === 'full') out(['msg' => '已滿員'], 409);
+    // 交易 + FOR UPDATE 鎖住這筆公告：兩人同時按加入時，第二個人要等第一個人做完，才不會超過上限
+    $pdo->beginTransaction();
+    $status = q('SELECT status FROM announcements WHERE id=? FOR UPDATE', [$p['id'] ?? 0])->fetchColumn();
+    if ($status === false || $status === 'full') {
+      $pdo->rollBack();
+      out(['msg' => $status ? '已滿員' : '找不到公告'], $status ? 409 : 404);
+    }
     q('INSERT IGNORE INTO announcement_participants (announcement_id, user_id) VALUES (?, ?)', [$p['id'], $uid]);
-    out(['status' => refreshStatus($p['id'])]);
+    $status = refreshStatus($p['id']);
+    $pdo->commit();
+    out(['status' => $status]);
 }
 out(['msg' => '未知動作'], 400);

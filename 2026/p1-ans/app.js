@@ -47,7 +47,9 @@ app.get('/api/state', (req, res) => res.json({ current: current(), waiting: wait
 app.post('/api/tickets', (req, res) => {
   const s = req.body.service;
   // 接受代碼(G/A/C)或中文名稱；不在白名單 → 400
-  const code = SERVICES[s] ? s : Object.keys(SERVICES).find(k => SERVICES[k] === s);
+  // 用 Object.hasOwn 而不是 SERVICES[s]：否則 'toString'、'__proto__' 會被當成合法服務
+  // typeof 檢查：送陣列 ["G"] 時 hasOwn 也會判成 true，要先擋掉
+  const code = typeof s !== 'string' ? null : Object.hasOwn(SERVICES, s) ? s : Object.keys(SERVICES).find(k => SERVICES[k] === s);
   if (!code) return res.status(400).json({ error: '服務類別錯誤' });
   // 計數器 +1 後取回（不存在就從 1 開始），序號存在 DB → 重開機也接續
   const { n } = db.prepare('INSERT INTO counters VALUES (?, 1) ON CONFLICT(prefix) DO UPDATE SET n = n + 1 RETURNING n').get(code);
@@ -89,5 +91,8 @@ app.post('/api/admin/complete', auth, (req, res) => {
 });
 
 app.get('/api/admin/history', auth, (req, res) => res.json(history()));
+
+// 錯誤處理（4 個參數）：例如 JSON 格式壞掉 → 回 400，不把伺服器錯誤細節回給使用者
+app.use((err, req, res, next) => res.status(err.status || 500).json({ error: '請求格式錯誤' }));
 
 app.listen(3000, () => console.log('http://localhost:3000'));

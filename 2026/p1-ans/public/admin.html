@@ -30,7 +30,7 @@
             <div class="col"><button id="next" class="btn btn-primary w-100" onclick="act('next')">下一位</button></div>
             <div class="col"><button id="done" class="btn btn-success w-100" onclick="act('complete')">完成服務</button></div>
           </div>
-          <div id="msg" class="text-danger mt-2"></div>
+          <div id="msg" class="text-danger mt-2 text-center"></div>
         </div>
         <div class="card card-body"><h5>等待清單</h5>
           <table class="table table-sm"><thead><tr><th>號碼</th><th>服務項目</th><th>取號時間</th></tr></thead><tbody id="waiting"></tbody></table></div>
@@ -54,6 +54,8 @@
       current.textContent = s.current ? `${s.current.number} (${s.current.service})` : '尚無服務中的號碼';
       next.disabled = !!s.current;  // 有人在服務中 → 下一位停用
       done.disabled = !s.current;   // 沒人在服務中 → 完成服務停用
+      // 依目前狀態顯示提示（附錄 C 的文字）；狀態改變時訊息也會跟著更新或清掉
+      msg.textContent = s.current ? '請先完成目前服務' : s.waiting.length ? '' : '目前無等待中的號碼';
       waiting.innerHTML = rows(s.waiting, ['number', 'service', 'createdAt'], 3, '目前無等待中的號碼');
       hist.innerHTML = rows(await h.json(), ['number', 'service', 'createdAt', 'calledAt', 'finishedAt'], 5, '尚無歷史紀錄');
     }
@@ -67,7 +69,7 @@
     // c、e. 下一位 / 完成服務；409 時顯示後端給的訊息
     async function act(type) {
       const r = await post('/api/admin/' + type);
-      msg.textContent = r.ok ? '' : (await r.json()).error;
+      if (!r.ok) alert((await r.json()).error); // 409 時跳出後端給的訊息
       refresh();
     }
 
