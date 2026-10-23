@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>圖片展示系統</title>
+  <link rel="stylesheet" href="team021.css">
+</head>
+<body>
+  <div id="btns">
+    <button class="on" data-type="all">全部圖片</button>
+    <button data-type="n">自然風景圖</button>
+    <button data-type="c">城市風景圖</button>
+  </div>
+  <!-- data-type 標記每張圖的分類，篩選時只比對這個屬性 -->
+  <div id="gallery">
+    <img data-type="n" src="img/n1.svg">
+    <img data-type="n" src="img/n2.svg">
+    <img data-type="c" src="img/c1.svg">
+    <img data-type="n" src="img/n3.svg">
+    <img data-type="c" src="img/c2.svg">
+    <img data-type="n" src="img/n4.svg">
+    <img data-type="n" src="img/n5.svg">
+    <img data-type="c" src="img/c3.svg">
+  </div>
+  <script src="team021.js"></script>
+</body>
+</html>

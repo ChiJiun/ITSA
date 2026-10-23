@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>視訊控制播放系統</title>
+</head>
+<body>
+  <!-- (1) 選擇 mp4 -->
+  <input type="file" id="file" accept="video/mp4">
+  <p>
+    <!-- (2) 播放畫面 -->
+    <video id="v" width="480" style="background:#000; display:block"></video>
+  </p>
+  <p>
+    <!-- (3) 播放／暫停，狀態顯示在 #state -->
+    <button id="play">播放</button>
+    <button id="pause">暫停</button>
+    目前狀態：<span id="state">暫停</span>
+  </p>
+  <p>
+    <!-- (4) 放大／縮小／正常 -->
+    <button onclick="size(1.25)">放大</button>
+    <button onclick="size(0.8)">縮小</button>
+    <button onclick="size(0)">正常</button>
+  </p>
+  <p>
+    <!-- (5) 音量 -->
+    音量 <input type="range" id="vol" min="0" max="1" step="0.1" value="1">
+    <span id="volText">100</span>%
+  </p>
+  <!-- (6) 目前時間 / 總長度 -->
+  <p>時間：<span id="time">00:00 / 00:00</span></p>
+  <script src="team021.js"></script>
+</body>
+</html>

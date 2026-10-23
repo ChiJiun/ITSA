@@ -1,0 +1,9 @@
+# XAMPP（Apache）：把 /、/login、/admin 對應到實際的 html；需啟用 mod_rewrite
+# 不接受 /login/：多一個斜線時相對路徑的 css、js 會找錯資料夾
+RewriteEngine On
+RewriteRule ^$ team021.html [L]
+RewriteRule ^login$ login.html [L]
+RewriteRule ^admin$ admin.html [L]
+
+# 有些 Apache 設定不會把 Authorization 標頭傳給 PHP，這行補上
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1

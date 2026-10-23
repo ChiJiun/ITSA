@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>引用 event_filter</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="team021.css">
+  <script src="jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <h4>本網頁展示如何引用外部 HTML 檔案以達到重複使用 Web 元件的目標</h4>
+  <div id="slot"></div>
+
+  <!-- 事件資料：JSON 放在 script 裡，type 不是 javascript 所以瀏覽器不會執行它。故意不依日期排序 -->
+  <script id="events" type="application/json">
+  [
+    { "date": "2024-07-26", "description": "巴黎奧運會開幕" },
+    { "date": "2024-05-28", "description": "project 總結展示結束" },
+    { "date": "2024-08-15", "description": "暑期實習成果發表" },
+    { "date": "2024-06-28", "description": "南極探險" },
+    { "date": "2024-04-10", "description": "專題題目申請截止" },
+    { "date": "2024-06-06", "description": "期末考" },
+    { "date": "2024-09-02", "description": "新學期開學" },
+    { "date": "2024-05-15", "description": "校外參訪" },
+    { "date": "2024-07-10", "description": "畢業典禮" },
+    { "date": "2024-06-20", "description": "社團成果展" },
+    { "date": "2024-03-30", "description": "春季校慶" },
+    { "date": "2024-07-31", "description": "暑期課程結束" }
+  ]
+  </script>
+
+  <script>
+    // .load() 抓 HTML 片段放進 #slot，並且會執行片段內的 script；路徑錯誤時走 error 分支
+    $('#slot').load('event_filter.html', (res, status, xhr) => {
+      if (status === 'error') $('#slot').text(`遭遇問題: ${xhr.status} ${xhr.statusText}`);
+    });
+  </script>
+</body>
+</html>

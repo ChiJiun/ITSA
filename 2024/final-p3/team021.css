@@ -1,0 +1,24 @@
+* { box-sizing: border-box; }
+body { margin: 0; padding: 16px; font-family: "Microsoft JhengHei", sans-serif; background: #fff; }
+.panel { max-width: 600px; margin: 0 auto; padding: 20px; background: #f7f7f7; border-radius: 12px; box-shadow: 0 2px 10px #0002; }
+.narrow { max-width: 420px; margin-top: 8vh; }
+h1 { margin: 0 0 16px; text-align: center; font-size: 24px; color: #333; }
+label { display: block; margin: 12px 0 6px; text-align: center; color: #555; }
+
+input { display: block; width: 100%; margin-bottom: 10px; padding: 10px 14px; border: 1px solid #ccc; border-radius: 20px; font-size: 15px; }
+.btn { flex: 1; padding: 10px 18px; border: 0; border-radius: 20px; background: #0d6efd; color: #fff; font-size: 15px; cursor: pointer; }
+.narrow .btn { width: 100%; margin-top: 14px; }
+.row { display: flex; gap: 10px; }
+
+/* 管理頁：每筆問答是一張圓角卡片，文字置中、按鈕靠右 */
+.item { margin-top: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; text-align: center; }
+.item .row { justify-content: flex-end; margin-top: 8px; }
+.item .btn { flex: none; }
+
+/* 對話頁 */
+.chat { height: 400px; margin-bottom: 12px; padding: 12px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px; background: #fff; }
+.msg { width: fit-content; max-width: 80%; margin-bottom: 10px; padding: 6px 12px; border-radius: 14px; word-break: break-word; }
+.bot { background: #f8d7da; }
+.user { margin-left: auto; background: #cfe8df; }
+#form.row input { margin: 0; border-radius: 6px; }
+#form.row .btn { flex: none; border-radius: 6px; }

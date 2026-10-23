@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>計時器</title>
+  <link rel="stylesheet" href="team021.css">
+</head>
+<body>
+  <h1>計時器</h1>
+  <div id="time">00:00:00</div>
+  <label for="target">設定目標日期及時間</label>
+  <!-- datetime-local 內建日期時間選擇圖示與 yyyy-mm-dd --:-- -- 提示 -->
+  <!-- step="1" 才能選到秒（題目第 2 項要求選秒），提示會多出秒欄位 -->
+  <input type="datetime-local" id="target" step="1">
+  <button id="start">開始</button>
+  <button id="reset">重置</button>
+  <script src="team021.js"></script>
+</body>
+</html>

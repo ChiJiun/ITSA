@@ -1,0 +1,37 @@
+<!-- 可重複使用的元件：只有片段，沒有 html/head/body。事件資料由引用它的頁面提供 -->
+<div class="container">
+  <div class="row">
+    <!-- col-md-6：>=768px 各佔 50%，更小的螢幕自動上下堆疊 -->
+    <div class="col-md-6 ef-filter">
+      <div>選擇欲查詢事件的區間:</div>
+      from: <input type="date" id="ef-from" value="2024-05-01">
+      to: <input type="date" id="ef-to" value="2024-07-31">
+    </div>
+    <div class="col-md-6 ef-list">
+      <div>事件列表:</div>
+      <ul id="ef-list" class="list-unstyled"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// 這段 script 只有用 jQuery .load() 匯入才會執行（innerHTML / fetch 不會執行 script）
+(() => {
+  // 從引用頁的 <script id="events" type="application/json"> 讀事件
+  const events = JSON.parse($('#events').text());
+
+  function render() {
+    const from = $('#ef-from').val(), to = $('#ef-to').val();
+    $('#ef-list').empty().append(
+      events
+        // yyyy-mm-dd 格式的字串，直接比大小就等於比日期；沒填的那端不限制
+        .filter(e => (!from || e.date >= from) && (!to || e.date <= to))
+        .sort((a, b) => a.date.localeCompare(b.date))   // 日期遞增
+        .map(e => $('<li>').text(`${e.date}: ${e.description}`))  // .text() 會自動跳脫
+    );
+  }
+
+  $('#ef-from, #ef-to').on('change', render);  // 起迄任一個改變就重畫
+  render();
+})();
+</script>

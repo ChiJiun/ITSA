@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>簡單的排座位工具</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="team021.css">
+  <script src="team021.js" defer></script>
+</head>
+<body>
+  <h1 class="m-2">簡單的排座位工具</h1>
+  <!-- col-sm-3 / col-sm-9：>=576px 左 25% 右 75%；<576px 自動上下堆疊 -->
+  <div class="row g-0">
+    <div class="col-sm-3 left p-2">
+      <input type="file" id="file" accept=".csv,.txt" class="form-control form-control-sm mb-2">
+      <table class="table table-sm table-bordered w-auto bg-white">
+        <thead><tr><th>序號</th><th>姓名</th></tr></thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+    <div class="col-sm-9 right p-2">
+      <div class="row mb-2">
+        <div class="col-6"><button class="btn btn-primary w-100" id="seq">循序排座</button></div>
+        <div class="col-6"><button class="btn btn-primary w-100" id="rnd">隨機排座</button></div>
+      </div>
+      <div class="d-flex justify-content-between mb-1">
+        <label>寬：<select id="w"></select> 位</label>
+        <label>高：<select id="h"></select> 位</label>
+      </div>
+      <div id="seats"></div>
+    </div>
+  </div>
+</body>
+</html>

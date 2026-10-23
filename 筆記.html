@@ -1,43 +1,762 @@
 <!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>ITSA 歷屆考古題筆記</title><style>
-/* A4 直式；灰階深淺做區分，黑白列印也分得出來 */
+/* A4 直式彩色：藍＝初賽、紅＝決賽、綠＝語法；黑白列印時深淺仍分得出來 */
 @page { size: A4; margin: 10mm 10mm 10mm 12mm; }
 * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; } /* 列印時保留背景色 */
-body { margin: 0; font: 10pt/1.5 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #000; background: #fff; }
+body { margin: 0; font: 10pt/1.5 "Microsoft JhengHei", "PingFang TC", sans-serif; color: #111; background: #fff; }
 main { max-width: 188mm; margin: auto; }
 section + section { break-before: page; }   /* 每題從新的一頁開始 */
-h1 { font-size: 16pt; margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 2.5px solid #000; }
-h2 { font-size: 13pt; margin: 0 0 2.5mm; padding: 1.5mm 3mm; background: #000; color: #fff; break-after: avoid; }
+h1 { font-size: 16pt; margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 2.5px solid #1d4ed8; color: #1e3a8a; }
+h2 { font-size: 13pt; margin: 0 0 2.5mm; padding: 1.5mm 3mm; background: #1e40af; color: #fff; break-after: avoid; }
+.final h2 { background: #9f1239; border-left: 4mm solid #fda4af; } /* 決賽用深紅＋淺色左框，黑白列印也分得出來 */
+.cheatsheet h2 { background: #065f46; }     /* 語法速查用深綠 */
 ul { margin: 1mm 0 0; padding-left: 5mm; }
 li { margin-bottom: 0.5mm; }
-/* 題目重點（淺灰底）與解題思路（白底粗左線）並排 */
-.head { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 3mm; break-inside: avoid; }
-.spec, .idea { padding: 2mm 3mm; font-size: 9.5pt; line-height: 1.45; }
-.spec { background: #e6e6e6; }
-.idea { border: 1px solid #999; border-left: 5px solid #000; }
-.spec b, .idea b { font-size: 10.5pt; }
-/* 常用語法：分類標題深灰底；語法欄淺灰底等寬字；列與列之間斑馬紋 */
-h3 { font-size: 11pt; margin: 3mm 0 0; padding: 1mm 3mm; background: #444; color: #fff; break-after: avoid; }
+/* 題目重點（淡藍底）與解題思路（淡橘底、橘色粗左線）並排 */
+.head { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 2mm; break-inside: avoid; }
+.spec, .idea { padding: 1.5mm 3mm; font-size: 9.5pt; line-height: 1.4; }
+.spec { background: #e0ecff; border-left: 5px solid #3b82f6; }
+.idea { background: #fff4e5; border-left: 5px solid #f59e0b; }
+.spec b { font-size: 10.5pt; color: #1e40af; }
+.idea b { font-size: 10.5pt; color: #b45309; }
+/* 常用語法：分類標題綠底；語法欄淡綠底等寬字 */
+h3 { font-size: 11pt; margin: 3mm 0 0; padding: 1mm 3mm; background: #047857; color: #fff; break-after: avoid; }
 .cheat { border-collapse: collapse; width: 100%; font-size: 9.5pt; }
-.cheat td { border: 1px solid #999; padding: 0.6mm 2mm; vertical-align: top; line-height: 1.35; }
-.cheat td:first-child { width: 60%; background: #ececec; }
+.cheat td { border: 1px solid #a7c4b5; padding: 0.6mm 2mm; vertical-align: top; line-height: 1.35; }
+.cheat td:first-child { width: 60%; background: #ecfdf5; }
 .cheat tr { break-inside: avoid; }
-pre.syn { border: 0; padding: 0; font-size: 8.5pt; }
-/* 檔名：中灰底白字；程式碼：灰色左線 */
-.file { font: bold 9pt Consolas, monospace; background: #555; color: #fff; padding: 1mm 3mm; margin-top: 3mm; break-after: avoid; }
-pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #555; border-top: 0; font: 8.5pt/1.25 Consolas, "Courier New", monospace;
+pre.syn { border: 0; padding: 0; font-size: 8.5pt; background: none; }
+/* 檔名：深灰藍底白字；程式碼：極淡灰底 */
+.file { font: bold 9pt Consolas, monospace; background: #334155; color: #fff; padding: 0.8mm 3mm; margin-top: 2mm; break-after: avoid; }
+pre { margin: 0; padding: 1.5mm 3mm; border: 1px solid #94a3b8; border-top: 0; background: #f8fafc; font: 8.5pt/1.2 Consolas, "Courier New", monospace;
       white-space: pre-wrap; word-break: break-all; }
-/* 註解：淺灰底＋斜體＋深灰字，和程式碼一眼分開 */
-pre i { background: #e3e3e3; color: #333; font-style: italic; }
-.doc { font-size: 8.5pt; line-height: 1.35; padding: 1mm 3mm; border: 1px solid #555; border-top: 0; }
-.doc > b { display: block; margin-top: 1.5mm; }
+/* 註解：綠色斜體，和程式碼一眼分開 */
+pre i { color: #15803d; font-style: italic; }
+.doc { font-size: 8.5pt; line-height: 1.35; padding: 1mm 3mm; border: 1px solid #94a3b8; border-top: 0; }
+.doc > b { display: block; margin-top: 1.5mm; color: #1e3a8a; }
 .md { border-collapse: collapse; width: 100%; margin: 1mm 0 2mm; }
-.md th, .md td { border: 1px solid #888; padding: 0.6mm 1.5mm; text-align: left; vertical-align: top; }
-.md th { background: #d0d0d0; }
-.md tr:nth-child(even) td { background: #f2f2f2; }
-code { font: 8.5pt Consolas, monospace; background: #e6e6e6; padding: 0 1mm; }
+.md th, .md td { border: 1px solid #94a3b8; padding: 0.6mm 1.5mm; text-align: left; vertical-align: top; }
+.md th { background: #dbeafe; }
+.md tr:nth-child(even) td { background: #f1f5f9; }
+code { font: 8.5pt Consolas, monospace; background: #fde68a; padding: 0 1mm; }
 @media screen { body { padding: 10mm 0; } }
-</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2024~2026）</h1><section><h2>常用語法速查</h2><h3>HTML 基本骨架與表單</h3><table class="cheat"><tr><td><pre class="syn">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</pre></td><td>手機才會用實際寬度顯示，@media 才有效</td></tr><tr><td><pre class="syn">&lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
-&lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;</pre></td><td>引入 CSS（放 head）、JS（放 body 最後，DOM 已載入）</td></tr><tr><td><pre class="syn">&lt;form onsubmit=&quot;save(); return false&quot;&gt;</pre></td><td>return false 阻止表單送出後換頁</td></tr><tr><td><pre class="syn">&lt;input id=&quot;t&quot; required&gt;  &lt;input type=&quot;number&quot; min=&quot;1&quot; max=&quot;10&quot;&gt;</pre></td><td>瀏覽器內建驗證：必填、數字範圍</td></tr><tr><td><pre class="syn">&lt;input pattern=&quot;[A-Za-z\d]{12}&quot;&gt;  el.checkValidity()</pre></td><td>正規表示式驗證；JS 用 checkValidity() 檢查</td></tr><tr><td><pre class="syn">&lt;select id=&quot;s&quot;&gt;&lt;option value=&quot;G&quot;&gt;一般服務&lt;/option&gt;&lt;/select&gt;</pre></td><td>下拉選單；value 是送出的值，文字是顯示的</td></tr><tr><td><pre class="syn">&lt;input type=&quot;datetime-local&quot;&gt;</pre></td><td>日期時間選擇器，值格式 2026-07-07T22:25</td></tr><tr><td><pre class="syn">&lt;table&gt;&lt;tr&gt;&lt;th&gt;標題&lt;/th&gt;&lt;/tr&gt;&lt;tbody id=&quot;list&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;</pre></td><td>表格；資料列用 JS 塞進 tbody</td></tr><tr><td><pre class="syn">hidden 屬性 / el.hidden = true</pre></td><td>隱藏元素（不用寫 CSS）</td></tr></table><h3>CSS 版面</h3><table class="cheat"><tr><td><pre class="syn">* { box-sizing: border-box; margin: 0; }</pre></td><td>寬度包含 padding、border，排版不會撐爆</td></tr><tr><td><pre class="syn">.wrap { max-width: 900px; margin: auto; }</pre></td><td>置中且左右等寬；螢幕不夠寬時自動滿版</td></tr><tr><td><pre class="syn">display: flex; justify-content: space-between; align-items: center;</pre></td><td>水平排列；左右推開；垂直置中</td></tr><tr><td><pre class="syn">flex-direction: column / row-reverse / column-reverse</pre></td><td>改成直排 / 左右反轉 / 由下往上疊</td></tr><tr><td><pre class="syn">flex: 1;  gap: 10px;  flex-wrap: wrap;</pre></td><td>平分剩餘空間；子元素間距；放不下就換行</td></tr><tr><td><pre class="syn">display: grid; grid-template-columns: 1fr 1fr;</pre></td><td>兩欄等寬格線</td></tr><tr><td><pre class="syn">position: relative; / absolute; top: 0; left: 0; z-index: 2;</pre></td><td>absolute 以最近的 relative 祖先定位；z-index 決定上下層</td></tr><tr><td><pre class="syn">margin-left: -10%;</pre></td><td>負邊距讓元素往外移，做圖文交疊</td></tr><tr><td><pre class="syn">@media (max-width: 749px) { ... }</pre></td><td>螢幕寬度 ≤ 749px 才套用（RWD 斷點）</td></tr><tr><td><pre class="syn">.row:nth-of-type(2)  li:nth-child(odd)  a:hover</pre></td><td>第 2 個同類元素；奇數項；滑鼠移上去</td></tr><tr><td><pre class="syn">display: contents;</pre></td><td>拆掉自己的外框，子元素直接參與父層 flex 排版</td></tr><tr><td><pre class="syn">transition: .3s;  opacity: 0;</pre></td><td>屬性變化時有動畫；透明度</td></tr></table><h3>JavaScript：DOM 與事件</h3><table class="cheat"><tr><td><pre class="syn">document.getElementById(&#x27;x&#x27;)  document.querySelector(&#x27;.c&#x27;)  querySelectorAll(&#x27;li&#x27;)</pre></td><td>取元素；querySelectorAll 回傳清單，可 forEach</td></tr><tr><td><pre class="syn">el.textContent = s  /  el.innerHTML = html  /  input.value</pre></td><td>設文字（安全）/ 設 HTML（要先跳脫）/ 表單值</td></tr><tr><td><pre class="syn">el.addEventListener(&#x27;click&#x27;, e =&gt; { e.preventDefault(); })</pre></td><td>綁事件；preventDefault 取消預設動作（換頁、送出）</td></tr><tr><td><pre class="syn">el.classList.add(&#x27;d-none&#x27;) / remove / toggle</pre></td><td>加、移除、切換 class</td></tr><tr><td><pre class="syn">document.createElement(&#x27;div&#x27;); parent.appendChild(d);</pre></td><td>建立並加入元素（appendChild 已存在的元素＝搬移）</td></tr><tr><td><pre class="syn">el.dataset.size   // &lt;div data-size=&quot;3&quot;&gt;</pre></td><td>讀取 data-* 自訂屬性（字串）</td></tr><tr><td><pre class="syn">setInterval(fn, 2000)  setTimeout(fn, 100)</pre></td><td>每 2 秒執行一次（輪詢）/ 延遲執行一次</td></tr><tr><td><pre class="syn">draggable=true; dragstart → dragover(e.preventDefault()) → drop</pre></td><td>拖放三步驟：dragover 一定要 preventDefault 才能 drop</td></tr><tr><td><pre class="syn">const esc = s =&gt; String(s).replace(/&lt;/g, &#x27;&amp;lt;&#x27;);</pre></td><td>放進 innerHTML 前跳脫，防 XSS</td></tr></table><h3>JavaScript：資料處理</h3><table class="cheat"><tr><td><pre class="syn">`${a} 共 ${n} 筆`</pre></td><td>樣板字串，${} 內放變數或運算式</td></tr><tr><td><pre class="syn">arr.map(x =&gt; x * 2)  arr.filter(x =&gt; x &gt; 0)  arr.find(x =&gt; x.id === 1)</pre></td><td>轉換 / 篩選 / 找第一個符合的</td></tr><tr><td><pre class="syn">arr.reduce((s, x) =&gt; s + x.count, 0)</pre></td><td>累加總和</td></tr><tr><td><pre class="syn">arr.sort((a, b) =&gt; b[1] - a[1]).slice(0, 10)</pre></td><td>由大到小排序後取前 10</td></tr><tr><td><pre class="syn">arr.some(x =&gt; ...)  arr.includes(v)  arr.join(&#x27;&#x27;)</pre></td><td>是否有任一符合 / 是否包含 / 串成字串</td></tr><tr><td><pre class="syn">[...new Set(arr)]</pre></td><td>去除重複</td></tr><tr><td><pre class="syn">Object.keys(o)  Object.entries(o)  Object.hasOwn(o, k)</pre></td><td>物件的鍵 / [鍵, 值] 陣列 / 是否有自己的屬性（白名單檢查用）</td></tr><tr><td><pre class="syn">total[k] = (total[k] || 0) + n;</pre></td><td>用物件當字典分組加總</td></tr><tr><td><pre class="syn">JSON.stringify(o)  JSON.parse(s)</pre></td><td>物件 ↔ 字串（undefined 欄位會被丟掉，空值用 null）</td></tr><tr><td><pre class="syn">localStorage.books = JSON.stringify(books)</pre></td><td>存到瀏覽器，重新整理不會消失</td></tr><tr><td><pre class="syn">String(n).padStart(3, &#x27;0&#x27;)   // 7 → &#x27;007&#x27;</pre></td><td>左補零</td></tr><tr><td><pre class="syn">a?.b  a ?? 0  !!x</pre></td><td>可選鏈（a 是 null 不報錯）/ null 時給預設值 / 轉布林</td></tr></table><h3>fetch 與 jQuery</h3><table class="cheat"><tr><td><pre class="syn">const r = await fetch(&#x27;/api/state&#x27;); const d = await r.json();</pre></td><td>GET 取 JSON（要在 async function 裡）</td></tr><tr><td><pre class="syn">fetch(url, { method: &#x27;POST&#x27;, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, body: JSON.stringify(o) })</pre></td><td>POST 送 JSON</td></tr><tr><td><pre class="syn">r.ok  r.status</pre></td><td>r.ok：狀態碼 200~299；r.status：數字狀態碼</td></tr><tr><td><pre class="syn">$.post(&#x27;api.php?a=login&#x27;, { account, password }).done(fn).fail(x =&gt; x.status)</pre></td><td>jQuery POST（表單格式，PHP 用 $_POST 接）；fail 拿狀態碼</td></tr><tr><td><pre class="syn">$.getJSON(&#x27;api.php?a=list&#x27;, rows =&gt; { ... })</pre></td><td>jQuery GET JSON</td></tr><tr><td><pre class="syn">$(&#x27;#id&#x27;).val()  .text(s)  .html(h)  .prop(&#x27;hidden&#x27;, true)</pre></td><td>取值 / 設文字 / 設 HTML / 設屬性</td></tr><tr><td><pre class="syn">$(&#x27;#id&#x27;).addClass(&#x27;d-none&#x27;)  .removeClass()  .fadeOut(600, callback)</pre></td><td>切換 class；淡出動畫結束後執行 callback</td></tr><tr><td><pre class="syn">$(document).on(&#x27;click&#x27;, &#x27;.btn&#x27;, function () { $(this) })</pre></td><td>事件委派：之後才產生的元素也能觸發</td></tr><tr><td><pre class="syn">$(&#x27;&lt;div&gt;&#x27;).text(s).html()</pre></td><td>jQuery 跳脫 HTML 的寫法</td></tr></table><h3>Bootstrap 5</h3><table class="cheat"><tr><td><pre class="syn">&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;row g-3&quot;&gt;&lt;div class=&quot;col-lg-4&quot;&gt;…&lt;/div&gt;&lt;div class=&quot;col-lg-8&quot;&gt;…&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</pre></td><td>12 格系統；lg ≥ 992px 左右兩欄，以下自動上下堆疊</td></tr><tr><td><pre class="syn">斷點：sm 576 / md 768 / lg 992 / xl 1200 / xxl 1400</pre></td><td>col-md-6 = 768px 以上佔一半</td></tr><tr><td><pre class="syn">d-none  d-flex  justify-content-between  align-items-center</pre></td><td>隱藏 / flex / 左右推開 / 垂直置中</td></tr><tr><td><pre class="syn">m-0 mt-2 mb-3 p-3 px-4 py-2  w-100  text-center</pre></td><td>間距（0~5）/ 寬 100% / 置中</td></tr><tr><td><pre class="syn">btn btn-primary / btn-outline-light / btn-sm  disabled</pre></td><td>按鈕樣式與大小；disabled 停用</td></tr><tr><td><pre class="syn">form-control  form-select  input-group</pre></td><td>輸入框 / 下拉 / 輸入框加按鈕</td></tr><tr><td><pre class="syn">card card-body  table table-sm  badge bg-success  alert alert-success</pre></td><td>卡片 / 表格 / 標籤 / 提示框</td></tr><tr><td><pre class="syn">&lt;ul class=&quot;nav nav-tabs&quot;&gt;&lt;li class=&quot;nav-item&quot;&gt;&lt;a class=&quot;nav-link active&quot;&gt;</pre></td><td>頁籤（用 JS 切換 d-none 做 SPA）</td></tr><tr><td><pre class="syn">&lt;html data-bs-theme=&quot;dark&quot;&gt;</pre></td><td>整頁深色主題</td></tr><tr><td><pre class="syn">&lt;div class=&quot;progress&quot;&gt;&lt;div class=&quot;progress-bar&quot; style=&quot;width:60%&quot;&gt;</pre></td><td>進度條</td></tr></table><h3>PHP + PDO</h3><table class="cheat"><tr><td><pre class="syn">$pdo = new PDO(&#x27;mysql:host=127.0.0.1;dbname=db;charset=utf8mb4&#x27;, &#x27;root&#x27;, &#x27;&#x27;, [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC]);</pre></td><td>連線：錯誤丟例外、結果用關聯陣列、utf8mb4 防亂碼</td></tr><tr><td><pre class="syn">$s = $pdo-&gt;prepare(&#x27;SELECT * FROM users WHERE id=?&#x27;); $s-&gt;execute([$id]);</pre></td><td>prepare + ? 參數：防 SQL injection</td></tr><tr><td><pre class="syn">$s-&gt;fetch()  $s-&gt;fetchAll()  $s-&gt;fetchColumn()  $pdo-&gt;lastInsertId()</pre></td><td>一筆 / 全部 / 第一欄的值 / 剛新增的 id</td></tr><tr><td><pre class="syn">$pdo-&gt;beginTransaction(); … $pdo-&gt;commit(); / rollBack();</pre></td><td>交易：全部成功才寫入</td></tr><tr><td><pre class="syn">session_start(); $_SESSION[&#x27;uid&#x27;] = $id; session_destroy();</pre></td><td>登入狀態存在伺服器端</td></tr><tr><td><pre class="syn">$_GET[&#x27;a&#x27;] ?? &#x27;&#x27;   $_POST[&#x27;name&#x27;] ?? &#x27;&#x27;</pre></td><td>讀參數；?? 避免沒傳時出現 warning</td></tr><tr><td><pre class="syn">header(&#x27;Content-Type: application/json; charset=utf-8&#x27;); echo json_encode($d, JSON_UNESCAPED_UNICODE);</pre></td><td>回傳 JSON（中文不轉成 \uXXXX）</td></tr><tr><td><pre class="syn">http_response_code(401);  header(&#x27;Location: team123.html&#x27;); exit;</pre></td><td>設狀態碼；302 轉址（之後要 exit）</td></tr><tr><td><pre class="syn">try { … } catch (PDOException $e) { $e-&gt;getCode() == 23000 }</pre></td><td>23000 = 違反 UNIQUE 或外鍵</td></tr><tr><td><pre class="syn">preg_match(&#x27;/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{12}$/&#x27;, $pw)</pre></td><td>密碼規則：含小寫、大寫、數字，共 12 碼</td></tr><tr><td><pre class="syn">password_hash($pw, PASSWORD_DEFAULT)  password_verify($pw, $hash)</pre></td><td>正式系統存密碼要雜湊</td></tr><tr><td><pre class="syn">array_map(&#x27;str_getcsv&#x27;, file(&#x27;a.csv&#x27;, FILE_IGNORE_NEW_LINES))</pre></td><td>讀 CSV 成二維陣列</td></tr><tr><td><pre class="syn">in_array($v, [&#x27;a&#x27;, &#x27;b&#x27;])  trim($s)  implode(&#x27;,&#x27;, $arr)</pre></td><td>白名單檢查 / 去空白 / 陣列串字串</td></tr></table><h3>SQL（MySQL / SQLite）</h3><table class="cheat"><tr><td><pre class="syn">CREATE TABLE t (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL UNIQUE) DEFAULT CHARSET utf8mb4;</pre></td><td>MySQL 建表；SQLite 用 INTEGER PRIMARY KEY AUTOINCREMENT</td></tr><tr><td><pre class="syn">role ENUM(&#x27;tech&#x27;,&#x27;patient&#x27;)   score TINYINT CHECK (score BETWEEN 1 AND 10)</pre></td><td>限定值 / 限定範圍</td></tr><tr><td><pre class="syn">FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE</pre></td><td>外鍵；刪除主檔時一起刪明細</td></tr><tr><td><pre class="syn">UNIQUE (user_id, item_id)   PRIMARY KEY (a, b)</pre></td><td>組合不可重複</td></tr><tr><td><pre class="syn">INSERT INTO t (a, b) VALUES (?, ?)</pre></td><td>新增</td></tr><tr><td><pre class="syn">INSERT IGNORE INTO …  /  … ON DUPLICATE KEY UPDATE n = n + 1</pre></td><td>MySQL：重複就略過 / 重複就更新</td></tr><tr><td><pre class="syn">INSERT … ON CONFLICT(k) DO UPDATE SET n = n + 1 RETURNING n</pre></td><td>SQLite：計數器 +1 並取回新值</td></tr><tr><td><pre class="syn">UPDATE t SET a=? WHERE id=?    DELETE FROM t WHERE id=?</pre></td><td>更新 / 刪除（一定要 WHERE）</td></tr><tr><td><pre class="syn">SELECT … FROM a JOIN b ON b.id = a.b_id WHERE … ORDER BY x DESC LIMIT 10</pre></td><td>關聯查詢、排序、取前幾筆</td></tr><tr><td><pre class="syn">SELECT game_id, COUNT(*) c FROM p GROUP BY game_id HAVING c &gt; 1</pre></td><td>分組統計；HAVING 篩選分組後結果</td></tr><tr><td><pre class="syn">(SELECT COUNT(*) FROM p WHERE p.aid = a.id) AS cnt</pre></td><td>子查詢：每筆附上人數</td></tr><tr><td><pre class="syn">EXISTS(SELECT 1 FROM p WHERE …)</pre></td><td>是否存在（回傳 0/1）</td></tr><tr><td><pre class="syn">CASE WHEN cnt &gt;= max THEN &#x27;full&#x27; WHEN cnt &gt;= min THEN &#x27;formed&#x27; ELSE &#x27;open&#x27; END</pre></td><td>依條件給值</td></tr><tr><td><pre class="syn">SELECT … FOR UPDATE（在交易中）</pre></td><td>鎖住這幾筆，避免同時修改</td></tr></table><h3>Node.js + Express</h3><table class="cheat"><tr><td><pre class="syn">const express = require(&#x27;express&#x27;); const app = express();</pre></td><td>建立伺服器</td></tr><tr><td><pre class="syn">app.use(express.json(), express.static(__dirname + &#x27;/public&#x27;));</pre></td><td>解析 JSON body；public 資料夾的檔案直接開放</td></tr><tr><td><pre class="syn">app.get(&#x27;/api/x&#x27;, (req, res) =&gt; res.json(data));</pre></td><td>GET 路由</td></tr><tr><td><pre class="syn">app.post(&#x27;/api/x&#x27;, auth, (req, res) =&gt; res.status(201).json(o));</pre></td><td>POST 路由；auth 是中介層（先檢查登入）</td></tr><tr><td><pre class="syn">req.body  req.query  req.params  req.headers.cookie</pre></td><td>請求內容 / ?a=1 / :id / Cookie 字串</td></tr><tr><td><pre class="syn">res.cookie(&#x27;sid&#x27;, id, { httpOnly: true })  res.clearCookie(&#x27;sid&#x27;)</pre></td><td>設定 / 清除 Cookie</td></tr><tr><td><pre class="syn">res.status(204).end()  res.redirect(&#x27;/team123.html&#x27;)</pre></td><td>無內容回應 / 轉址</td></tr><tr><td><pre class="syn">const auth = (req, res, next) =&gt; ok ? next() : res.status(401).json({});</pre></td><td>中介層：通過才呼叫 next()</td></tr><tr><td><pre class="syn">app.use((err, req, res, next) =&gt; res.status(400).json({}));</pre></td><td>錯誤處理（4 個參數）</td></tr><tr><td><pre class="syn">const { DatabaseSync } = require(&#x27;node:sqlite&#x27;); db.prepare(sql).get() / all() / run()</pre></td><td>Node 22.13+ 內建 SQLite（同步）</td></tr><tr><td><pre class="syn">crypto.randomUUID()</pre></td><td>產生隨機 session id</td></tr><tr><td><pre class="syn">package.json: &quot;scripts&quot;: { &quot;start&quot;: &quot;node app.js&quot; }</pre></td><td>npm start 執行的指令</td></tr></table><h3>Chart.js 與檔案下載</h3><table class="cheat"><tr><td><pre class="syn">new Chart(canvas, { type: &#x27;bar&#x27;, data: { labels, datasets: [{ label, data }] }, options })</pre></td><td>畫圖；type 可換 line、pie</td></tr><tr><td><pre class="syn">chart.destroy()  chart.toBase64Image()</pre></td><td>換圖前先銷毀 / 取得 PNG 圖片網址</td></tr><tr><td><pre class="syn">const a = document.createElement(&#x27;a&#x27;); a.href = url; a.download = &#x27;x.csv&#x27;; a.click();</pre></td><td>觸發下載</td></tr><tr><td><pre class="syn">URL.createObjectURL(new Blob([&#x27;\uFEFF&#x27; + csv], { type: &#x27;text/csv&#x27; }))</pre></td><td>產生 CSV 檔；BOM 讓 Excel 不亂碼</td></tr></table><h3>HTTP 狀態碼與常見陷阱</h3><table class="cheat"><tr><td><pre class="syn">200 OK / 201 Created / 204 No Content</pre></td><td>成功 / 新增成功 / 成功但沒內容</td></tr><tr><td><pre class="syn">302 Found（Location）</pre></td><td>轉址；瀏覽器收到 401 不會跟著 Location 跳</td></tr><tr><td><pre class="syn">400 / 401 / 403 / 404 / 409 / 500</pre></td><td>參數錯 / 未登入 / 沒權限 / 找不到 / 狀態衝突 / 伺服器錯誤</td></tr><tr><td><pre class="syn">權限檢查</pre></td><td>一定要在伺服器端檢查；前端停用按鈕只是輔助</td></tr><tr><td><pre class="syn">相對路徑</pre></td><td>答案資料夾要自帶所有檔案，不可引用 ../p1-ref/</td></tr><tr><td><pre class="syn">Font Awesome</pre></td><td>all.min.css 內寫 ../webfonts/，CSS 要放在子資料夾（css/）</td></tr><tr><td><pre class="syn">全域變數撞名</pre></td><td>別把元素 id 取成 history、name、login 這種和 window 屬性或函式同名的</td></tr><tr><td><pre class="syn">XAMPP</pre></td><td>phpMyAdmin 匯入 .sql；檔案放 htdocs；網址 http://localhost/資料夾/檔名</td></tr></table></section><section><h2>2024 P1｜響應式 ITSA 首頁（HTML5 + CSS3，不可用 Bootstrap）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>&gt;900px：導覽列、頁首、內容區置中等寬；頁首灰底、圖片與文字不等高、報名按鈕</li><li>內容兩列圖文交疊：第一列圖左文右，第二列圖右文左</li><li>750~900px 滿版無左右邊界；&lt;750px 每個元素各佔一列</li></ul></div><div class="idea"><b>解題思路</b><ul><li>.wrap{max-width:900px;margin:auto} 一行搞定置中，寬度不足時自然滿版</li><li>交疊＝文字框 margin 負值 + position:relative 疊到圖片上</li><li>第二列用 flex-direction:row-reverse 反轉，不必改 HTML</li><li>手機版 .txt{display:contents} 拆掉外框，h3 才能用 order 排到圖片上面</li></ul></div></div><div class="file">2024/p1-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+</style></head><body><main><h1>ITSA 極客挑戰賽 歷屆考古題筆記（2019~2026 初賽・決賽精選）</h1><section class="cheatsheet"><h2>常用語法速查</h2><h3>HTML 基本骨架與表單</h3><table class="cheat"><tr><td><pre class="syn">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</pre></td><td>手機才會用實際寬度顯示，@media 才有效</td></tr><tr><td><pre class="syn">&lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;</pre></td><td>引入 CSS（放 head）、JS（放 body 最後，DOM 已載入）</td></tr><tr><td><pre class="syn">&lt;form onsubmit=&quot;save(); return false&quot;&gt;</pre></td><td>return false 阻止表單送出後換頁</td></tr><tr><td><pre class="syn">&lt;input id=&quot;t&quot; required&gt;  &lt;input type=&quot;number&quot; min=&quot;1&quot; max=&quot;10&quot;&gt;</pre></td><td>瀏覽器內建驗證：必填、數字範圍</td></tr><tr><td><pre class="syn">&lt;input pattern=&quot;[A-Za-z\d]{12}&quot;&gt;  el.checkValidity()</pre></td><td>正規表示式驗證；JS 用 checkValidity() 檢查</td></tr><tr><td><pre class="syn">&lt;select id=&quot;s&quot;&gt;&lt;option value=&quot;G&quot;&gt;一般服務&lt;/option&gt;&lt;/select&gt;</pre></td><td>下拉選單；value 是送出的值，文字是顯示的</td></tr><tr><td><pre class="syn">&lt;input type=&quot;datetime-local&quot;&gt;</pre></td><td>日期時間選擇器，值格式 2026-07-07T22:25</td></tr><tr><td><pre class="syn">&lt;table&gt;&lt;tr&gt;&lt;th&gt;標題&lt;/th&gt;&lt;/tr&gt;&lt;tbody id=&quot;list&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;</pre></td><td>表格；資料列用 JS 塞進 tbody</td></tr><tr><td><pre class="syn">hidden 屬性 / el.hidden = true</pre></td><td>隱藏元素（不用寫 CSS）</td></tr></table><h3>CSS 版面</h3><table class="cheat"><tr><td><pre class="syn">* { box-sizing: border-box; margin: 0; }</pre></td><td>寬度包含 padding、border，排版不會撐爆</td></tr><tr><td><pre class="syn">.wrap { max-width: 900px; margin: auto; }</pre></td><td>置中且左右等寬；螢幕不夠寬時自動滿版</td></tr><tr><td><pre class="syn">display: flex; justify-content: space-between; align-items: center;</pre></td><td>水平排列；左右推開；垂直置中</td></tr><tr><td><pre class="syn">flex-direction: column / row-reverse / column-reverse</pre></td><td>改成直排 / 左右反轉 / 由下往上疊</td></tr><tr><td><pre class="syn">flex: 1;  gap: 10px;  flex-wrap: wrap;</pre></td><td>平分剩餘空間；子元素間距；放不下就換行</td></tr><tr><td><pre class="syn">display: grid; grid-template-columns: 1fr 1fr;</pre></td><td>兩欄等寬格線</td></tr><tr><td><pre class="syn">position: relative; / absolute; top: 0; left: 0; z-index: 2;</pre></td><td>absolute 以最近的 relative 祖先定位；z-index 決定上下層</td></tr><tr><td><pre class="syn">margin-left: -10%;</pre></td><td>負邊距讓元素往外移，做圖文交疊</td></tr><tr><td><pre class="syn">@media (max-width: 749px) { ... }</pre></td><td>螢幕寬度 ≤ 749px 才套用（RWD 斷點）</td></tr><tr><td><pre class="syn">.row:nth-of-type(2)  li:nth-child(odd)  a:hover</pre></td><td>第 2 個同類元素；奇數項；滑鼠移上去</td></tr><tr><td><pre class="syn">display: contents;</pre></td><td>拆掉自己的外框，子元素直接參與父層 flex 排版</td></tr><tr><td><pre class="syn">transition: .3s;  opacity: 0;</pre></td><td>屬性變化時有動畫；透明度</td></tr></table><h3>JavaScript：DOM 與事件</h3><table class="cheat"><tr><td><pre class="syn">document.getElementById(&#x27;x&#x27;)  document.querySelector(&#x27;.c&#x27;)  querySelectorAll(&#x27;li&#x27;)</pre></td><td>取元素；querySelectorAll 回傳清單，可 forEach</td></tr><tr><td><pre class="syn">el.textContent = s  /  el.innerHTML = html  /  input.value</pre></td><td>設文字（安全）/ 設 HTML（要先跳脫）/ 表單值</td></tr><tr><td><pre class="syn">el.addEventListener(&#x27;click&#x27;, e =&gt; { e.preventDefault(); })</pre></td><td>綁事件；preventDefault 取消預設動作（換頁、送出）</td></tr><tr><td><pre class="syn">el.classList.add(&#x27;d-none&#x27;) / remove / toggle</pre></td><td>加、移除、切換 class</td></tr><tr><td><pre class="syn">document.createElement(&#x27;div&#x27;); parent.appendChild(d);</pre></td><td>建立並加入元素（appendChild 已存在的元素＝搬移）</td></tr><tr><td><pre class="syn">el.dataset.size   // &lt;div data-size=&quot;3&quot;&gt;</pre></td><td>讀取 data-* 自訂屬性（字串）</td></tr><tr><td><pre class="syn">setInterval(fn, 2000)  setTimeout(fn, 100)</pre></td><td>每 2 秒執行一次（輪詢）/ 延遲執行一次</td></tr><tr><td><pre class="syn">draggable=true; dragstart → dragover(e.preventDefault()) → drop</pre></td><td>拖放三步驟：dragover 一定要 preventDefault 才能 drop</td></tr><tr><td><pre class="syn">const esc = s =&gt; String(s).replace(/&lt;/g, &#x27;&amp;lt;&#x27;);</pre></td><td>放進 innerHTML 前跳脫，防 XSS</td></tr></table><h3>JavaScript：資料處理</h3><table class="cheat"><tr><td><pre class="syn">`${a} 共 ${n} 筆`</pre></td><td>樣板字串，${} 內放變數或運算式</td></tr><tr><td><pre class="syn">arr.map(x =&gt; x * 2)  arr.filter(x =&gt; x &gt; 0)  arr.find(x =&gt; x.id === 1)</pre></td><td>轉換 / 篩選 / 找第一個符合的</td></tr><tr><td><pre class="syn">arr.reduce((s, x) =&gt; s + x.count, 0)</pre></td><td>累加總和</td></tr><tr><td><pre class="syn">arr.sort((a, b) =&gt; b[1] - a[1]).slice(0, 10)</pre></td><td>由大到小排序後取前 10</td></tr><tr><td><pre class="syn">arr.some(x =&gt; ...)  arr.includes(v)  arr.join(&#x27;&#x27;)</pre></td><td>是否有任一符合 / 是否包含 / 串成字串</td></tr><tr><td><pre class="syn">[...new Set(arr)]</pre></td><td>去除重複</td></tr><tr><td><pre class="syn">Object.keys(o)  Object.entries(o)  Object.hasOwn(o, k)</pre></td><td>物件的鍵 / [鍵, 值] 陣列 / 是否有自己的屬性（白名單檢查用）</td></tr><tr><td><pre class="syn">total[k] = (total[k] || 0) + n;</pre></td><td>用物件當字典分組加總</td></tr><tr><td><pre class="syn">JSON.stringify(o)  JSON.parse(s)</pre></td><td>物件 ↔ 字串（undefined 欄位會被丟掉，空值用 null）</td></tr><tr><td><pre class="syn">localStorage.books = JSON.stringify(books)</pre></td><td>存到瀏覽器，重新整理不會消失</td></tr><tr><td><pre class="syn">String(n).padStart(3, &#x27;0&#x27;)   // 7 → &#x27;007&#x27;</pre></td><td>左補零</td></tr><tr><td><pre class="syn">a?.b  a ?? 0  !!x</pre></td><td>可選鏈（a 是 null 不報錯）/ null 時給預設值 / 轉布林</td></tr></table><h3>fetch 與 jQuery</h3><table class="cheat"><tr><td><pre class="syn">const r = await fetch(&#x27;/api/state&#x27;); const d = await r.json();</pre></td><td>GET 取 JSON（要在 async function 裡）</td></tr><tr><td><pre class="syn">fetch(url, { method: &#x27;POST&#x27;, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, body: JSON.stringify(o) })</pre></td><td>POST 送 JSON</td></tr><tr><td><pre class="syn">r.ok  r.status</pre></td><td>r.ok：狀態碼 200~299；r.status：數字狀態碼</td></tr><tr><td><pre class="syn">$.post(&#x27;api.php?a=login&#x27;, { account, password }).done(fn).fail(x =&gt; x.status)</pre></td><td>jQuery POST（表單格式，PHP 用 $_POST 接）；fail 拿狀態碼</td></tr><tr><td><pre class="syn">$.getJSON(&#x27;api.php?a=list&#x27;, rows =&gt; { ... })</pre></td><td>jQuery GET JSON</td></tr><tr><td><pre class="syn">$(&#x27;#id&#x27;).val()  .text(s)  .html(h)  .prop(&#x27;hidden&#x27;, true)</pre></td><td>取值 / 設文字 / 設 HTML / 設屬性</td></tr><tr><td><pre class="syn">$(&#x27;#id&#x27;).addClass(&#x27;d-none&#x27;)  .removeClass()  .fadeOut(600, callback)</pre></td><td>切換 class；淡出動畫結束後執行 callback</td></tr><tr><td><pre class="syn">$(document).on(&#x27;click&#x27;, &#x27;.btn&#x27;, function () { $(this) })</pre></td><td>事件委派：之後才產生的元素也能觸發</td></tr><tr><td><pre class="syn">$(&#x27;&lt;div&gt;&#x27;).text(s).html()</pre></td><td>jQuery 跳脫 HTML 的寫法</td></tr></table><h3>Bootstrap 5</h3><table class="cheat"><tr><td><pre class="syn">&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;row g-3&quot;&gt;&lt;div class=&quot;col-lg-4&quot;&gt;…&lt;/div&gt;&lt;div class=&quot;col-lg-8&quot;&gt;…&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</pre></td><td>12 格系統；lg ≥ 992px 左右兩欄，以下自動上下堆疊</td></tr><tr><td><pre class="syn">斷點：sm 576 / md 768 / lg 992 / xl 1200 / xxl 1400</pre></td><td>col-md-6 = 768px 以上佔一半</td></tr><tr><td><pre class="syn">d-none  d-flex  justify-content-between  align-items-center</pre></td><td>隱藏 / flex / 左右推開 / 垂直置中</td></tr><tr><td><pre class="syn">m-0 mt-2 mb-3 p-3 px-4 py-2  w-100  text-center</pre></td><td>間距（0~5）/ 寬 100% / 置中</td></tr><tr><td><pre class="syn">btn btn-primary / btn-outline-light / btn-sm  disabled</pre></td><td>按鈕樣式與大小；disabled 停用</td></tr><tr><td><pre class="syn">form-control  form-select  input-group</pre></td><td>輸入框 / 下拉 / 輸入框加按鈕</td></tr><tr><td><pre class="syn">card card-body  table table-sm  badge bg-success  alert alert-success</pre></td><td>卡片 / 表格 / 標籤 / 提示框</td></tr><tr><td><pre class="syn">&lt;ul class=&quot;nav nav-tabs&quot;&gt;&lt;li class=&quot;nav-item&quot;&gt;&lt;a class=&quot;nav-link active&quot;&gt;</pre></td><td>頁籤（用 JS 切換 d-none 做 SPA）</td></tr><tr><td><pre class="syn">&lt;html data-bs-theme=&quot;dark&quot;&gt;</pre></td><td>整頁深色主題</td></tr><tr><td><pre class="syn">&lt;div class=&quot;progress&quot;&gt;&lt;div class=&quot;progress-bar&quot; style=&quot;width:60%&quot;&gt;</pre></td><td>進度條</td></tr></table><h3>PHP + PDO</h3><table class="cheat"><tr><td><pre class="syn">$pdo = new PDO(&#x27;mysql:host=127.0.0.1;dbname=db;charset=utf8mb4&#x27;, &#x27;root&#x27;, &#x27;&#x27;, [PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC]);</pre></td><td>連線：錯誤丟例外、結果用關聯陣列、utf8mb4 防亂碼</td></tr><tr><td><pre class="syn">$s = $pdo-&gt;prepare(&#x27;SELECT * FROM users WHERE id=?&#x27;); $s-&gt;execute([$id]);</pre></td><td>prepare + ? 參數：防 SQL injection</td></tr><tr><td><pre class="syn">$s-&gt;fetch()  $s-&gt;fetchAll()  $s-&gt;fetchColumn()  $pdo-&gt;lastInsertId()</pre></td><td>一筆 / 全部 / 第一欄的值 / 剛新增的 id</td></tr><tr><td><pre class="syn">$pdo-&gt;beginTransaction(); … $pdo-&gt;commit(); / rollBack();</pre></td><td>交易：全部成功才寫入</td></tr><tr><td><pre class="syn">session_start(); $_SESSION[&#x27;uid&#x27;] = $id; session_destroy();</pre></td><td>登入狀態存在伺服器端</td></tr><tr><td><pre class="syn">$_GET[&#x27;a&#x27;] ?? &#x27;&#x27;   $_POST[&#x27;name&#x27;] ?? &#x27;&#x27;</pre></td><td>讀參數；?? 避免沒傳時出現 warning</td></tr><tr><td><pre class="syn">header(&#x27;Content-Type: application/json; charset=utf-8&#x27;); echo json_encode($d, JSON_UNESCAPED_UNICODE);</pre></td><td>回傳 JSON（中文不轉成 \uXXXX）</td></tr><tr><td><pre class="syn">http_response_code(401);  header(&#x27;Location: team123.html&#x27;); exit;</pre></td><td>設狀態碼；302 轉址（之後要 exit）</td></tr><tr><td><pre class="syn">try { … } catch (PDOException $e) { $e-&gt;getCode() == 23000 }</pre></td><td>23000 = 違反 UNIQUE 或外鍵</td></tr><tr><td><pre class="syn">preg_match(&#x27;/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{12}$/&#x27;, $pw)</pre></td><td>密碼規則：含小寫、大寫、數字，共 12 碼</td></tr><tr><td><pre class="syn">password_hash($pw, PASSWORD_DEFAULT)  password_verify($pw, $hash)</pre></td><td>正式系統存密碼要雜湊</td></tr><tr><td><pre class="syn">array_map(&#x27;str_getcsv&#x27;, file(&#x27;a.csv&#x27;, FILE_IGNORE_NEW_LINES))</pre></td><td>讀 CSV 成二維陣列</td></tr><tr><td><pre class="syn">in_array($v, [&#x27;a&#x27;, &#x27;b&#x27;])  trim($s)  implode(&#x27;,&#x27;, $arr)</pre></td><td>白名單檢查 / 去空白 / 陣列串字串</td></tr></table><h3>SQL（MySQL / SQLite）</h3><table class="cheat"><tr><td><pre class="syn">CREATE TABLE t (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL UNIQUE) DEFAULT CHARSET utf8mb4;</pre></td><td>MySQL 建表；SQLite 用 INTEGER PRIMARY KEY AUTOINCREMENT</td></tr><tr><td><pre class="syn">role ENUM(&#x27;tech&#x27;,&#x27;patient&#x27;)   score TINYINT CHECK (score BETWEEN 1 AND 10)</pre></td><td>限定值 / 限定範圍</td></tr><tr><td><pre class="syn">FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE</pre></td><td>外鍵；刪除主檔時一起刪明細</td></tr><tr><td><pre class="syn">UNIQUE (user_id, item_id)   PRIMARY KEY (a, b)</pre></td><td>組合不可重複</td></tr><tr><td><pre class="syn">INSERT INTO t (a, b) VALUES (?, ?)</pre></td><td>新增</td></tr><tr><td><pre class="syn">INSERT IGNORE INTO …  /  … ON DUPLICATE KEY UPDATE n = n + 1</pre></td><td>MySQL：重複就略過 / 重複就更新</td></tr><tr><td><pre class="syn">INSERT … ON CONFLICT(k) DO UPDATE SET n = n + 1 RETURNING n</pre></td><td>SQLite：計數器 +1 並取回新值</td></tr><tr><td><pre class="syn">UPDATE t SET a=? WHERE id=?    DELETE FROM t WHERE id=?</pre></td><td>更新 / 刪除（一定要 WHERE）</td></tr><tr><td><pre class="syn">SELECT … FROM a JOIN b ON b.id = a.b_id WHERE … ORDER BY x DESC LIMIT 10</pre></td><td>關聯查詢、排序、取前幾筆</td></tr><tr><td><pre class="syn">SELECT game_id, COUNT(*) c FROM p GROUP BY game_id HAVING c &gt; 1</pre></td><td>分組統計；HAVING 篩選分組後結果</td></tr><tr><td><pre class="syn">(SELECT COUNT(*) FROM p WHERE p.aid = a.id) AS cnt</pre></td><td>子查詢：每筆附上人數</td></tr><tr><td><pre class="syn">EXISTS(SELECT 1 FROM p WHERE …)</pre></td><td>是否存在（回傳 0/1）</td></tr><tr><td><pre class="syn">CASE WHEN cnt &gt;= max THEN &#x27;full&#x27; WHEN cnt &gt;= min THEN &#x27;formed&#x27; ELSE &#x27;open&#x27; END</pre></td><td>依條件給值</td></tr><tr><td><pre class="syn">SELECT … FOR UPDATE（在交易中）</pre></td><td>鎖住這幾筆，避免同時修改</td></tr></table><h3>Node.js + Express</h3><table class="cheat"><tr><td><pre class="syn">const express = require(&#x27;express&#x27;); const app = express();</pre></td><td>建立伺服器</td></tr><tr><td><pre class="syn">app.use(express.json(), express.static(__dirname + &#x27;/public&#x27;));</pre></td><td>解析 JSON body；public 資料夾的檔案直接開放</td></tr><tr><td><pre class="syn">app.get(&#x27;/api/x&#x27;, (req, res) =&gt; res.json(data));</pre></td><td>GET 路由</td></tr><tr><td><pre class="syn">app.post(&#x27;/api/x&#x27;, auth, (req, res) =&gt; res.status(201).json(o));</pre></td><td>POST 路由；auth 是中介層（先檢查登入）</td></tr><tr><td><pre class="syn">req.body  req.query  req.params  req.headers.cookie</pre></td><td>請求內容 / ?a=1 / :id / Cookie 字串</td></tr><tr><td><pre class="syn">res.cookie(&#x27;sid&#x27;, id, { httpOnly: true })  res.clearCookie(&#x27;sid&#x27;)</pre></td><td>設定 / 清除 Cookie</td></tr><tr><td><pre class="syn">res.status(204).end()  res.redirect(&#x27;/team123.html&#x27;)</pre></td><td>無內容回應 / 轉址</td></tr><tr><td><pre class="syn">const auth = (req, res, next) =&gt; ok ? next() : res.status(401).json({});</pre></td><td>中介層：通過才呼叫 next()</td></tr><tr><td><pre class="syn">app.use((err, req, res, next) =&gt; res.status(400).json({}));</pre></td><td>錯誤處理（4 個參數）</td></tr><tr><td><pre class="syn">const { DatabaseSync } = require(&#x27;node:sqlite&#x27;); db.prepare(sql).get() / all() / run()</pre></td><td>Node 22.13+ 內建 SQLite（同步）</td></tr><tr><td><pre class="syn">crypto.randomUUID()</pre></td><td>產生隨機 session id</td></tr><tr><td><pre class="syn">package.json: &quot;scripts&quot;: { &quot;start&quot;: &quot;node app.js&quot; }</pre></td><td>npm start 執行的指令</td></tr></table><h3>Chart.js 與檔案下載</h3><table class="cheat"><tr><td><pre class="syn">new Chart(canvas, { type: &#x27;bar&#x27;, data: { labels, datasets: [{ label, data }] }, options })</pre></td><td>畫圖；type 可換 line、pie</td></tr><tr><td><pre class="syn">chart.destroy()  chart.toBase64Image()</pre></td><td>換圖前先銷毀 / 取得 PNG 圖片網址</td></tr><tr><td><pre class="syn">const a = document.createElement(&#x27;a&#x27;); a.href = url; a.download = &#x27;x.csv&#x27;; a.click();</pre></td><td>觸發下載</td></tr><tr><td><pre class="syn">URL.createObjectURL(new Blob([&#x27;\uFEFF&#x27; + csv], { type: &#x27;text/csv&#x27; }))</pre></td><td>產生 CSV 檔；BOM 讓 Excel 不亂碼</td></tr></table><h3>Date 日期時間</h3><table class="cheat"><tr><td><pre class="syn">const d = new Date();  new Date(2024, 1, 1)</pre></td><td>現在時間；月份從 0 開始（1＝2 月）</td></tr><tr><td><pre class="syn">d.getFullYear() getMonth() getDate() getDay() getHours()</pre></td><td>年 / 月(0~11) / 日 / 星期(0＝日) / 時</td></tr><tr><td><pre class="syn">new Date(y, m + 1, 0).getDate()</pre></td><td>某月有幾天（下個月的第 0 天＝這個月最後一天）</td></tr><tr><td><pre class="syn">new Date(y, m, 1).getDay()</pre></td><td>某月 1 號是星期幾 → 月曆前面要空幾格</td></tr><tr><td><pre class="syn">new Date(input.value) - new Date()</pre></td><td>兩個 Date 相減＝毫秒差；/1000 秒、/86400000 天</td></tr><tr><td><pre class="syn">String(n).padStart(2, &#x27;0&#x27;)</pre></td><td>補零：7 → &quot;07&quot;</td></tr><tr><td><pre class="syn">d.toLocaleString(&#x27;en-US&#x27;, { month: &#x27;short&#x27; })</pre></td><td>月份英文縮寫 Jul；民國年＝西元 − 1911</td></tr><tr><td><pre class="syn">&#x27;2024-05-28&#x27; &lt; &#x27;2024-06-01&#x27;</pre></td><td>YYYY-MM-DD 字串可以直接比大小、排序</td></tr></table><h3>Canvas 與影音</h3><table class="cheat"><tr><td><pre class="syn">const c = canvas.getContext(&#x27;2d&#x27;);</pre></td><td>取得畫筆；canvas 的寬高用屬性設，不要用 CSS</td></tr><tr><td><pre class="syn">c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); c.stroke();</pre></td><td>畫圓；fill 填滿、stroke 畫框</td></tr><tr><td><pre class="syn">c.lineWidth = 5; c.strokeStyle = &quot;red&quot;; c.fillStyle = &quot;yellow&quot;;</pre></td><td>線寬、框色、填色</td></tr><tr><td><pre class="syn">c.moveTo(x, y); c.lineTo(x2, y2);  c.fillText(&quot;12&quot;, x, y);</pre></td><td>畫線；寫字（c.font = &quot;35px Arial&quot;）</td></tr><tr><td><pre class="syn">x = cx + r * Math.sin(θ);  y = cy - r * Math.cos(θ);</pre></td><td>時鐘指針：12 點方向為 0，順時針；θ 用弧度</td></tr><tr><td><pre class="syn">c.clearRect(0, 0, w, h)</pre></td><td>清空畫布再重畫；後畫的會蓋在上面</td></tr><tr><td><pre class="syn">video.src = URL.createObjectURL(file)</pre></td><td>播放使用者選的本機影片或音樂</td></tr><tr><td><pre class="syn">v.play() v.pause() v.paused v.volume=0~1 v.currentTime v.duration</pre></td><td>播放控制；duration 在 loadedmetadata 之後才有值</td></tr><tr><td><pre class="syn">v.addEventListener(&#x27;timeupdate&#x27;, show)</pre></td><td>播放進度改變時更新時間顯示</td></tr></table><h3>檔案：File API 與 PHP 上傳</h3><table class="cheat"><tr><td><pre class="syn">&lt;input type=&quot;file&quot; multiple accept=&quot;.csv&quot;&gt;</pre></td><td>可多選；accept 限制副檔名</td></tr><tr><td><pre class="syn">for (const f of input.files) f.name, f.size</pre></td><td>檔名、大小（byte）；MiB＝size / 1024 / 1024</td></tr><tr><td><pre class="syn">const r = new FileReader(); r.onload = () =&gt; r.result; r.readAsText(f);</pre></td><td>讀文字檔（CSV、JSON）</td></tr><tr><td><pre class="syn">text.trim().split(/\r?\n/).map(l =&gt; l.split(&#x27;,&#x27;))</pre></td><td>CSV 拆成二維陣列</td></tr><tr><td><pre class="syn">&lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</pre></td><td>上傳檔案一定要加 enctype</td></tr><tr><td><pre class="syn">$_FILES[&#x27;img&#x27;][&#x27;name&#x27;] [&#x27;tmp_name&#x27;] [&#x27;size&#x27;] [&#x27;error&#x27;]</pre></td><td>PHP 取得上傳檔資訊</td></tr><tr><td><pre class="syn">strtolower(pathinfo($name, PATHINFO_EXTENSION))</pre></td><td>取副檔名，用白名單 in_array 檢查</td></tr><tr><td><pre class="syn">move_uploaded_file($tmp, &#x27;uploads/&#x27; . uniqid() . &quot;.$ext&quot;)</pre></td><td>存檔；檔名自己產生，避免覆蓋或路徑穿越</td></tr></table><h3>JWT 登入（HS256）</h3><table class="cheat"><tr><td><pre class="syn">header.payload.signature</pre></td><td>三段 base64url，用 . 串起來</td></tr><tr><td><pre class="syn">rtrim(strtr(base64_encode($s), &#x27;+/&#x27;, &#x27;-_&#x27;), &#x27;=&#x27;)</pre></td><td>base64url 編碼</td></tr><tr><td><pre class="syn">hash_hmac(&#x27;sha256&#x27;, &quot;$h.$p&quot;, $secret, true)</pre></td><td>簽章；驗證時重算一次用 hash_equals 比對</td></tr><tr><td><pre class="syn">[&#x27;sub&#x27; =&gt; &#x27;admin&#x27;, &#x27;exp&#x27; =&gt; time() + 600]</pre></td><td>payload 放到期時間；驗證時檢查 exp &gt; time()</td></tr><tr><td><pre class="syn">$_SERVER[&#x27;HTTP_AUTHORIZATION&#x27;]  // Bearer xxx</pre></td><td>前端放在 Authorization 標頭；Apache 可能要 .htaccess 轉進來</td></tr></table><h3>HTTP 狀態碼與常見陷阱</h3><table class="cheat"><tr><td><pre class="syn">200 OK / 201 Created / 204 No Content</pre></td><td>成功 / 新增成功 / 成功但沒內容</td></tr><tr><td><pre class="syn">302 Found（Location）</pre></td><td>轉址；瀏覽器收到 401 不會跟著 Location 跳</td></tr><tr><td><pre class="syn">400 / 401 / 403 / 404 / 409 / 500</pre></td><td>參數錯 / 未登入 / 沒權限 / 找不到 / 狀態衝突 / 伺服器錯誤</td></tr><tr><td><pre class="syn">權限檢查</pre></td><td>一定要在伺服器端檢查；前端停用按鈕只是輔助</td></tr><tr><td><pre class="syn">相對路徑</pre></td><td>答案資料夾要自帶所有檔案，不可引用 ../p1-ref/</td></tr><tr><td><pre class="syn">Font Awesome</pre></td><td>all.min.css 內寫 ../webfonts/，CSS 要放在子資料夾（css/）</td></tr><tr><td><pre class="syn">全域變數撞名</pre></td><td>別把元素 id 取成 history、name、login 這種和 window 屬性或函式同名的</td></tr><tr><td><pre class="syn">XAMPP</pre></td><td>phpMyAdmin 匯入 .sql；檔案放 htdocs；網址 http://localhost/資料夾/檔名</td></tr></table></section><section class="final"><h2>2019 決賽 P1｜在網頁上顯示時鐘 2.0（canvas、三角函數）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>canvas 500×500：橘框黃底大圓、藍色與紅色小圓，中心都在正中央</li><li>依系統時間畫時針、分針、秒針；時針位置要把分與秒的進度算進去</li><li>圓周畫 1~12 紅色數字與棕色刻度，每條刻度角度不同</li><li>疊放：秒針最上，其下紅圓、藍圓、分針，時針最底；每秒更新並顯示數字時間</li></ul></div><div class="idea"><b>解題思路</b><ul><li>角度用「一圈的比例 f」：x = O + len·sin(2πf)、y = O − len·cos(2πf)，0 在 12 點方向</li><li>寫一個 line(f, from, to, width, color) 小函式，指針和刻度共用</li><li>時針 f = (h%12 + m/60 + s/3600)/12；分針 f = (m + s/60)/60；秒針 f = s/60</li><li>canvas 後畫的蓋在上面：時針 → 分針 → 藍圓 → 紅圓 → 秒針</li><li>數字用 fillText 搭配 textAlign、textBaseline 置中；setInterval(draw, 1000) 每秒重畫</li></ul></div></div><div class="file">2019/final-p1/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;HTML5 即時時鐘&lt;/title&gt;
+  &lt;style&gt;
+    body { text-align: center; margin: 0; }
+    h1 { font: bold 35px Arial; color: green; margin: 0; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;canvas id=&quot;c&quot; width=&quot;500&quot; height=&quot;500&quot;&gt;&lt;/canvas&gt;
+  &lt;h1&gt;HTML5 即時時鐘&lt;/h1&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2019/final-p1/team021.js</div><pre>const ctx = document.getElementById(&#x27;c&#x27;).getContext(&#x27;2d&#x27;);
+const O = 250; <i>// 圓心 x = y = 250（canvas 正中央）</i>
+
+<i>// 角度用「一圈的比例」(0~1) 表示；0 在 12 點鐘方向，順時針增加</i>
+<i>// 套用提示公式：x = O + len*sin(2π*f)，y = O - len*cos(2π*f)</i>
+const pos = (f, len) =&gt; [O + len * Math.sin(2 * Math.PI * f), O - len * Math.cos(2 * Math.PI * f)];
+
+<i>// 畫線：從半徑 from 到半徑 to（指針 from=0；刻度則是外框上的一小段）</i>
+function line(f, from, to, width, color) {
+  ctx.beginPath();
+  ctx.moveTo(...pos(f, from));
+  ctx.lineTo(...pos(f, to));
+  ctx.lineWidth = width;
+  ctx.strokeStyle = color;
+  ctx.stroke();
+}
+
+<i>// 實心圓</i>
+function dot(r, color) {
+  ctx.beginPath();
+  ctx.arc(O, O, r, 0, 2 * Math.PI);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function draw() {
+  const d = new Date(), h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+  ctx.clearRect(0, 0, 500, 500);
+
+  <i>// 錶面：黃底、橘框（線寬 20）</i>
+  ctx.beginPath();
+  ctx.arc(O, O, 240, 0, 2 * Math.PI);
+  ctx.fillStyle = &#x27;yellow&#x27;;
+  ctx.fill();
+  ctx.lineWidth = 20;
+  ctx.strokeStyle = &#x27;orange&#x27;;
+  ctx.stroke();
+
+  <i>// 每個小時刻度：棕色短線（跨在橘框上）＋紅色數字，角度每次差 1/12 圈</i>
+  ctx.font = &#x27;24px Arial&#x27;;
+  ctx.textAlign = &#x27;center&#x27;;
+  ctx.textBaseline = &#x27;middle&#x27;;
+  ctx.fillStyle = &#x27;red&#x27;;
+  for (let i = 1; i &lt;= 12; i++) {
+    line(i / 12, 230, 250, 4, &#x27;saddlebrown&#x27;);
+    ctx.fillText(i, ...pos(i / 12, 200));
+  }
+
+  <i>// 數字時間：補零成 20 : 28 : 08</i>
+  ctx.fillStyle = &#x27;black&#x27;;
+  ctx.font = &#x27;26px Arial&#x27;;
+  ctx.fillText([h, m, s].map(n =&gt; String(n).padStart(2, &#x27;0&#x27;)).join(&#x27; : &#x27;), O, 130);
+
+  <i>// 由下而上疊：時針 → 分針 → 藍圓 → 紅圓 → 秒針（後畫的蓋在上面）</i>
+  <i>// 時針要加上分鐘與秒的進度，不然 3:59 時針會停在 3 的位置</i>
+  line(((h % 12) + m / 60 + s / 3600) / 12, 0, 120, 12, &#x27;black&#x27;);
+  line((m + s / 60) / 60, 0, 170, 8, &#x27;purple&#x27;);
+  dot(12, &#x27;blue&#x27;);
+  dot(5, &#x27;red&#x27;);
+  line(s / 60, 0, 200, 5, &#x27;red&#x27;);
+}
+
+draw();
+setInterval(draw, 1000); <i>// 每秒重畫一次</i></pre></section><section class="pre"><h2>2021 初賽 P1｜線上上傳檔案（input file multiple、File API）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>一次選多個檔案（input type=file multiple）</li><li>顯示檔案個數、每個檔名、總大小（byte 與 MiB）</li><li>起始畫面顯示 file names: 0、selected files: 0、total size: 0</li></ul></div><div class="idea"><b>解題思路</b><ul><li>選完檔案觸發 onchange，檔案在 input.files（FileList）</li><li><code>[...input.files]</code> 轉成陣列，才能 map 取 name、reduce 加總 size</li><li>File.size 單位是 byte；MiB = size / 1024 / 1024，toFixed(3)</li><li>起始與 onchange 共用同一個 show()；檔名放進 innerHTML 前要跳脫</li></ul></div></div><div class="file">2021/pre-p1/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;線上上傳檔案&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div style=&quot;border:1px solid #999; width:360px; padding:4px&quot;&gt;
+    <i>&lt;!-- multiple：一次可選多個檔案 --&gt;</i>
+    &lt;input type=&quot;file&quot; id=&quot;f&quot; multiple&gt;
+    &lt;div id=&quot;out&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2021/pre-p1/team021.js</div><pre>const f = document.getElementById(&#x27;f&#x27;);
+const out = document.getElementById(&#x27;out&#x27;);
+const esc = s =&gt; String(s).replace(/&amp;/g, &#x27;&amp;amp;&#x27;).replace(/&lt;/g, &#x27;&amp;lt;&#x27;); <i>// 檔名可能含 &lt; 符號</i>
+
+<i>// 一開始與選完檔案都呼叫同一個函式顯示結果</i>
+function show() {
+  const files = [...f.files]; <i>// FileList 轉成真正的陣列才能用 map / reduce</i>
+  const total = files.reduce((sum, x) =&gt; sum + x.size, 0); <i>// File.size 單位是 byte</i>
+  out.innerHTML = `file names: ${files.length ? files.map(x =&gt; esc(x.name)).join(&#x27;,&#x27;) : 0}&lt;br&gt;
+    selected files: ${files.length};&lt;br&gt;
+    total size: ${files.length ? (total / 1024 / 1024).toFixed(3) + &#x27; MiB (&#x27; + total + &#x27; bytes)&#x27; : 0}`;
+}
+
+f.onchange = show; <i>// 選好檔案按「打開」後觸發</i>
+show();</pre></section><section class="final"><h2>2021 決賽 P3｜圖片檔案管理系統（PHP + MySQL 檔案上傳）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>建立 crud 資料庫與 uploads 資料表（id、tgl_upload、file_name、file_size、file_type）</li><li>新增圖片：只接受 JPG、JPEG、PNG、GIF，格式不符要 alert 並留在上傳頁</li><li>首頁列表顯示圖片、檔名、大小、格式，每列有檢視、修改、刪除</li><li>修改要刪掉伺服器上的舊檔；刪除先 confirm，資料列與實體檔一起刪</li></ul></div><div class="idea"><b>解題思路</b><ul><li>form 加 enctype=&quot;multipart/form-data&quot;；前端 FormData + fetch 送出，PHP 從 $_FILES 取檔</li><li>副檔名 in_array 白名單，再用 getimagesize 確認內容真的是圖片</li><li>實體檔名自己產生 uploads/&lt;id&gt;.&lt;副檔名&gt;，不用使用者給的檔名 → 防路徑穿越與覆蓋</li><li>move_uploaded_file 搬檔；修改、刪除時 unlink 舊檔</li><li>列表顯示原始檔名前 esc() 跳脫；圖片網址加 ?v=filemtime 避免快取舊圖</li><li>單頁用 location.hash 切換首頁、新增、檢視、修改</li></ul></div></div><div class="file">2021/final-p3/team021-3.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;圖片檔案管理系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <i>&lt;!-- 四個畫面（首頁 / 上傳 / 檢視 / 修改）都畫在這裡，用網址 # 後面的路徑切換 --&gt;</i>
+  &lt;div id=&quot;app&quot; class=&quot;container my-3&quot;&gt;&lt;/div&gt;
+  &lt;script src=&quot;team021-3.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2021/final-p3/team021-3.js</div><pre>const app = document.getElementById(&#x27;app&#x27;);
+const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, c =&gt; &#x27;&amp;#&#x27; + c.charCodeAt(0) + &#x27;;&#x27;);
+const api = (a, body) =&gt; fetch(&#x27;api.php?a=&#x27; + a, body &amp;&amp; { method: &#x27;POST&#x27;, body }).then(r =&gt; r.json());
+
+const bar = btn =&gt; `&lt;div class=&quot;d-flex justify-content-between align-items-center mb-3&quot;&gt;&lt;span&gt;圖片檔案管理系統&lt;/span&gt;${btn}&lt;/div&gt;`;
+const card = (title, body) =&gt; `&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;card-header&quot;&gt;${title}&lt;/div&gt;&lt;div class=&quot;card-body&quot;&gt;${body}&lt;/div&gt;&lt;/div&gt;`;
+const back = &#x27;&lt;a class=&quot;btn btn-outline-danger btn-sm&quot; href=&quot;#/&quot;&gt;回首頁Back&lt;/a&gt;&#x27;;
+
+<i>// 簡易路由：#/ 首頁、#/add 新增、#/view/3 檢視、#/edit/3 修改</i>
+async function render() {
+  const [, page, id] = location.hash.split(&#x27;/&#x27;);
+  const rows = await api(&#x27;list&#x27;);
+  const row = rows.find(r =&gt; r.id == id);
+
+  if (page === &#x27;add&#x27;) {
+    app.innerHTML = bar(back) + card(&#x27;編輯圖片資料&#x27;, form());
+  } else if (page === &#x27;view&#x27; &amp;&amp; row) {
+    app.innerHTML = bar(&#x27;&#x27;) + card(&#x27;檔案資訊&#x27;, `&lt;div class=&quot;row&quot;&gt;&lt;div class=&quot;col-md-8&quot;&gt;&lt;img class=&quot;img-fluid&quot; src=&quot;${row.url}&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;col-md-4&quot;&gt;&lt;b&gt;檔案名稱&lt;/b&gt;&lt;p&gt;${esc(row.file_name)}&lt;/p&gt;&lt;b&gt;檔案大小&lt;/b&gt;&lt;p&gt;${row.file_size}&lt;/p&gt;&lt;b&gt;檔案型態&lt;/b&gt;&lt;p&gt;${row.file_type}&lt;/p&gt;${back}&lt;/div&gt;&lt;/div&gt;`);
+  } else if (page === &#x27;edit&#x27; &amp;&amp; row) {
+    app.innerHTML = bar(back) + card(&#x27;編輯圖片資料&#x27;, form(row));
+  } else {
+    app.innerHTML = bar(&#x27;&lt;a class=&quot;btn btn-primary&quot; href=&quot;#/add&quot;&gt;新增圖片&lt;/a&gt;&#x27;) + card(&#x27;所有檔案資訊&#x27;, `&lt;table class=&quot;table&quot;&gt;
+      &lt;thead&gt;&lt;tr&gt;&lt;th&gt;圖片&lt;/th&gt;&lt;th&gt;檔案名稱&lt;/th&gt;&lt;th&gt;檔案大小&lt;/th&gt;&lt;th&gt;檔案格式&lt;/th&gt;&lt;th&gt;指令動作&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${rows.map(r =&gt; `
+      &lt;tr&gt;&lt;td&gt;&lt;img src=&quot;${r.url}&quot; height=&quot;40&quot;&gt;&lt;/td&gt;&lt;td&gt;${esc(r.file_name)}&lt;/td&gt;&lt;td&gt;${r.file_size}&lt;/td&gt;&lt;td&gt;${r.file_type}&lt;/td&gt;&lt;td&gt;
+        &lt;a class=&quot;btn btn-success btn-sm&quot; href=&quot;#/view/${r.id}&quot;&gt;檢視&lt;/a&gt;
+        &lt;a class=&quot;btn btn-info btn-sm&quot; href=&quot;#/edit/${r.id}&quot;&gt;修改&lt;/a&gt;
+        &lt;button class=&quot;btn btn-danger btn-sm&quot; data-del=&quot;${r.id}&quot;&gt;刪除&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;/tbody&gt;&lt;/table&gt;`);
+  }
+}
+
+<i>// 新增與修改共用同一張表單；修改時多一個 hidden id 並顯示舊圖</i>
+const form = row =&gt; `&lt;form enctype=&quot;multipart/form-data&quot;&gt;
+  &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${row ? row.id : &#x27;&#x27;}&quot;&gt;
+  &lt;label class=&quot;form-label&quot;&gt;選擇圖片&lt;/label&gt;
+  ${row ? `&lt;div&gt;&lt;img src=&quot;${row.url}&quot; height=&quot;60&quot;&gt;&lt;/div&gt;` : &#x27;&#x27;}
+  &lt;input class=&quot;form-control mb-3&quot; type=&quot;file&quot; name=&quot;file&quot;&gt;
+  &lt;button class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;&lt;/form&gt;`;
+
+<i>// 前端先擋一次副檔名（立刻 alert）；真正的檢查在 api.php，不能只靠這裡</i>
+app.onsubmit = async e =&gt; {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const ext = fd.get(&#x27;file&#x27;).name.split(&#x27;.&#x27;).pop().toLowerCase();
+  if (![&#x27;jpg&#x27;, &#x27;jpeg&#x27;, &#x27;png&#x27;, &#x27;gif&#x27;].includes(ext)) {
+    alert(&#x27;上傳檔案格式只能是 JPG、JPEG、PNG 或 GIF&#x27;);
+    return e.target.reset(); <i>// 清掉選到的檔案，留在原頁等使用者重選</i>
+  }
+  const res = await api(fd.get(&#x27;id&#x27;) ? &#x27;update&#x27; : &#x27;upload&#x27;, fd);
+  if (res.msg) return alert(res.msg);
+  location.hash = &#x27;#/&#x27;;
+};
+
+app.onclick = async e =&gt; {
+  const id = e.target.dataset.del;
+  if (!id || !confirm(&#x27;你確定要刪除這筆資料嗎？&#x27;)) return;
+  await api(&#x27;delete&#x27;, new URLSearchParams({ id }));
+  render();
+};
+
+onhashchange = render;
+render();</pre><div class="file">2021/final-p3/api.php</div><pre>&lt;?php
+<i>// 圖片檔案管理 API：api.php?a=動作（list / upload / update / delete）</i>
+header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
+$pdo = new PDO(&#x27;mysql:host=127.0.0.1;dbname=crud;charset=utf8mb4&#x27;, &#x27;root&#x27;, &#x27;&#x27;, [
+  PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
+]);
+
+function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
+function q($sql, $args = []) { global $pdo; $s = $pdo-&gt;prepare($sql); $s-&gt;execute($args); return $s; }
+
+<i>// 磁碟上的檔名只由 id 與白名單副檔名組成，不使用使用者給的檔名 → 不會路徑穿越、也不會互相覆蓋</i>
+function path($r) { return __DIR__ . &quot;/uploads/{$r[&#x27;id&#x27;]}.{$r[&#x27;file_type&#x27;]}&quot;; }
+
+<i>// 檢查 $_FILES[&#x27;file&#x27;]：副檔名白名單 + 內容真的是圖片（getimagesize），通過才回傳 [檔案, 副檔名]</i>
+function pick() {
+  $f = $_FILES[&#x27;file&#x27;] ?? null;
+  if (!$f || $f[&#x27;error&#x27;] !== UPLOAD_ERR_OK) out([&#x27;msg&#x27; =&gt; &#x27;請選擇有效的檔案&#x27;], 400);
+  $ext = strtolower(pathinfo($f[&#x27;name&#x27;], PATHINFO_EXTENSION));
+  if (!in_array($ext, [&#x27;jpg&#x27;, &#x27;jpeg&#x27;, &#x27;png&#x27;, &#x27;gif&#x27;]) || !@getimagesize($f[&#x27;tmp_name&#x27;]))
+    out([&#x27;msg&#x27; =&gt; &#x27;上傳檔案格式只能是 JPG、JPEG、PNG 或 GIF&#x27;], 400);
+  return [$f, $ext];
+}
+
+$a = $_GET[&#x27;a&#x27;] ?? &#x27;&#x27;;
+$id = $_POST[&#x27;id&#x27;] ?? 0;
+
+if ($a === &#x27;list&#x27;) {
+  $rows = q(&#x27;SELECT * FROM uploads ORDER BY id&#x27;)-&gt;fetchAll();
+  <i>// url 加上修改時間，換圖後瀏覽器才不會用到快取的舊圖</i>
+  foreach ($rows as &amp;$r) $r[&#x27;url&#x27;] = &quot;uploads/{$r[&#x27;id&#x27;]}.{$r[&#x27;file_type&#x27;]}?v=&quot; . @filemtime(path($r));
+  out($rows);
+}
+
+if ($a === &#x27;upload&#x27;) {
+  [$f, $ext] = pick();
+  q(&#x27;INSERT INTO uploads (tgl_upload, file_name, file_size, file_type) VALUES (CURDATE(), ?, ?, ?)&#x27;,
+    [mb_substr(basename($f[&#x27;name&#x27;]), 0, 100), $f[&#x27;size&#x27;], $ext]);
+  $row = [&#x27;id&#x27; =&gt; $pdo-&gt;lastInsertId(), &#x27;file_type&#x27; =&gt; $ext];
+  if (!move_uploaded_file($f[&#x27;tmp_name&#x27;], path($row))) {
+    q(&#x27;DELETE FROM uploads WHERE id=?&#x27;, [$row[&#x27;id&#x27;]]);
+    out([&#x27;msg&#x27; =&gt; &#x27;儲存檔案失敗&#x27;], 500);
+  }
+  out([&#x27;ok&#x27; =&gt; true]);
+}
+
+if ($a === &#x27;update&#x27;) {
+  $old = q(&#x27;SELECT * FROM uploads WHERE id=?&#x27;, [$id])-&gt;fetch() or out([&#x27;msg&#x27; =&gt; &#x27;找不到資料&#x27;], 404);
+  [$f, $ext] = pick();
+  $new = [&#x27;id&#x27; =&gt; $old[&#x27;id&#x27;], &#x27;file_type&#x27; =&gt; $ext];
+  if (!move_uploaded_file($f[&#x27;tmp_name&#x27;], path($new))) out([&#x27;msg&#x27; =&gt; &#x27;儲存檔案失敗&#x27;], 500);
+  q(&#x27;UPDATE uploads SET tgl_upload=CURDATE(), file_name=?, file_size=?, file_type=? WHERE id=?&#x27;,
+    [mb_substr(basename($f[&#x27;name&#x27;]), 0, 100), $f[&#x27;size&#x27;], $ext, $id]);
+  if (path($old) !== path($new)) @unlink(path($old)); <i>// 資料庫更新成功才刪；副檔名變了舊檔不會被蓋掉，要手動刪</i>
+  out([&#x27;ok&#x27; =&gt; true]);
+}
+
+if ($a === &#x27;delete&#x27;) {
+  $r = q(&#x27;SELECT * FROM uploads WHERE id=?&#x27;, [$id])-&gt;fetch() or out([&#x27;msg&#x27; =&gt; &#x27;找不到資料&#x27;], 404);
+  @unlink(path($r)); <i>// 資料列與伺服器上的實體檔一起刪</i>
+  q(&#x27;DELETE FROM uploads WHERE id=?&#x27;, [$id]);
+  out([&#x27;ok&#x27; =&gt; true]);
+}
+
+out([&#x27;msg&#x27; =&gt; &#x27;未知動作&#x27;], 400);</pre><div class="file">2021/final-p3/team021-3.sql</div><pre><i>-- 圖片檔案管理系統：crud 資料庫、uploads 資料表（欄位同圖 3-1）</i>
+SET NAMES utf8mb4;
+CREATE DATABASE IF NOT EXISTS crud DEFAULT CHARSET utf8mb4;
+USE crud;
+DROP TABLE IF EXISTS uploads;
+
+<i>-- 實際檔案存成 uploads/&lt;id&gt;.&lt;file_type&gt;，檔名由伺服器決定；file_name 只用來顯示原始檔名</i>
+CREATE TABLE uploads (
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  tgl_upload DATE NOT NULL,
+  file_name VARCHAR(100) NOT NULL,
+  file_size INT(20) NOT NULL,
+  file_type VARCHAR(10) NOT NULL
+);</pre></section><section class="final"><h2>2022 決賽 P1｜視訊控制播放系統（video、createObjectURL）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>按鈕選本機 mp4 並播放；播放、暫停按鈕要顯示目前狀態</li><li>放大、縮小、正常三種畫面大小</li><li>音量滑桿，並顯示目前播放時間與總長度</li></ul></div><div class="idea"><b>解題思路</b><ul><li><code>URL.createObjectURL(file)</code> 產生暫時網址，直接設給 video.src，不必上傳</li><li>video.play()、video.pause() 控制播放，順便更新狀態文字</li><li>放大縮小只改 video.width</li><li>音量用 range（min 0、max 1、step 0.1），oninput 時設 video.volume</li><li>timeupdate 事件讀 currentTime、duration，轉成 mm:ss；loadedmetadata 時先顯示總長度</li></ul></div></div><div class="file">2022/final-p1/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;視訊控制播放系統&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <i>&lt;!-- (1) 選擇 mp4 --&gt;</i>
+  &lt;input type=&quot;file&quot; id=&quot;file&quot; accept=&quot;video/mp4&quot;&gt;
+  &lt;p&gt;
+    <i>&lt;!-- (2) 播放畫面 --&gt;</i>
+    &lt;video id=&quot;v&quot; width=&quot;480&quot; style=&quot;background:#000; display:block&quot;&gt;&lt;/video&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    <i>&lt;!-- (3) 播放／暫停，狀態顯示在 #state --&gt;</i>
+    &lt;button id=&quot;play&quot;&gt;播放&lt;/button&gt;
+    &lt;button id=&quot;pause&quot;&gt;暫停&lt;/button&gt;
+    目前狀態：&lt;span id=&quot;state&quot;&gt;暫停&lt;/span&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    <i>&lt;!-- (4) 放大／縮小／正常 --&gt;</i>
+    &lt;button onclick=&quot;size(1.25)&quot;&gt;放大&lt;/button&gt;
+    &lt;button onclick=&quot;size(0.8)&quot;&gt;縮小&lt;/button&gt;
+    &lt;button onclick=&quot;size(0)&quot;&gt;正常&lt;/button&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    <i>&lt;!-- (5) 音量 --&gt;</i>
+    音量 &lt;input type=&quot;range&quot; id=&quot;vol&quot; min=&quot;0&quot; max=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;
+    &lt;span id=&quot;volText&quot;&gt;100&lt;/span&gt;%
+  &lt;/p&gt;
+  <i>&lt;!-- (6) 目前時間 / 總長度 --&gt;</i>
+  &lt;p&gt;時間：&lt;span id=&quot;time&quot;&gt;00:00 / 00:00&lt;/span&gt;&lt;/p&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2022/final-p1/team021.js</div><pre>const $ = id =&gt; document.getElementById(id);
+const v = $(&#x27;v&#x27;);
+let w = 480; <i>// 影片目前寬度</i>
+
+<i>// (1)(2) 本機檔案不用上傳，產生暫時網址直接給 video 播放</i>
+$(&#x27;file&#x27;).onchange = e =&gt; v.src = URL.createObjectURL(e.target.files[0]);
+
+<i>// (3) 播放／暫停：呼叫 video 內建方法，並更新狀態文字</i>
+<i>// 狀態文字跟著 video 自己的事件更新，播完也會觸發 pause；沒選影片時不呼叫 play()（否則會先觸發 play 事件）</i>
+$(&#x27;play&#x27;).onclick = () =&gt; v.src &amp;&amp; v.play();
+$(&#x27;pause&#x27;).onclick = () =&gt; v.pause();
+v.onplay = () =&gt; $(&#x27;state&#x27;).textContent = &#x27;播放&#x27;;
+v.onpause = () =&gt; $(&#x27;state&#x27;).textContent = &#x27;暫停&#x27;;
+
+<i>// (4) 放大／縮小：改寬度；0 代表回到正常</i>
+function size(k) {
+  w = k ? Math.round(w * k) : 480;
+  v.width = w;
+}
+
+<i>// (5) 音量：volume 範圍 0~1</i>
+$(&#x27;vol&#x27;).oninput = () =&gt; {
+  v.volume = $(&#x27;vol&#x27;).value;
+  $(&#x27;volText&#x27;).textContent = Math.round(v.volume * 100);
+};
+
+<i>// (6) timeupdate 在播放位置改變時觸發；秒數轉成 mm:ss</i>
+const mmss = t =&gt; {
+  t = Math.floor(t || 0); <i>// 未載入影片時 duration 是 NaN</i>
+  return String(Math.floor(t / 60)).padStart(2, &#x27;0&#x27;) + &#x27;:&#x27; + String(t % 60).padStart(2, &#x27;0&#x27;);
+};
+const showTime = () =&gt; $(&#x27;time&#x27;).textContent = mmss(v.currentTime) + &#x27; / &#x27; + mmss(v.duration);
+v.ontimeupdate = showTime;
+v.onloadedmetadata = showTime; <i>// 載入後立刻顯示總長度</i></pre></section><section class="final"><h2>2022 決賽 P3｜會員資料輸入系統（jQuery 表單驗證、正規表示式）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>失去焦點（blur）就檢查，錯誤時紅框加紅字</li><li>正規表示式偵測 SQL Injection 字串、檢查信箱格式、密碼規範與強度</li><li>同一組 radio、勾選 checkbox 複製戶籍地址、placeholder、眼睛圖示切換顯示密碼</li><li>按確認再全部檢查一次，彈出成功或失敗訊息</li></ul></div><div class="idea"><b>解題思路</b><ul><li><code>.on(&quot;blur&quot;, ...)</code> 綁在所有要檢查的欄位上</li><li>每個欄位的規則放進物件（test + 錯誤訊息），一個 check 函式通用</li><li>SQL Injection 用 /…|select|from|or|and/i，i 表示不分大小寫</li><li>密碼「不連續」：/(.)\1/ 擋相同字元相連，charCodeAt 相差 1 擋 abc、123</li><li>radio 的 name 相同就是同一組；checkbox 的 change 事件複製地址</li><li>眼睛圖示用 <code>attr(&quot;type&quot;)</code> 在 password 和 text 間切換</li><li>送出時先 map 檢查全部欄位再 every，才不會遇到第一個錯就停、漏標紅</li></ul></div></div><div class="file">2022/final-p3/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;ABC俱樂部會員申請&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+  &lt;script src=&quot;jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;team021.js&quot; defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form id=&quot;f&quot; class=&quot;box&quot; novalidate&gt;
+  &lt;h2&gt;ABC俱樂部會員申請&lt;/h2&gt;
+
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label&gt;姓名 &lt;input id=&quot;name&quot; class=&quot;chk&quot; placeholder=&quot;請輸入姓名&quot;&gt;&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;span&gt;性別
+      <i>&lt;!-- name 相同 = 同一群組，只能選一個 --&gt;</i>
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;sex&quot;&gt;男性&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;sex&quot;&gt;女性&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;sex&quot;&gt;不明&lt;/label&gt;
+    &lt;/span&gt;
+    &lt;label&gt;出生年月日 &lt;input id=&quot;birth&quot; class=&quot;chk&quot; type=&quot;date&quot;&gt;&lt;/label&gt;
+    &lt;label&gt;聯絡電話 &lt;input id=&quot;tel&quot; class=&quot;chk&quot; placeholder=&quot;(xx)1234-5679&quot;&gt;&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;&lt;label&gt;戶籍地址&lt;input id=&quot;addr1&quot; class=&quot;chk wide&quot; placeholder=&quot;請輸入戶籍地址&quot;&gt;&lt;/label&gt;&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label&gt;通訊地址 &lt;input type=&quot;checkbox&quot; id=&quot;same&quot;&gt;同戶籍地址
+      &lt;input id=&quot;addr2&quot; class=&quot;chk wide&quot; placeholder=&quot;請輸入通訊地址&quot;&gt;&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;&lt;label&gt;電子郵件帳號&lt;input id=&quot;mail&quot; class=&quot;chk wide&quot; placeholder=&quot;請輸入電子郵件帳號&quot;&gt;&lt;/label&gt;&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;label&gt;再次輸入電子郵件帳號&lt;input id=&quot;mail2&quot; class=&quot;chk wide&quot; placeholder=&quot;請再次輸入電子郵件帳號&quot;&gt;&lt;/label&gt;&lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label&gt;密碼 &lt;input id=&quot;pw&quot; class=&quot;chk&quot; type=&quot;password&quot; placeholder=&quot;請輸入密碼&quot;&gt;&lt;/label&gt;
+    &lt;span class=&quot;eye&quot; data-for=&quot;pw&quot;&gt;👁&lt;/span&gt;
+    &lt;small&gt;(請輸入8位以上密碼，包含不連續之大小寫字母、符號及數字)&lt;/small&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;密碼強度 &lt;b id=&quot;strength&quot;&gt;&lt;/b&gt;&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label&gt;密碼確認 &lt;input id=&quot;pw2&quot; class=&quot;chk&quot; type=&quot;password&quot; placeholder=&quot;再次輸入密碼&quot;&gt;&lt;/label&gt;
+    &lt;span class=&quot;eye&quot; data-for=&quot;pw2&quot;&gt;👁&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;確認&lt;/button&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2022/final-p3/team021.css</div><pre>body { background: #eee; font-family: sans-serif; font-size: 14px; }
+.box { max-width: 760px; margin: 20px auto; padding: 16px 24px; background: #fff; border: 1px solid #ddd; }
+h2 { text-align: center; }
+.row { margin: 10px 0; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; }
+.row &gt; label { display: block; }
+.row &gt; label:has(.wide), .row:has(.wide) &gt; label { flex: 1; }
+input { padding: 4px; border: 1px solid #ccc; border-radius: 3px; }
+input::placeholder { color: #bbb; }   <i>/* 未輸入前以淺色顯示說明 */</i>
+.wide { display: block; width: 100%; box-sizing: border-box; }
+input.bad { border-color: red; }
+.err { color: red; font-size: 12px; }
+.eye { cursor: pointer; }
+small { color: #555; }
+button { background: #0d6efd; color: #fff; border: 0; padding: 6px 12px; border-radius: 3px; }</pre><div class="file">2022/final-p3/team021.js</div><pre><i>// 每個欄位的規則：test 回傳 true 代表「有問題」，msg 是紅字</i>
+const SQL = /[&#x27;‘’#!*]|\|\||&amp;&amp;|select|use|drop|delete|from|or|and/i; <i>// 符號 + 關鍵字，i = 不分大小寫</i>
+const sqlRule = { bad: v =&gt; SQL.test(v), msg: &#x27;疑似SQL Injection攻擊字串&#x27; };
+
+<i>// 信箱：帳號(英數_.，頭尾不能是 _ .) @ 網址(至少兩段，點不連續)</i>
+const MAIL = /^[a-z0-9]([a-z0-9_.]*[a-z0-9])?@[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
+
+const rules = {
+  name:  sqlRule,
+  addr1: sqlRule,
+  addr2: sqlRule,
+  mail:  { bad: v =&gt; !MAIL.test(v) || /\.\./.test(v), msg: &#x27;電子郵件帳號不符合規則&#x27; },
+  mail2: { bad: v =&gt; v !== $(&#x27;#mail&#x27;).val(), msg: &#x27;電子郵件帳號不相同&#x27; },
+  pw:    { bad: v =&gt; strength(v) &lt; 4 || v.length &lt; 8 || serial(v), msg: &#x27;密碼不符合規範&#x27; },
+  pw2:   { bad: v =&gt; v !== $(&#x27;#pw&#x27;).val(), msg: &#x27;兩次輸入密碼不相同&#x27; },
+};
+
+<i>// 「不連續」解讀為：不能有相同字元相連（aa），也不能有 3 個遞增字元（abc、123）</i>
+const serial = v =&gt; /(.)\1/.test(v) || [...v].some((c, i) =&gt; v.charCodeAt(i + 1) - v.charCodeAt(i) === 1 &amp;&amp; v.charCodeAt(i + 2) - v.charCodeAt(i + 1) === 1);
+
+<i>// 密碼強度 = 符合幾種字元類別（小寫、大寫、數字、符號）</i>
+const strength = v =&gt; [/[a-z]/, /[A-Z]/, /\d/, /[^a-zA-Z0-9]/].filter(r =&gt; r.test(v)).length;
+
+<i>// 檢查單一欄位；回傳 true = 通過。空白只有按確認時才標紅（無文字）</i>
+function check($el, submitting) {
+  const v = $el.val(), r = rules[$el.attr(&#x27;id&#x27;)];
+  let msg = &#x27;&#x27;;
+  if (!v) { if (!submitting) { show($el, &#x27;&#x27;); return true; } }
+  else if (r &amp;&amp; r.bad(v)) msg = r.msg;
+  const ok = v &amp;&amp; !msg;
+  show($el, ok ? &#x27;&#x27; : msg, !ok);
+  return !!ok;
+}
+
+<i>// 紅框 + 輸入框下方紅字（錯誤訊息 div 緊接在輸入框後面）</i>
+function show($el, msg, bad) {
+  $el.toggleClass(&#x27;bad&#x27;, !!bad).next(&#x27;.err&#x27;).remove();
+  if (msg) $el.after(`&lt;div class=&quot;err&quot;&gt;${msg}&lt;/div&gt;`);
+}
+
+$(() =&gt; {
+  <i>// blur = 失去焦點（由 active 變 inactive）</i>
+  $(&#x27;.chk&#x27;).on(&#x27;blur&#x27;, function () { check($(this)); });
+
+  <i>// 勾選後複製戶籍地址；已勾選時戶籍地址再改也同步</i>
+  const copy = () =&gt; $(&#x27;#same&#x27;).prop(&#x27;checked&#x27;) &amp;&amp; $(&#x27;#addr2&#x27;).val($(&#x27;#addr1&#x27;).val());
+  $(&#x27;#same&#x27;).on(&#x27;change&#x27;, copy);
+  $(&#x27;#addr1&#x27;).on(&#x27;input&#x27;, copy);
+
+  <i>// 眼睛：切換 type=password / text</i>
+  $(&#x27;.eye&#x27;).on(&#x27;click&#x27;, function () {
+    const $i = $(&#x27;#&#x27; + $(this).data(&#x27;for&#x27;));
+    $i.attr(&#x27;type&#x27;, $i.attr(&#x27;type&#x27;) === &#x27;password&#x27; ? &#x27;text&#x27; : &#x27;password&#x27;);
+  });
+
+  <i>// 輸入時即時顯示強度</i>
+  $(&#x27;#pw&#x27;).on(&#x27;input&#x27;, function () {
+    const n = strength($(this).val());
+    $(&#x27;#strength&#x27;).text($(this).val() ? [&#x27;弱&#x27;, &#x27;弱&#x27;, &#x27;中&#x27;, &#x27;中&#x27;, &#x27;強&#x27;][n] : &#x27;&#x27;);
+  });
+
+  $(&#x27;#f&#x27;).on(&#x27;submit&#x27;, e =&gt; {
+    e.preventDefault();
+    <i>// 用 map 先全部檢查完（every 遇到錯就停，會漏標紅）</i>
+    const all = $(&#x27;.chk&#x27;).map((_, el) =&gt; check($(el), true)).get().every(Boolean);
+    alert(all ? &#x27;資料已填寫完畢，謝謝&#x27; : &#x27;請填入所有資料及修正錯誤資料&#x27;);
+  });
+});</pre></section><section class="pre"><h2>2023 初賽 P1｜圖片展示系統（flex-wrap、篩選、hover scale）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>Flex 排 8 張圖；按鈕篩選：全部 8、自然 5、城市 3</li><li>每種篩選都要 RWD：寬螢幕多欄、窄螢幕單欄</li><li>圖有陰影；hover 放大（scale）且陰影消失</li></ul></div><div class="idea"><b>解題思路</b><ul><li>display:flex + flex-wrap:wrap + justify-content:center：放不下自動換行，不需 @media</li><li>data-type 標分類，按鈕只切換 hidden，其餘自動重排</li><li>width:300px + max-width:100%，窄螢幕跟著縮</li><li>:hover { transform: scale(1.1); box-shadow: none; } 搭配 transition: transform .3s</li></ul></div></div><div class="file">2023/pre-p1/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;圖片展示系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id=&quot;btns&quot;&gt;
+    &lt;button class=&quot;on&quot; data-type=&quot;all&quot;&gt;全部圖片&lt;/button&gt;
+    &lt;button data-type=&quot;n&quot;&gt;自然風景圖&lt;/button&gt;
+    &lt;button data-type=&quot;c&quot;&gt;城市風景圖&lt;/button&gt;
+  &lt;/div&gt;
+  <i>&lt;!-- data-type 標記每張圖的分類，篩選時只比對這個屬性 --&gt;</i>
+  &lt;div id=&quot;gallery&quot;&gt;
+    &lt;img data-type=&quot;n&quot; src=&quot;img/n1.svg&quot;&gt;
+    &lt;img data-type=&quot;n&quot; src=&quot;img/n2.svg&quot;&gt;
+    &lt;img data-type=&quot;c&quot; src=&quot;img/c1.svg&quot;&gt;
+    &lt;img data-type=&quot;n&quot; src=&quot;img/n3.svg&quot;&gt;
+    &lt;img data-type=&quot;c&quot; src=&quot;img/c2.svg&quot;&gt;
+    &lt;img data-type=&quot;n&quot; src=&quot;img/n4.svg&quot;&gt;
+    &lt;img data-type=&quot;n&quot; src=&quot;img/n5.svg&quot;&gt;
+    &lt;img data-type=&quot;c&quot; src=&quot;img/c3.svg&quot;&gt;
+  &lt;/div&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2023/pre-p1/team021.css</div><pre>body { font-family: sans-serif; margin: 0; padding: 20px; }
+#btns { text-align: center; margin: 30px 0; }
+button { border: 0; border-radius: 20px; padding: 6px 14px; margin: 0 4px; background: #ddd; cursor: pointer; }
+button.on { background: #1fa89a; color: #fff; }
+
+<i>/* flex-wrap：放不下就自動換行，不需要媒體查詢就有 RWD；
+   justify-content:center 讓最後一列落單的圖片置中 */</i>
+#gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1400px; margin: auto; }
+#gallery img {
+  width: 300px; max-width: 100%;       <i>/* 視窗比 300px 窄時跟著縮 */</i>
+  box-shadow: 8px 8px 12px rgba(0, 0, 0, .35);
+  transition: transform .3s;
+}
+#gallery img:hover { transform: scale(1.1); box-shadow: none; }</pre><div class="file">2023/pre-p1/team021.js</div><pre>const imgs = document.querySelectorAll(&#x27;#gallery img&#x27;);
+const btns = document.querySelectorAll(&#x27;#btns button&#x27;);
+
+btns.forEach(b =&gt; b.onclick = () =&gt; {
+  btns.forEach(x =&gt; x.classList.toggle(&#x27;on&#x27;, x === b)); <i>// 只有被點的按鈕高亮</i>
+  <i>// hidden = true 會讓圖片從 flex 排版中消失，剩下的圖自動重新排列</i>
+  imgs.forEach(img =&gt; img.hidden = b.dataset.type !== &#x27;all&#x27; &amp;&amp; img.dataset.type !== b.dataset.type);
+});</pre></section><section class="pre"><h2>2023 初賽 P2｜計時器（datetime-local、Date 相減、setInterval）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>標題、剩餘時間 00:00:00、日期時間輸入欄、開始與重置按鈕</li><li>沒設定或設成過去時間，按開始要跳出提醒</li><li>開始後每秒倒數，按鈕依序變成暫停、繼續；重置或時間到回到初始畫面</li></ul></div><div class="idea"><b>解題思路</b><ul><li><code>&lt;input type=&quot;datetime-local&quot; step=&quot;1&quot;&gt;</code> 內建選擇器，值可直接 new Date()</li><li>剩餘 = new Date(目標) − new Date()，得到毫秒再換成時分秒</li><li>用 state（idle / run / pause）決定同一顆按鈕的行為與文字</li><li>暫停、重置 clearInterval；開始、繼續 setInterval(tick, 1000)</li><li>tick 發現剩餘 ≤ 0 就 reset() 再 alert</li></ul></div></div><div class="file">2023/pre-p2/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;計時器&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;計時器&lt;/h1&gt;
+  &lt;div id=&quot;time&quot;&gt;00:00:00&lt;/div&gt;
+  &lt;label for=&quot;target&quot;&gt;設定目標日期及時間&lt;/label&gt;
+  <i>&lt;!-- datetime-local 內建日期時間選擇圖示與 yyyy-mm-dd --:-- -- 提示 --&gt;</i>
+  <i>&lt;!-- step=&quot;1&quot; 才能選到秒（題目第 2 項要求選秒），提示會多出秒欄位 --&gt;</i>
+  &lt;input type=&quot;datetime-local&quot; id=&quot;target&quot; step=&quot;1&quot;&gt;
+  &lt;button id=&quot;start&quot;&gt;開始&lt;/button&gt;
+  &lt;button id=&quot;reset&quot;&gt;重置&lt;/button&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2023/pre-p2/team021.css</div><pre>body { text-align: center; font-family: sans-serif; }
+h1 { font-size: 36px; margin: 20px 0 0; }
+#time { font-size: 64px; margin: 20px 0 30px; }</pre><div class="file">2023/pre-p2/team021.js</div><pre>const $ = id =&gt; document.getElementById(id);
+let state = &#x27;idle&#x27;; <i>// idle 未開始 / run 倒數中 / pause 暫停</i>
+let timer;          <i>// setInterval 的編號，clearInterval 要用</i>
+
+const pad = n =&gt; String(n).padStart(2, &#x27;0&#x27;);
+
+<i>// 剩餘毫秒 → 時:分:秒（小時不取餘數，超過 24 小時也能顯示）</i>
+function show(ms) {
+  const s = Math.floor(ms / 1000);
+  $(&#x27;time&#x27;).textContent = `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
+}
+
+function tick() {
+  const left = new Date($(&#x27;target&#x27;).value) - new Date(); <i>// Date 相減得到毫秒</i>
+  if (left &lt;= 0) { reset(); alert(&#x27;目標日期及時間已到，計時結束&#x27;); return; }
+  show(left);
+}
+
+function reset() {
+  clearInterval(timer);
+  state = &#x27;idle&#x27;;
+  $(&#x27;start&#x27;).textContent = &#x27;開始&#x27;;
+  $(&#x27;target&#x27;).value = &#x27;&#x27;;
+  show(0);
+}
+
+<i>// 同一顆按鈕，依 state 決定做什麼、下一個文字是什麼</i>
+$(&#x27;start&#x27;).onclick = () =&gt; {
+  if (state === &#x27;run&#x27;) {
+    clearInterval(timer);
+    state = &#x27;pause&#x27;;
+    $(&#x27;start&#x27;).textContent = &#x27;繼續&#x27;;
+    return;
+  }
+  if (state === &#x27;idle&#x27;) {
+    if (!$(&#x27;target&#x27;).value) return alert(&#x27;請先設定目標日期及時間&#x27;);
+    if (new Date($(&#x27;target&#x27;).value) &lt;= new Date()) return alert(&#x27;目標時間已過，請重新設定&#x27;);
+  }
+  state = &#x27;run&#x27;;
+  $(&#x27;start&#x27;).textContent = &#x27;暫停&#x27;;
+  tick();
+  timer = setInterval(tick, 1000);
+};
+
+$(&#x27;reset&#x27;).onclick = reset;</pre></section><section class="pre"><h2>2023 初賽 P4｜日期選擇元件（Date、月曆、民國年）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>訊息列顯示「所選日期: 民國 112 年 07 月 26 日」，下方月曆可逐月翻頁</li><li>月曆佔視窗 80% 寬、水平置中、5px 藍色實線框；所選日期灰底</li><li>標題 Jul 2023 與 &lt; &gt; 翻頁，星期列 S M T W T F S；日期與星期要正確（113/02 有 29 日且是週四）</li></ul></div><div class="idea"><b>解題思路</b><ul><li><code>new Date(y, m, 1).getDay()</code>：1 號是星期幾 → 前面補幾個空格</li><li><code>new Date(y, m + 1, 0).getDate()</code>：當月天數（下個月第 0 天），閏年自動處理</li><li>翻月用 new Date(y, m ± 1, 1)，月份超出範圍會自動進位</li><li>民國年 = 西元 − 1911；<code>padStart(2, &quot;0&quot;)</code> 補零</li><li>CSS grid repeat(7, 1fr) 排七欄；width:80% + margin:0 auto 置中</li></ul></div></div><div class="file">2023/pre-p4/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;日期選擇元件&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+  &lt;script src=&quot;team021.js&quot; defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p id=&quot;msg&quot;&gt;&lt;/p&gt;
+  &lt;div id=&quot;cal&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2023/pre-p4/team021.css</div><pre>body { font-family: sans-serif; }
+#msg { text-align: center; font-size: 20px; }
+#cal {
+  width: 80vw;             <i>/* vw＝視窗寬度的 1%：任何螢幕都佔可視寬度 80% */</i>
+  box-sizing: border-box;  <i>/* 邊框算在 80vw 裡面 */</i>
+  margin: 0 auto;          <i>/* 水平置中 */</i>
+  border: 5px solid blue;
+}
+.head { display: flex; justify-content: space-between; padding: 8px; font-weight: bold; }
+.head span { cursor: pointer; user-select: none; padding: 0 12px; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.grid div { padding: 10px 0; }
+.day { cursor: pointer; border: 1px solid #ddd; }
+.day:hover { background: #eef; }
+.day.sel { background: gray; color: #fff; }</pre><div class="file">2023/pre-p4/team021.js</div><pre>const $ = id =&gt; document.getElementById(id);
+const MON = &#x27;Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec&#x27;.split(&#x27; &#x27;);
+const pad = n =&gt; String(n).padStart(2, &#x27;0&#x27;); <i>// 7 -&gt; &#x27;07&#x27;</i>
+
+let sel = new Date();                              <i>// 所選日期，一開始是今天</i>
+let y = sel.getFullYear(), m = sel.getMonth();     <i>// 月曆正在看的年、月（月份 0~11）</i>
+
+function show() {
+  <i>// 民國年 = 西元年 - 1911</i>
+  $(&#x27;msg&#x27;).textContent = `所選日期: 民國 ${sel.getFullYear() - 1911} 年 ${pad(sel.getMonth() + 1)} 月 ${pad(sel.getDate())} 日`;
+}
+
+function render() {
+  const first = new Date(y, m, 1).getDay();        <i>// 當月 1 號是星期幾（0=日），前面要補幾格空白</i>
+  const days = new Date(y, m + 1, 0).getDate();    <i>// 下個月的第 0 天 = 當月最後一天 = 當月天數（自動處理閏年）</i>
+  let h = `&lt;div class=&quot;head&quot;&gt;&lt;span onclick=&quot;go(-1)&quot;&gt;&amp;lt;&lt;/span&gt;${MON[m]} ${y}&lt;span onclick=&quot;go(1)&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/div&gt;
+           &lt;div class=&quot;grid&quot;&gt;${[...&#x27;SMTWTFS&#x27;].map(d =&gt; `&lt;div&gt;${d}&lt;/div&gt;`).join(&#x27;&#x27;)}`;
+  h += &#x27;&lt;div&gt;&lt;/div&gt;&#x27;.repeat(first);
+  for (let d = 1; d &lt;= days; d++) {
+    const on = sel.getFullYear() === y &amp;&amp; sel.getMonth() === m &amp;&amp; sel.getDate() === d;
+    h += `&lt;div class=&quot;day${on ? &#x27; sel&#x27; : &#x27;&#x27;}&quot; onclick=&quot;pick(${d})&quot;&gt;${d}&lt;/div&gt;`;
+  }
+  $(&#x27;cal&#x27;).innerHTML = h + &#x27;&lt;/div&gt;&#x27;;
+}
+
+<i>// new Date(2024, 12, 1) 會自動進位成 2025/01，所以翻月只要 m 加減 1</i>
+function go(n) { const d = new Date(y, m + n, 1); y = d.getFullYear(); m = d.getMonth(); render(); }
+function pick(d) { sel = new Date(y, m, d); show(); render(); }
+
+show(); render();</pre></section><section class="final"><h2>2023 決賽 P3｜排座位工具（Bootstrap、FileReader 讀 CSV、洗牌）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>載入 CSV 名單並顯示；超過 w×h 只取前面的人</li><li>寬、高下拉選單 5~10，改動時刷新座位表</li><li>循序排座由左至右、由上至下；隨機排座把 w×h 陣列洗牌，空位也隨機</li><li>≥576px 左 25% 右 75%，以下上下堆疊</li></ul></div><div class="idea"><b>解題思路</b><ul><li>col-sm-3 / col-sm-9：sm 斷點剛好是 576px</li><li>FileReader.readAsText() 讀檔，再 split(/?
+/) 一行一個姓名</li><li>names.slice(0, w*h) 取前 w×h 筆；座位用 grid-template-columns: repeat(w, 1fr)</li><li>範例名單 students.csv 一行一個姓名；先把名單補空字串湊滿 w×h，再 Fisher-Yates 洗牌，空位自然散開</li><li>Fisher-Yates：i 從尾到頭，和 0..i 之間的隨機位置交換</li></ul></div></div><div class="file">2023/final-p3/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;簡單的排座位工具&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+  &lt;script src=&quot;team021.js&quot; defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 class=&quot;m-2&quot;&gt;簡單的排座位工具&lt;/h1&gt;
+  <i>&lt;!-- col-sm-3 / col-sm-9：&gt;=576px 左 25% 右 75%；&lt;576px 自動上下堆疊 --&gt;</i>
+  &lt;div class=&quot;row g-0&quot;&gt;
+    &lt;div class=&quot;col-sm-3 left p-2&quot;&gt;
+      &lt;input type=&quot;file&quot; id=&quot;file&quot; accept=&quot;.csv,.txt&quot; class=&quot;form-control form-control-sm mb-2&quot;&gt;
+      &lt;table class=&quot;table table-sm table-bordered w-auto bg-white&quot;&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th&gt;序號&lt;/th&gt;&lt;th&gt;姓名&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=&quot;list&quot;&gt;&lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm-9 right p-2&quot;&gt;
+      &lt;div class=&quot;row mb-2&quot;&gt;
+        &lt;div class=&quot;col-6&quot;&gt;&lt;button class=&quot;btn btn-primary w-100&quot; id=&quot;seq&quot;&gt;循序排座&lt;/button&gt;&lt;/div&gt;
+        &lt;div class=&quot;col-6&quot;&gt;&lt;button class=&quot;btn btn-primary w-100&quot; id=&quot;rnd&quot;&gt;隨機排座&lt;/button&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;d-flex justify-content-between mb-1&quot;&gt;
+        &lt;label&gt;寬：&lt;select id=&quot;w&quot;&gt;&lt;/select&gt; 位&lt;/label&gt;
+        &lt;label&gt;高：&lt;select id=&quot;h&quot;&gt;&lt;/select&gt; 位&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div id=&quot;seats&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2023/final-p3/team021.css</div><pre>.left { background: #fde; }
+.right { background: #e8e8b0; min-height: 100vh; }
+#seats { display: grid; gap: 4px; border: 2px solid #664; padding: 4px; }
+.seat { border: 1px solid #664; min-height: 40px; background: #f4f4c0; display: flex; align-items: center; justify-content: center; text-align: center; }</pre><div class="file">2023/final-p3/team021.js</div><pre>const $ = id =&gt; document.getElementById(id);
+let all = [];            <i>// CSV 讀進來的全部姓名</i>
+let arrange = sequential; <i>// 目前的排法；改寬高時沿用</i>
+
+<i>// 下拉選單 5~10</i>
+for (const id of [&#x27;w&#x27;, &#x27;h&#x27;])
+  $(id).innerHTML = Array.from({ length: 6 }, (_, i) =&gt; `&lt;option&gt;${i + 5}&lt;/option&gt;`).join(&#x27;&#x27;);
+
+const size = () =&gt; $(&#x27;w&#x27;).value * $(&#x27;h&#x27;).value;
+const names = () =&gt; all.slice(0, size()); <i>// 超過 w*h 只取最前面 w*h 筆；保留完整名單，座位調大時被截掉的人會回來</i>
+
+<i>// 讀檔：FileReader 讀成文字，一行一個姓名</i>
+$(&#x27;file&#x27;).onchange = e =&gt; {
+  const r = new FileReader();
+  r.onload = () =&gt; {
+    all = r.result.replace(/^﻿/, &#x27;&#x27;).split(/\r?\n/).map(s =&gt; s.trim()).filter(Boolean);
+    refresh();
+  };
+  r.readAsText(e.target.files[0]);
+};
+
+function sequential() { <i>// 先放名單，不足的補空字串</i>
+  return [...names(), ...Array(size() - names().length).fill(&#x27;&#x27;)];
+}
+
+function random() {     <i>// Fisher-Yates：從後面往前，每格和「前面隨機一格」交換</i>
+  const a = sequential();
+  for (let i = a.length - 1; i &gt; 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function refresh() {
+  <i>// 名單用 textContent 放入（不用 innerHTML），避免姓名裡的 &lt; &gt; 被當成 HTML</i>
+  $(&#x27;list&#x27;).replaceChildren(...names().map((n, i) =&gt; {
+    const tr = document.createElement(&#x27;tr&#x27;);
+    tr.insertCell().textContent = i + 1;
+    tr.insertCell().textContent = n;
+    return tr;
+  }));
+  <i>// 座位表：CSS grid，欄數 = 寬</i>
+  const box = $(&#x27;seats&#x27;);
+  box.style.gridTemplateColumns = `repeat(${$(&#x27;w&#x27;).value}, 1fr)`;
+  box.replaceChildren(...arrange().map(n =&gt; {
+    const d = document.createElement(&#x27;div&#x27;);
+    d.className = &#x27;seat&#x27;;
+    d.textContent = n;
+    return d;
+  }));
+}
+
+$(&#x27;seq&#x27;).onclick = () =&gt; { arrange = sequential; refresh(); };
+$(&#x27;rnd&#x27;).onclick = () =&gt; { arrange = random; refresh(); };
+$(&#x27;w&#x27;).onchange = $(&#x27;h&#x27;).onchange = refresh; <i>// 改寬高就重畫</i>
+
+refresh();</pre></section><section class="pre"><h2>2024 初賽 P1｜響應式 ITSA 首頁（HTML5 + CSS3，不可用 Bootstrap）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>&gt;900px：導覽列、頁首、內容區置中等寬；頁首灰底、圖片與文字不等高、報名按鈕</li><li>內容兩列圖文交疊：第一列圖左文右，第二列圖右文左</li><li>750~900px 滿版無左右邊界；&lt;750px 每個元素各佔一列</li></ul></div><div class="idea"><b>解題思路</b><ul><li>.wrap{max-width:900px;margin:auto} 一行搞定置中，寬度不足時自然滿版</li><li>交疊＝文字框 margin 負值 + position:relative 疊到圖片上</li><li>第二列用 flex-direction:row-reverse 反轉，不必改 HTML</li><li>手機版 .txt{display:contents} 拆掉外框，h3 才能用 order 排到圖片上面</li></ul></div></div><div class="file">2024/p1-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-TW&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -131,7 +850,7 @@ button { background: #333; color: #fff; border: 0; padding: 10px 16px; margin: -
   .txt { display: contents; }
   .txt h3 { margin: 0 0 10px; order: -1; }
   .txt p, .row:nth-of-type(2) p { margin: 0; }
-}</pre></section><section><h2>2024 P2｜圖書管理系統（新增 / 列表 / 刪除 / 更新）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>輸入書名、作者、出版年份新增；表格列出全部；每列有刪除、更新按鈕</li></ul></div><div class="idea"><b>解題思路</b><ul><li>資料放陣列，每次改完存 localStorage 再整張表重畫（render）</li><li>新增和更新共用同一個表單，用 editId 是否為 null 判斷模式</li><li>刪除＝filter 留下 id 不同的；更新＝map 換掉 id 相同的</li></ul></div></div><div class="file">2024/p2-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+}</pre></section><section class="pre"><h2>2024 初賽 P2｜圖書管理系統（新增 / 列表 / 刪除 / 更新）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>輸入書名、作者、出版年份新增；表格列出全部；每列有刪除、更新按鈕</li></ul></div><div class="idea"><b>解題思路</b><ul><li>資料放陣列，每次改完存 localStorage 再整張表重畫（render）</li><li>新增和更新共用同一個表單，用 editId 是否為 null 判斷模式</li><li>刪除＝filter 留下 id 不同的；更新＝map 換掉 id 相同的</li></ul></div></div><div class="file">2024/p2-ans/team021.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-TW&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -207,7 +926,7 @@ function edit(id) {
 render();</pre><div class="file">2024/p2-ans/team021.css</div><pre>body { font-family: sans-serif; background: #fff; color: #222; margin: 20px; }
 input { margin-bottom: 6px; }
 table { width: 100%; border-collapse: collapse; }
-th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }</pre></section><section><h2>2024 P3｜健康度量管理系統（jQuery + PHP PDO + MySQL）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>人員（醫檢員/受檢者）、醫檢項目、檢查結果三張表，分數 1~10</li><li>醫檢員：註冊、登入、三張表新增/刪除/更新/查詢，同項目人員編號不重複</li><li>受檢者：首次登入強制改密碼（12 碼、大小寫英文 + 數字），之後單頁看全部分數</li><li>測試帳號：醫檢員 tech1/1234；受檢者 p1~p5/1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>一支 api.php 用 ?a=動作 分流；表名、欄位走白名單，SQL 一律 prepare</li><li>results 加 UNIQUE(user_id,item_id) → 資料庫層保證不重複；CHECK 限制 1~10</li><li>save 有 id 就 UPDATE、沒有就 INSERT，三張表共用同一段程式</li><li>前端每列都是 input，改完按「存」；最後一列空白當新增列</li><li>密碼規則前端 pattern 先擋、後端 preg_match 再驗一次</li></ul></div></div><div class="file">2024/p3-ans/team021.sql</div><pre><i>-- 健康度量管理系統：人員 / 醫檢項目 / 檢查結果 三張表（第三正規化）</i>
+th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }</pre></section><section class="pre"><h2>2024 初賽 P3｜健康度量管理系統（jQuery + PHP PDO + MySQL）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>人員（醫檢員/受檢者）、醫檢項目、檢查結果三張表，分數 1~10</li><li>醫檢員：註冊、登入、三張表新增/刪除/更新/查詢，同項目人員編號不重複</li><li>受檢者：首次登入強制改密碼（12 碼、大小寫英文 + 數字），之後單頁看全部分數</li><li>測試帳號：醫檢員 tech1/1234；受檢者 p1~p5/1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>一支 api.php 用 ?a=動作 分流；表名、欄位走白名單，SQL 一律 prepare</li><li>results 加 UNIQUE(user_id,item_id) → 資料庫層保證不重複；CHECK 限制 1~10</li><li>save 有 id 就 UPDATE、沒有就 INSERT，三張表共用同一段程式</li><li>前端每列都是 input，改完按「存」；最後一列空白當新增列</li><li>密碼規則前端 pattern 先擋、後端 preg_match 再驗一次</li></ul></div></div><div class="file">2024/p3-ans/team021.sql</div><pre><i>-- 健康度量管理系統：人員 / 醫檢項目 / 檢查結果 三張表（第三正規化）</i>
 SET NAMES utf8mb4;
 CREATE DATABASE IF NOT EXISTS health DEFAULT CHARSET utf8mb4;
 USE health;
@@ -508,7 +1227,353 @@ function loadAll() {
 #msg { color: #c00; }
 table { border-collapse: collapse; background: #fff; margin-bottom: 10px; }
 th, td { border: 1px solid #ccc; padding: 4px; }
-td input { width: 100px; }</pre></section><section><h2>2025 P1｜圖形化河內塔（拖放）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>3~9 個圓盤，拖放移動；顯示最少步數 2ⁿ−1 與目前步數</li><li>只能拿最上面的圓盤，大的不能疊在小的上；全部移到右柱即過關</li></ul></div><div class="idea"><b>解題思路</b><ul><li>柱子用 flex-direction:column-reverse → appendChild 就是疊到最上面</li><li>最上面那塊＝lastElementChild，DOM 本身就是狀態，不用另存陣列</li><li>dragover 一定要 preventDefault，否則 drop 不會觸發</li></ul></div></div><div class="file">2025/p1-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
+td input { width: 100px; }</pre></section><section class="final"><h2>2024 決賽 P1｜可重複使用網頁元件 event_filter（jQuery .load、JSON）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>元件片段只含 UI 與 JS（沒有 html/head/body），由主頁動態匯入</li><li>from、to 兩個日期欄位，改變就刷新事件列表，依日期遞增排序</li><li>事件 JSON 放在主頁 script 標籤，至少 10 筆且不按日期排</li><li>匯入失敗要顯示錯誤訊息；≥768px 兩區塊各佔 50%，以下上下堆疊</li></ul></div><div class="idea"><b>解題思路</b><ul><li><code>$(&quot;#box&quot;).load(&quot;event_filter.html&quot;, callback)</code>：.load() 會執行片段內的 script，fetch + innerHTML 不會</li><li>事件放 <code>&lt;script id=&quot;events&quot; type=&quot;application/json&quot;&gt;</code>，用 JSON.parse($(&quot;#events&quot;).text()) 讀</li><li>yyyy-mm-dd 字串可以直接比大小過濾；sort 用 localeCompare</li><li>callback 判斷 status === &quot;error&quot;，顯示 xhr.status 與 statusText</li><li>兩區塊都是 col-md-6（md＝768px）；列表用 .text() 自動跳脫</li></ul></div></div><div class="file">2024/final-p1/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;引用 event_filter&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+  &lt;script src=&quot;jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h4&gt;本網頁展示如何引用外部 HTML 檔案以達到重複使用 Web 元件的目標&lt;/h4&gt;
+  &lt;div id=&quot;slot&quot;&gt;&lt;/div&gt;
+
+  <i>&lt;!-- 事件資料：JSON 放在 script 裡，type 不是 javascript 所以瀏覽器不會執行它。故意不依日期排序 --&gt;</i>
+  &lt;script id=&quot;events&quot; type=&quot;application/json&quot;&gt;
+  [
+    { &quot;date&quot;: &quot;2024-07-26&quot;, &quot;description&quot;: &quot;巴黎奧運會開幕&quot; },
+    { &quot;date&quot;: &quot;2024-05-28&quot;, &quot;description&quot;: &quot;project 總結展示結束&quot; },
+    { &quot;date&quot;: &quot;2024-08-15&quot;, &quot;description&quot;: &quot;暑期實習成果發表&quot; },
+    { &quot;date&quot;: &quot;2024-06-28&quot;, &quot;description&quot;: &quot;南極探險&quot; },
+    { &quot;date&quot;: &quot;2024-04-10&quot;, &quot;description&quot;: &quot;專題題目申請截止&quot; },
+    { &quot;date&quot;: &quot;2024-06-06&quot;, &quot;description&quot;: &quot;期末考&quot; },
+    { &quot;date&quot;: &quot;2024-09-02&quot;, &quot;description&quot;: &quot;新學期開學&quot; },
+    { &quot;date&quot;: &quot;2024-05-15&quot;, &quot;description&quot;: &quot;校外參訪&quot; },
+    { &quot;date&quot;: &quot;2024-07-10&quot;, &quot;description&quot;: &quot;畢業典禮&quot; },
+    { &quot;date&quot;: &quot;2024-06-20&quot;, &quot;description&quot;: &quot;社團成果展&quot; },
+    { &quot;date&quot;: &quot;2024-03-30&quot;, &quot;description&quot;: &quot;春季校慶&quot; },
+    { &quot;date&quot;: &quot;2024-07-31&quot;, &quot;description&quot;: &quot;暑期課程結束&quot; }
+  ]
+  &lt;/script&gt;
+
+  &lt;script&gt;
+    <i>// .load() 抓 HTML 片段放進 #slot，並且會執行片段內的 script；路徑錯誤時走 error 分支</i>
+    $(&#x27;#slot&#x27;).load(&#x27;event_filter.html&#x27;, (res, status, xhr) =&gt; {
+      if (status === &#x27;error&#x27;) $(&#x27;#slot&#x27;).text(`遭遇問題: ${xhr.status} ${xhr.statusText}`);
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/final-p1/event_filter.html</div><pre><i>&lt;!-- 可重複使用的元件：只有片段，沒有 html/head/body。事件資料由引用它的頁面提供 --&gt;</i>
+&lt;div class=&quot;container&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    <i>&lt;!-- col-md-6：&gt;=768px 各佔 50%，更小的螢幕自動上下堆疊 --&gt;</i>
+    &lt;div class=&quot;col-md-6 ef-filter&quot;&gt;
+      &lt;div&gt;選擇欲查詢事件的區間:&lt;/div&gt;
+      from: &lt;input type=&quot;date&quot; id=&quot;ef-from&quot; value=&quot;2024-05-01&quot;&gt;
+      to: &lt;input type=&quot;date&quot; id=&quot;ef-to&quot; value=&quot;2024-07-31&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-md-6 ef-list&quot;&gt;
+      &lt;div&gt;事件列表:&lt;/div&gt;
+      &lt;ul id=&quot;ef-list&quot; class=&quot;list-unstyled&quot;&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+<i>// 這段 script 只有用 jQuery .load() 匯入才會執行（innerHTML / fetch 不會執行 script）</i>
+(() =&gt; {
+  <i>// 從引用頁的 &lt;script id=&quot;events&quot; type=&quot;application/json&quot;&gt; 讀事件</i>
+  const events = JSON.parse($(&#x27;#events&#x27;).text());
+
+  function render() {
+    const from = $(&#x27;#ef-from&#x27;).val(), to = $(&#x27;#ef-to&#x27;).val();
+    $(&#x27;#ef-list&#x27;).empty().append(
+      events
+        <i>// yyyy-mm-dd 格式的字串，直接比大小就等於比日期；沒填的那端不限制</i>
+        .filter(e =&gt; (!from || e.date &gt;= from) &amp;&amp; (!to || e.date &lt;= to))
+        .sort((a, b) =&gt; a.date.localeCompare(b.date))   <i>// 日期遞增</i>
+        .map(e =&gt; $(&#x27;&lt;li&gt;&#x27;).text(`${e.date}: ${e.description}`))  <i>// .text() 會自動跳脫</i>
+    );
+  }
+
+  $(&#x27;#ef-from, #ef-to&#x27;).on(&#x27;change&#x27;, render);  <i>// 起迄任一個改變就重畫</i>
+  render();
+})();
+&lt;/script&gt;</pre><div class="file">2024/final-p1/team021.css</div><pre>.ef-filter { background: #0d6efd; color: #fff; padding: 8px; }
+.ef-list   { background: #198754; color: #fff; padding: 8px; }</pre></section><section class="final"><h2>2024 決賽 P3｜聊天對話框後端與前端整合（PHP + MySQL + JWT）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>/login 管理員登入，錯誤 alert「使用者或密碼錯誤！」；admin/password 存在資料庫</li><li>JWT 驗證，10 分鐘自動登出回 /login；未登入進 /admin 跳回 /login</li><li>/admin 問答新增、編輯（更新／取消）、刪除，預設 4 筆；管理 API 都要驗登入</li><li>/ 對話頁：Enter 或按鈕送出，查無回「很抱歉，我無法回答這個問題。」，自動捲到最底</li></ul></div><div class="idea"><b>解題思路</b><ul><li>手寫 HS256：hash_hmac(&quot;sha256&quot;, header.payload, 金鑰, true) + base64url；驗證用 hash_equals 並檢查 exp</li><li>金鑰第一次執行時用 random_bytes 產生存成 secret.txt，不寫死在程式（寫死＝看得到原始碼就能偽造 token）</li><li>登入回傳 token（exp＝現在 + 600 秒），前端存 localStorage，呼叫 API 帶 Authorization: Bearer</li><li>前端 setTimeout(logout, exp*1000 − Date.now()) 自動登出；API 回 401 也導回登入頁</li><li>密碼用 password_hash 存、password_verify 比對</li><li>/login、/admin：XAMPP 用 .htaccess RewriteRule，PHP 內建伺服器用 router.php</li><li>用 form submit 處理 Enter（不會誤送輸入法選字）；訊息用 textContent，scrollTop = scrollHeight 捲到底</li></ul></div></div><div class="file">2024/final-p3/team021.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;便利商店智慧問答客服&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body data-page=&quot;chat&quot;&gt;
+  &lt;main class=&quot;panel&quot;&gt;
+    &lt;h1&gt;便利商店智慧問答客服&lt;/h1&gt;
+    &lt;div id=&quot;box&quot; class=&quot;chat&quot;&gt;&lt;/div&gt;
+    <i>&lt;!-- 用 form 送出：按 Enter 或按鈕都會觸發 submit，輸入法選字時的 Enter 也不會誤送 --&gt;</i>
+    &lt;form id=&quot;form&quot; class=&quot;row&quot;&gt;
+      &lt;input id=&quot;q&quot; placeholder=&quot;請輸入您的問題...&quot; autocomplete=&quot;off&quot;&gt;
+      &lt;button class=&quot;btn&quot;&gt;傳送&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/final-p3/login.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;管理員登入&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body data-page=&quot;login&quot;&gt;
+  &lt;form id=&quot;form&quot; class=&quot;panel narrow&quot;&gt;
+    &lt;h1&gt;管理員登入&lt;/h1&gt;
+    &lt;label for=&quot;username&quot;&gt;帳號&lt;/label&gt;
+    &lt;input id=&quot;username&quot; required&gt;
+    &lt;label for=&quot;password&quot;&gt;密碼&lt;/label&gt;
+    &lt;input id=&quot;password&quot; type=&quot;password&quot; required&gt;
+    &lt;button class=&quot;btn&quot;&gt;登入&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/final-p3/admin.html</div><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-Hant&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;問答管理系統&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;team021.css&quot;&gt;
+&lt;/head&gt;
+&lt;body data-page=&quot;admin&quot;&gt;
+  &lt;main class=&quot;panel&quot;&gt;
+    &lt;h1&gt;問答管理系統&lt;/h1&gt;
+    &lt;input id=&quot;question&quot; placeholder=&quot;問題&quot;&gt;
+    &lt;input id=&quot;answer&quot; placeholder=&quot;答案&quot;&gt;
+    &lt;div id=&quot;btns&quot; class=&quot;row&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;list&quot;&gt;&lt;/div&gt;
+  &lt;/main&gt;
+  &lt;script src=&quot;team021.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><div class="file">2024/final-p3/team021.js</div><pre><i>// 三個頁面共用一支 JS，依 &lt;body data-page=&quot;...&quot;&gt; 決定要執行哪一段</i>
+const $ = id =&gt; document.getElementById(id);
+const esc = s =&gt; String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, c =&gt; &#x27;&amp;#&#x27; + c.charCodeAt(0) + &#x27;;&#x27;);
+
+<i>// 一律 POST；token 放在 Authorization 標頭。401 代表沒登入或過期 → 回登入頁</i>
+async function call(a, data = {}) {
+  const r = await fetch(&#x27;api.php?a=&#x27; + a, {
+    method: &#x27;POST&#x27;,
+    headers: { Authorization: &#x27;Bearer &#x27; + localStorage.token },
+    body: new URLSearchParams(data),
+  });
+  if (r.status === 401 &amp;&amp; document.body.dataset.page === &#x27;admin&#x27;) return logout();
+  return r.json();
+}
+
+function logout() {
+  localStorage.removeItem(&#x27;token&#x27;);
+  localStorage.removeItem(&#x27;exp&#x27;);
+  location.href = &#x27;login&#x27;; <i>// 相對路徑：/admin → /login</i>
+}
+
+const pages = {
+  <i>// 已登入（token 有效）就直接進後台，否則留在登入表單</i>
+  async login() {
+    $(&#x27;form&#x27;).onsubmit = async e =&gt; {
+      e.preventDefault();
+      const r = await call(&#x27;login&#x27;, { username: $(&#x27;username&#x27;).value, password: $(&#x27;password&#x27;).value });
+      if (!r.token) return alert(r.msg);
+      localStorage.token = r.token;
+      localStorage.exp = r.exp;
+      location.href = &#x27;admin&#x27;;
+    };
+    if (localStorage.token &amp;&amp; Array.isArray(await call(&#x27;list&#x27;))) location.href = &#x27;admin&#x27;;
+  },
+
+  admin() {
+    <i>// 沒 token 或已過期就踢走；否則用 setTimeout 在 exp 到期那一刻自動登出（沒有登出鈕）</i>
+    const left = localStorage.exp * 1000 - Date.now();
+    if (!localStorage.token || !(left &gt; 0)) return logout();
+    setTimeout(logout, left);
+
+    let items = [], editId = null;
+    const buttons = () =&gt; $(&#x27;btns&#x27;).innerHTML = editId
+      ? &#x27;&lt;button class=&quot;btn&quot; id=&quot;save&quot;&gt;更新&lt;/button&gt;&lt;button class=&quot;btn&quot; id=&quot;cancel&quot;&gt;取消&lt;/button&gt;&#x27;
+      : &#x27;&lt;button class=&quot;btn&quot; id=&quot;save&quot;&gt;新增&lt;/button&gt;&#x27;;
+
+    async function load() {
+      items = (await call(&#x27;list&#x27;)) || [];
+      $(&#x27;list&#x27;).innerHTML = items.map(i =&gt; `&lt;div class=&quot;item&quot;&gt;&lt;b&gt;${esc(i.question)}&lt;/b&gt;&lt;div&gt;${esc(i.answer)}&lt;/div&gt;
+        &lt;div class=&quot;row&quot;&gt;&lt;button class=&quot;btn&quot; data-edit=&quot;${i.id}&quot;&gt;編輯&lt;/button&gt;&lt;button class=&quot;btn&quot; data-del=&quot;${i.id}&quot;&gt;刪除&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+    }
+    function reset() { editId = null; $(&#x27;question&#x27;).value = $(&#x27;answer&#x27;).value = &#x27;&#x27;; buttons(); }
+
+    $(&#x27;btns&#x27;).onclick = async e =&gt; {
+      if (e.target.id === &#x27;cancel&#x27;) return reset();
+      if (e.target.id !== &#x27;save&#x27;) return;
+      const r = await call(editId ? &#x27;update&#x27; : &#x27;add&#x27;, { id: editId, question: $(&#x27;question&#x27;).value, answer: $(&#x27;answer&#x27;).value });
+      if (r.msg) return alert(r.msg);
+      reset();
+      load();
+    };
+    $(&#x27;list&#x27;).onclick = async e =&gt; {
+      const { edit, del } = e.target.dataset;
+      if (edit) { <i>// 編輯：把這筆帶回最上面兩個欄位，按鈕換成 更新 / 取消</i>
+        const i = items.find(i =&gt; i.id == edit);
+        $(&#x27;question&#x27;).value = i.question; $(&#x27;answer&#x27;).value = i.answer;
+        editId = i.id; buttons();
+      }
+      if (del) {
+        await call(&#x27;delete&#x27;, { id: del });
+        if (editId == del) reset();
+        load();
+      }
+    };
+    buttons();
+    load();
+  },
+
+  chat() {
+    const say = (text, who) =&gt; {
+      const d = document.createElement(&#x27;div&#x27;);
+      d.className = &#x27;msg &#x27; + who;
+      d.textContent = text; <i>// textContent：使用者輸入不會被當成 HTML</i>
+      $(&#x27;box&#x27;).append(d);
+      $(&#x27;box&#x27;).scrollTop = $(&#x27;box&#x27;).scrollHeight; <i>// 自動捲到最底</i>
+    };
+    say(&#x27;您好，請問有需要什麼服務嗎？&#x27;, &#x27;bot&#x27;);
+    $(&#x27;form&#x27;).onsubmit = async e =&gt; {
+      e.preventDefault();
+      const q = $(&#x27;q&#x27;).value.trim();
+      if (!q) return;
+      say(q, &#x27;user&#x27;);
+      $(&#x27;q&#x27;).value = &#x27;&#x27;;
+      say((await call(&#x27;ask&#x27;, { q })).answer, &#x27;bot&#x27;);
+    };
+  },
+};
+pages[document.body.dataset.page]();</pre><div class="file">2024/final-p3/team021.css</div><pre>* { box-sizing: border-box; }
+body { margin: 0; padding: 16px; font-family: &quot;Microsoft JhengHei&quot;, sans-serif; background: #fff; }
+.panel { max-width: 600px; margin: 0 auto; padding: 20px; background: #f7f7f7; border-radius: 12px; box-shadow: 0 2px 10px #0002; }
+.narrow { max-width: 420px; margin-top: 8vh; }
+h1 { margin: 0 0 16px; text-align: center; font-size: 24px; color: #333; }
+label { display: block; margin: 12px 0 6px; text-align: center; color: #555; }
+
+input { display: block; width: 100%; margin-bottom: 10px; padding: 10px 14px; border: 1px solid #ccc; border-radius: 20px; font-size: 15px; }
+.btn { flex: 1; padding: 10px 18px; border: 0; border-radius: 20px; background: #0d6efd; color: #fff; font-size: 15px; cursor: pointer; }
+.narrow .btn { width: 100%; margin-top: 14px; }
+.row { display: flex; gap: 10px; }
+
+<i>/* 管理頁：每筆問答是一張圓角卡片，文字置中、按鈕靠右 */</i>
+.item { margin-top: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; text-align: center; }
+.item .row { justify-content: flex-end; margin-top: 8px; }
+.item .btn { flex: none; }
+
+<i>/* 對話頁 */</i>
+.chat { height: 400px; margin-bottom: 12px; padding: 12px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px; background: #fff; }
+.msg { width: fit-content; max-width: 80%; margin-bottom: 10px; padding: 6px 12px; border-radius: 14px; word-break: break-word; }
+.bot { background: #f8d7da; }
+.user { margin-left: auto; background: #cfe8df; }
+#form.row input { margin: 0; border-radius: 6px; }
+#form.row .btn { flex: none; border-radius: 6px; }</pre><div class="file">2024/final-p3/api.php</div><pre>&lt;?php
+<i>// 聊天問答 API：api.php?a=動作。ask 公開；login 換 JWT；其餘動作都要帶 Authorization: Bearer &lt;token&gt;</i>
+header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
+$pdo = new PDO(&#x27;mysql:host=127.0.0.1;dbname=chat;charset=utf8mb4&#x27;, &#x27;root&#x27;, &#x27;&#x27;, [
+  PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE =&gt; PDO::FETCH_ASSOC,
+]);
+<i>// 簽章金鑰：第一次執行時隨機產生並存檔；不能寫死在程式裡，否則看得到原始碼的人都能偽造 token</i>
+if (!is_file(__DIR__ . &#x27;/secret.txt&#x27;)) file_put_contents(__DIR__ . &#x27;/secret.txt&#x27;, bin2hex(random_bytes(32)));
+define(&#x27;SECRET&#x27;, file_get_contents(__DIR__ . &#x27;/secret.txt&#x27;));
+
+function out($data, $code = 200) { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
+function q($sql, $args = []) { global $pdo; $s = $pdo-&gt;prepare($sql); $s-&gt;execute($args); return $s; }
+
+<i>// ---- 手寫 JWT（HS256）：base64url(header).base64url(payload).簽章 ----</i>
+function b64($s) { return rtrim(strtr(base64_encode($s), &#x27;+/&#x27;, &#x27;-_&#x27;), &#x27;=&#x27;); }
+function sign($data) { return b64(hash_hmac(&#x27;sha256&#x27;, $data, SECRET, true)); }
+function makeJwt($user, $exp) {
+  $body = b64(&#x27;{&quot;alg&quot;:&quot;HS256&quot;,&quot;typ&quot;:&quot;JWT&quot;}&#x27;) . &#x27;.&#x27; . b64(json_encode([&#x27;sub&#x27; =&gt; $user, &#x27;exp&#x27; =&gt; $exp]));
+  return $body . &#x27;.&#x27; . sign($body);
+}
+<i>// 驗簽章 + 檢查 exp；失敗一律回 401</i>
+function requireJwt() {
+  $t = explode(&#x27;.&#x27;, preg_replace(&#x27;/^Bearer /&#x27;, &#x27;&#x27;, $_SERVER[&#x27;HTTP_AUTHORIZATION&#x27;] ?? &#x27;&#x27;));
+  if (count($t) !== 3 || !hash_equals(sign(&quot;$t[0].$t[1]&quot;), $t[2])) out([&#x27;msg&#x27; =&gt; &#x27;請先登入&#x27;], 401);
+  $p = json_decode(base64_decode(strtr($t[1], &#x27;-_&#x27;, &#x27;+/&#x27;)), true);
+  if (($p[&#x27;exp&#x27;] ?? 0) &lt; time()) out([&#x27;msg&#x27; =&gt; &#x27;登入已過期&#x27;], 401);
+}
+
+$a = $_GET[&#x27;a&#x27;] ?? &#x27;&#x27;;
+$p = $_POST;
+
+if ($a === &#x27;login&#x27;) {
+  $u = q(&#x27;SELECT * FROM admins WHERE username=?&#x27;, [$p[&#x27;username&#x27;] ?? &#x27;&#x27;])-&gt;fetch();
+  if (!$u || !password_verify($p[&#x27;password&#x27;] ?? &#x27;&#x27;, $u[&#x27;password&#x27;])) out([&#x27;msg&#x27; =&gt; &#x27;使用者或密碼錯誤！&#x27;], 401);
+  $exp = time() + 600; <i>// 10 分鐘後過期</i>
+  out([&#x27;token&#x27; =&gt; makeJwt($u[&#x27;username&#x27;], $exp), &#x27;exp&#x27; =&gt; $exp]);
+}
+
+if ($a === &#x27;ask&#x27;) { <i>// 對話頁：不需登入。去掉前後空白與標點後，用 LIKE 找最短的相符問題</i>
+  $k = trim(preg_replace(&#x27;/^[\s?？!！。.,，]+|[\s?？!！。.,，]+$/u&#x27;, &#x27;&#x27;, $p[&#x27;q&#x27;] ?? &#x27;&#x27;));
+  $r = $k === &#x27;&#x27; ? false : q(&quot;SELECT answer FROM faqs WHERE question LIKE ? ORDER BY CHAR_LENGTH(question) LIMIT 1&quot;,
+    [&#x27;%&#x27; . addcslashes($k, &#x27;%_\\&#x27;) . &#x27;%&#x27;])-&gt;fetchColumn();
+  out([&#x27;answer&#x27; =&gt; $r ?: &#x27;很抱歉，我無法回答這個問題。&#x27;]);
+}
+
+requireJwt(); <i>// 以下是管理 API，沒有有效 token 就到此為止</i>
+
+$q = trim($p[&#x27;question&#x27;] ?? &#x27;&#x27;); $ans = trim($p[&#x27;answer&#x27;] ?? &#x27;&#x27;);
+if (in_array($a, [&#x27;add&#x27;, &#x27;update&#x27;]) &amp;&amp; ($q === &#x27;&#x27; || $ans === &#x27;&#x27;)) out([&#x27;msg&#x27; =&gt; &#x27;問題與答案都要填&#x27;], 400);
+
+switch ($a) {
+  case &#x27;list&#x27;:   out(q(&#x27;SELECT * FROM faqs ORDER BY id&#x27;)-&gt;fetchAll());
+  case &#x27;add&#x27;:    q(&#x27;INSERT INTO faqs (question, answer) VALUES (?, ?)&#x27;, [$q, $ans]); out([&#x27;ok&#x27; =&gt; true]);
+  case &#x27;update&#x27;: q(&#x27;UPDATE faqs SET question=?, answer=? WHERE id=?&#x27;, [$q, $ans, $p[&#x27;id&#x27;] ?? 0]); out([&#x27;ok&#x27; =&gt; true]);
+  case &#x27;delete&#x27;: q(&#x27;DELETE FROM faqs WHERE id=?&#x27;, [$p[&#x27;id&#x27;] ?? 0]); out([&#x27;ok&#x27; =&gt; true]);
+}
+out([&#x27;msg&#x27; =&gt; &#x27;未知動作&#x27;], 400);</pre><div class="file">2024/final-p3/team021.sql</div><pre><i>-- 聊天對話框：chat 資料庫，admins（管理員）與 faqs（問答集）</i>
+SET NAMES utf8mb4;
+CREATE DATABASE IF NOT EXISTS chat DEFAULT CHARSET utf8mb4;
+USE chat;
+DROP TABLE IF EXISTS admins, faqs;
+
+<i>-- 密碼存 password_hash() 的雜湊（這串就是 &quot;password&quot;），登入時用 password_verify() 比對</i>
+CREATE TABLE admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+INSERT INTO admins (username, password) VALUES (&#x27;admin&#x27;, &#x27;$2y$10$XPZoV2dDgRzsbdDWTZYBF.h4wVYxw/ToB4AkCuHzEDKLaEsXEskjW&#x27;);
+
+CREATE TABLE faqs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  question VARCHAR(255) NOT NULL,
+  answer VARCHAR(500) NOT NULL
+);
+INSERT INTO faqs (question, answer) VALUES
+(&#x27;請問你們的營業時間？&#x27;, &#x27;我們的營業時間是每天24小時營業。&#x27;),
+(&#x27;你們的地址在哪裡？&#x27;, &#x27;我們的地址是台北市中山區南京東路九段9999號。&#x27;),
+(&#x27;請問要怎麼付款？&#x27;, &#x27;我們提供宅配服務，您可以在店內或者線上下單。&#x27;),
+(&#x27;你們的商品有哪些？&#x27;, &#x27;我們提供多種商品，包括食品、飲料、日用品、以及即時便當。&#x27;);</pre><div class="file">2024/final-p3/.htaccess</div><pre># XAMPP（Apache）：把 /、/login、/admin 對應到實際的 html；需啟用 mod_rewrite
+# 不接受 /login/：多一個斜線時相對路徑的 css、js 會找錯資料夾
+RewriteEngine On
+RewriteRule ^$ team021.html [L]
+RewriteRule ^login$ login.html [L]
+RewriteRule ^admin$ admin.html [L]
+
+# 有些 Apache 設定不會把 Authorization 標頭傳給 PHP，這行補上
+SetEnvIf Authorization &quot;(.+)&quot; HTTP_AUTHORIZATION=$1</pre><div class="file">2024/final-p3/router.php</div><pre>&lt;?php
+<i>// PHP 內建伺服器用：php -S 127.0.0.1:8000 router.php（效果等同 .htaccess）</i>
+$pages = [&#x27;/&#x27; =&gt; &#x27;team021.html&#x27;, &#x27;/login&#x27; =&gt; &#x27;login.html&#x27;, &#x27;/admin&#x27; =&gt; &#x27;admin.html&#x27;];
+$path = parse_url($_SERVER[&#x27;REQUEST_URI&#x27;], PHP_URL_PATH);
+if (!isset($pages[$path])) return false; <i>// 其他網址（api.php、css、js）照常由伺服器處理</i>
+readfile(__DIR__ . &#x27;/&#x27; . $pages[$path]);</pre></section><section class="pre"><h2>2025 初賽 P1｜圖形化河內塔（拖放）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>3~9 個圓盤，拖放移動；顯示最少步數 2ⁿ−1 與目前步數</li><li>只能拿最上面的圓盤，大的不能疊在小的上；全部移到右柱即過關</li></ul></div><div class="idea"><b>解題思路</b><ul><li>柱子用 flex-direction:column-reverse → appendChild 就是疊到最上面</li><li>最上面那塊＝lastElementChild，DOM 本身就是狀態，不用另存陣列</li><li>dragover 一定要 preventDefault，否則 drop 不會觸發</li></ul></div></div><div class="file">2025/p1-ans/team111.html</div><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;zh-Hant&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -573,7 +1638,7 @@ pegs.forEach(peg =&gt; {
   });
 });
 
-start();</pre></section><section><h2>2025 P2｜詐騙關鍵字週報（CSV + Chart.js + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>讀 weekly_kw.csv（week, keyword, count, …），可選全部或單一週期</li><li>長條圖 / 趨勢圖切換，顯示 TOP 10 與統計卡，下載 CSV 與圖表 PNG</li><li>※ 原題 PDF 不在資料夾中，需求依先前作答與筆記整理</li></ul></div><div class="idea"><b>解題思路</b><ul><li>PHP 只負責把 CSV 轉 JSON；統計全部在前端做</li><li>加總用物件當字典 total[kw] += count，再 Object.entries 排序取前 10</li><li>換圖前 chart.destroy()；PNG 用 chart.toBase64Image()</li><li>CSV 開頭加 \uFEFF（BOM），Excel 開中文才不會亂碼</li></ul></div></div><div class="file">2025/p2-ans/team111.php</div><pre>&lt;?php
+start();</pre></section><section class="pre"><h2>2025 初賽 P2｜詐騙關鍵字週報（CSV + Chart.js + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>讀 weekly_kw.csv（week, keyword, count, …），可選全部或單一週期</li><li>長條圖 / 趨勢圖切換，顯示 TOP 10 與統計卡，下載 CSV 與圖表 PNG</li><li>※ 原題 PDF 不在資料夾中，需求依先前作答與筆記整理</li></ul></div><div class="idea"><b>解題思路</b><ul><li>PHP 只負責把 CSV 轉 JSON；統計全部在前端做</li><li>加總用物件當字典 total[kw] += count，再 Object.entries 排序取前 10</li><li>換圖前 chart.destroy()；PNG 用 chart.toBase64Image()</li><li>CSV 開頭加 \uFEFF（BOM），Excel 開中文才不會亂碼</li></ul></div></div><div class="file">2025/p2-ans/team111.php</div><pre>&lt;?php
 <i>// 讀 CSV → 轉成 JSON 陣列給前端：[[week, keyword, count, avg_risk, trend], ...]</i>
 header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);
 $lines = file(&#x27;weekly_kw.csv&#x27;, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -671,7 +1736,7 @@ function downloadPng() { save(chart.toBase64Image(), &#x27;chart.png&#x27;); }</
 .cards b { display: block; font-size: 28px; color: #1a73e8; }
 canvas { background: #fff; }
 table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 12px; }
-th, td { border: 1px solid #ddd; padding: 6px; }</pre></section><section><h2>2026 P1｜叫號與候位系統（Node.js + Express + SQLite）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>前台：選服務（一般 G / 開戶 A / 諮詢 C）取號，顯示號碼、目前叫號、等待清單，5 秒內自動更新</li><li>櫃台：admin/password123 登入，下一位、完成服務、歷史紀錄、登出銷毀 session</li><li>單一 FIFO 佇列；同時最多 1 筆服務中；違規回 409；服務非白名單回 400</li><li>號碼 前綴+3 位數，超過 999 變 A1000，存 DB 不重置；重啟後完整還原</li><li>執行：把 P1_Node離線套件.zip 的 node_modules 放進 p1-ans，npm start</li></ul></div><div class="idea"><b>解題思路</b><ul><li>用 Node 22 內建 node:sqlite（同步 API），不用 callback，也不會有併發交錯</li><li>計數器一行：INSERT … ON CONFLICT DO UPDATE SET n=n+1 RETURNING n</li><li>時間存毫秒數字排序最準，輸出時才格式化成 YYYY/M/D HH:mm:ss</li><li>session 自己做：Set 存 sid，登出 delete → 舊 Cookie 重放也是 401</li><li>權限一定在伺服器檢查（auth middleware），前端停用按鈕只是輔助</li><li>前端 element id 別取 history、login 這種和全域變數撞名的名字</li></ul></div></div><div class="file">2026/p1-ans/app.js</div><pre><i>// 叫號與候位系統：Express + SQLite（Node 22 內建 node:sqlite，同步 API 最好寫）</i>
+th, td { border: 1px solid #ddd; padding: 6px; }</pre></section><section class="pre"><h2>2026 初賽 P1｜叫號與候位系統（Node.js + Express + SQLite）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>前台：選服務（一般 G / 開戶 A / 諮詢 C）取號，顯示號碼、目前叫號、等待清單，5 秒內自動更新</li><li>櫃台：admin/password123 登入，下一位、完成服務、歷史紀錄、登出銷毀 session</li><li>單一 FIFO 佇列；同時最多 1 筆服務中；違規回 409；服務非白名單回 400</li><li>號碼 前綴+3 位數，超過 999 變 A1000，存 DB 不重置；重啟後完整還原</li><li>執行：把 P1_Node離線套件.zip 的 node_modules 放進 p1-ans，npm start</li></ul></div><div class="idea"><b>解題思路</b><ul><li>用 Node 22 內建 node:sqlite（同步 API），不用 callback，也不會有併發交錯</li><li>計數器一行：INSERT … ON CONFLICT DO UPDATE SET n=n+1 RETURNING n</li><li>時間存毫秒數字排序最準，輸出時才格式化成 YYYY/M/D HH:mm:ss</li><li>session 自己做：Set 存 sid，登出 delete → 舊 Cookie 重放也是 401</li><li>權限一定在伺服器檢查（auth middleware），前端停用按鈕只是輔助</li><li>前端 element id 別取 history、login 這種和全域變數撞名的名字</li></ul></div></div><div class="file">2026/p1-ans/app.js</div><pre><i>// 叫號與候位系統：Express + SQLite（Node 22 內建 node:sqlite，同步 API 最好寫）</i>
 const express = require(&#x27;express&#x27;);
 const crypto = require(&#x27;crypto&#x27;);
 const { DatabaseSync } = require(&#x27;node:sqlite&#x27;);
@@ -904,7 +1969,7 @@ app.listen(3000, () =&gt; console.log(&#x27;http://localhost:3000&#x27;));</pre>
 function rows(list, keys, cols, empty) {
   if (!list.length) return `&lt;tr&gt;&lt;td colspan=&quot;${cols}&quot; class=&quot;text-muted&quot;&gt;${empty}&lt;/td&gt;&lt;/tr&gt;`;
   return list.map(t =&gt; &#x27;&lt;tr&gt;&#x27; + keys.map(k =&gt; `&lt;td&gt;${t[k] ?? &#x27;&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;) + &#x27;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;);
-}</pre><div class="file">2026/p1-ans/系統設計文件.md</div><div class="doc"><b>叫號與候位系統：系統設計文件（team123）</b><div>啟動：<code>npm start</code>，開啟 http://localhost:3000 。需要 Node 22.13 以上（使用內建 <code>node:sqlite</code>，啟動時的 ExperimentalWarning 可忽略）與 express。</div><div>繳交前：把 <code>P1_Node離線套件.zip</code> 裡的 <code>node_modules</code> 放進本資料夾一起壓縮，評審才能直接 <code>npm start</code>。</div><div>櫃台帳密：admin / password123</div><b>API 一覽表</b><table class="md"><tr><th>方法</th><th>路徑</th><th>需登入</th><th>主要回應</th></tr><tr><td>GET</td><td>/api/state</td><td>否</td><td>200 <code>{ current, waiting[], history[] }</code></td></tr><tr><td>POST</td><td>/api/tickets</td><td>否</td><td>201 <code>{ number, service, createdAt }</code>；service 非 G/A/C 或中文名稱 → 400</td></tr><tr><td>POST</td><td>/api/login</td><td>否</td><td>200 + Set-Cookie(sid)；失敗 401</td></tr><tr><td>POST</td><td>/api/logout</td><td>是</td><td>204，伺服器端刪除 session；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/next</td><td>是</td><td>200 <code>{ current }</code>；已有服務中或無等待者 → 409；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/complete</td><td>是</td><td>200；無服務中號碼 → 409；未登入 401</td></tr><tr><td>GET</td><td>/api/admin/history</td><td>是</td><td>200 <code>[ … ]</code>（完成時間新→舊）；未登入 401</td></tr></table><b>資料表結構（queue.db）</b><table class="md"><tr><th>資料表</th><th>欄位</th><th>型別</th><th>說明</th></tr><tr><td>counters</td><td>prefix</td><td>TEXT PK</td><td>G / A / C</td></tr><tr><td></td><td>n</td><td>INTEGER</td><td>該類別目前最後號碼，不重置</td></tr><tr><td>tickets</td><td>id</td><td>INTEGER PK AUTOINCREMENT</td><td>取號先後</td></tr><tr><td></td><td>number</td><td>TEXT UNIQUE</td><td>例 A001、C1000</td></tr><tr><td></td><td>service</td><td>TEXT</td><td>G / A / C</td></tr><tr><td></td><td>status</td><td>TEXT</td><td>waiting → serving → completed</td></tr><tr><td></td><td>created_at / called_at / finished_at</td><td>INTEGER</td><td>毫秒時間戳，顯示時轉 YYYY/M/D HH:mm:ss</td></tr></table><div>索引：<code>idx_status (status, created_at)</code>，加速「等待中且最早」的查詢。</div></div></section><section><h2>2026 P2｜GamersHub 玩家組隊與行事曆（Bootstrap 5 + jQuery + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>左「控制面板」右「大廳/行事曆」，&lt;992px 上下堆疊；SPA 不重整</li><li>未登入直接開大廳或 API → 跳回登入；玩家 A、B 資料各自隔離</li><li>新增喜愛遊戲（不存在就建立）→ 標籤、發布選單、快速過濾同步多一項；移除後該遊戲公告消失</li><li>招募中 → 達下限「已成局招募」→ 達上限淡出消失，並出現在每位成員的行事曆</li><li>測試帳號 faker / caps / tenz / s1mple，密碼 1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>col-lg-4 / col-lg-8：lg 斷點剛好是 992px</li><li>所有查詢都 WHERE user_id = session 的 uid → 天生資料隔離</li><li>一個 load() 抓全部資料、重畫所有區塊 → 三個選單自然同步</li><li>狀態用一句 UPDATE … CASE 依人數重算；join 回傳 full 時先 fadeOut 再重畫</li><li>未登入：AJAX 回 401；瀏覽器直接開回 302（401 不會跟著 Location 跳）</li><li>Font Awesome 的 CSS 寫 ../webfonts/，所以 all.min.css 要放在 css/ 子資料夾</li></ul></div></div><div class="file">2026/p2-ans/api.php</div><pre>&lt;?php
+}</pre><div class="file">2026/p1-ans/系統設計文件.md</div><div class="doc"><b>叫號與候位系統：系統設計文件（team123）</b><div>啟動：<code>npm start</code>，開啟 http://localhost:3000 。需要 Node 22.13 以上（使用內建 <code>node:sqlite</code>，啟動時的 ExperimentalWarning 可忽略）與 express。</div><div>繳交前：把 <code>P1_Node離線套件.zip</code> 裡的 <code>node_modules</code> 放進本資料夾一起壓縮，評審才能直接 <code>npm start</code>。</div><div>櫃台帳密：admin / password123</div><b>API 一覽表</b><table class="md"><tr><th>方法</th><th>路徑</th><th>需登入</th><th>主要回應</th></tr><tr><td>GET</td><td>/api/state</td><td>否</td><td>200 <code>{ current, waiting[], history[] }</code></td></tr><tr><td>POST</td><td>/api/tickets</td><td>否</td><td>201 <code>{ number, service, createdAt }</code>；service 非 G/A/C 或中文名稱 → 400</td></tr><tr><td>POST</td><td>/api/login</td><td>否</td><td>200 + Set-Cookie(sid)；失敗 401</td></tr><tr><td>POST</td><td>/api/logout</td><td>是</td><td>204，伺服器端刪除 session；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/next</td><td>是</td><td>200 <code>{ current }</code>；已有服務中或無等待者 → 409；未登入 401</td></tr><tr><td>POST</td><td>/api/admin/complete</td><td>是</td><td>200；無服務中號碼 → 409；未登入 401</td></tr><tr><td>GET</td><td>/api/admin/history</td><td>是</td><td>200 <code>[ … ]</code>（完成時間新→舊）；未登入 401</td></tr></table><b>資料表結構（queue.db）</b><table class="md"><tr><th>資料表</th><th>欄位</th><th>型別</th><th>說明</th></tr><tr><td>counters</td><td>prefix</td><td>TEXT PK</td><td>G / A / C</td></tr><tr><td></td><td>n</td><td>INTEGER</td><td>該類別目前最後號碼，不重置</td></tr><tr><td>tickets</td><td>id</td><td>INTEGER PK AUTOINCREMENT</td><td>取號先後</td></tr><tr><td></td><td>number</td><td>TEXT UNIQUE</td><td>例 A001、C1000</td></tr><tr><td></td><td>service</td><td>TEXT</td><td>G / A / C</td></tr><tr><td></td><td>status</td><td>TEXT</td><td>waiting → serving → completed</td></tr><tr><td></td><td>created_at / called_at / finished_at</td><td>INTEGER</td><td>毫秒時間戳，顯示時轉 YYYY/M/D HH:mm:ss</td></tr></table><div>索引：<code>idx_status (status, created_at)</code>，加速「等待中且最早」的查詢。</div></div></section><section class="pre"><h2>2026 初賽 P2｜GamersHub 玩家組隊與行事曆（Bootstrap 5 + jQuery + PHP）</h2><div class="head"><div class="spec"><b>題目重點</b><ul><li>左「控制面板」右「大廳/行事曆」，&lt;992px 上下堆疊；SPA 不重整</li><li>未登入直接開大廳或 API → 跳回登入；玩家 A、B 資料各自隔離</li><li>新增喜愛遊戲（不存在就建立）→ 標籤、發布選單、快速過濾同步多一項；移除後該遊戲公告消失</li><li>招募中 → 達下限「已成局招募」→ 達上限淡出消失，並出現在每位成員的行事曆</li><li>測試帳號 faker / caps / tenz / s1mple，密碼 1234</li></ul></div><div class="idea"><b>解題思路</b><ul><li>col-lg-4 / col-lg-8：lg 斷點剛好是 992px</li><li>所有查詢都 WHERE user_id = session 的 uid → 天生資料隔離</li><li>一個 load() 抓全部資料、重畫所有區塊 → 三個選單自然同步</li><li>狀態用一句 UPDATE … CASE 依人數重算；join 回傳 full 時先 fadeOut 再重畫</li><li>未登入：AJAX 回 401；瀏覽器直接開回 302（401 不會跟著 Location 跳）</li><li>Font Awesome 的 CSS 寫 ../webfonts/，所以 all.min.css 要放在 css/ 子資料夾</li></ul></div></div><div class="file">2026/p2-ans/api.php</div><pre>&lt;?php
 <i>// GamerHub API：api.php?a=動作</i>
 session_start();
 header(&#x27;Content-Type: application/json; charset=utf-8&#x27;);

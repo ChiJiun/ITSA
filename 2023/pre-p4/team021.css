@@ -1,0 +1,15 @@
+body { font-family: sans-serif; }
+#msg { text-align: center; font-size: 20px; }
+#cal {
+  width: 80vw;             /* vw＝視窗寬度的 1%：任何螢幕都佔可視寬度 80% */
+  box-sizing: border-box;  /* 邊框算在 80vw 裡面 */
+  margin: 0 auto;          /* 水平置中 */
+  border: 5px solid blue;
+}
+.head { display: flex; justify-content: space-between; padding: 8px; font-weight: bold; }
+.head span { cursor: pointer; user-select: none; padding: 0 12px; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.grid div { padding: 10px 0; }
+.day { cursor: pointer; border: 1px solid #ddd; }
+.day:hover { background: #eef; }
+.day.sel { background: gray; color: #fff; }

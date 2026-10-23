@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>ABC俱樂部會員申請</title>
+  <link rel="stylesheet" href="team021.css">
+  <script src="jquery-3.7.1.min.js"></script>
+  <script src="team021.js" defer></script>
+</head>
+<body>
+<form id="f" class="box" novalidate>
+  <h2>ABC俱樂部會員申請</h2>
+
+  <div class="row">
+    <label>姓名 <input id="name" class="chk" placeholder="請輸入姓名"></label>
+  </div>
+  <div class="row">
+    <span>性別
+      <!-- name 相同 = 同一群組，只能選一個 -->
+      <label><input type="radio" name="sex">男性</label>
+      <label><input type="radio" name="sex">女性</label>
+      <label><input type="radio" name="sex">不明</label>
+    </span>
+    <label>出生年月日 <input id="birth" class="chk" type="date"></label>
+    <label>聯絡電話 <input id="tel" class="chk" placeholder="(xx)1234-5679"></label>
+  </div>
+
+  <div class="row"><label>戶籍地址<input id="addr1" class="chk wide" placeholder="請輸入戶籍地址"></label></div>
+  <div class="row">
+    <label>通訊地址 <input type="checkbox" id="same">同戶籍地址
+      <input id="addr2" class="chk wide" placeholder="請輸入通訊地址"></label>
+  </div>
+
+  <div class="row"><label>電子郵件帳號<input id="mail" class="chk wide" placeholder="請輸入電子郵件帳號"></label></div>
+  <div class="row"><label>再次輸入電子郵件帳號<input id="mail2" class="chk wide" placeholder="請再次輸入電子郵件帳號"></label></div>
+
+  <div class="row">
+    <label>密碼 <input id="pw" class="chk" type="password" placeholder="請輸入密碼"></label>
+    <span class="eye" data-for="pw">👁</span>
+    <small>(請輸入8位以上密碼，包含不連續之大小寫字母、符號及數字)</small>
+  </div>
+  <div class="row">密碼強度 <b id="strength"></b></div>
+  <div class="row">
+    <label>密碼確認 <input id="pw2" class="chk" type="password" placeholder="再次輸入密碼"></label>
+    <span class="eye" data-for="pw2">👁</span>
+  </div>
+
+  <button type="submit">確認</button>
+</form>
+</body>
+</html>

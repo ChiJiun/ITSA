@@ -1,0 +1,14 @@
+body { font-family: sans-serif; margin: 0; padding: 20px; }
+#btns { text-align: center; margin: 30px 0; }
+button { border: 0; border-radius: 20px; padding: 6px 14px; margin: 0 4px; background: #ddd; cursor: pointer; }
+button.on { background: #1fa89a; color: #fff; }
+
+/* flex-wrap：放不下就自動換行，不需要媒體查詢就有 RWD；
+   justify-content:center 讓最後一列落單的圖片置中 */
+#gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1400px; margin: auto; }
+#gallery img {
+  width: 300px; max-width: 100%;       /* 視窗比 300px 窄時跟著縮 */
+  box-shadow: 8px 8px 12px rgba(0, 0, 0, .35);
+  transition: transform .3s;
+}
+#gallery img:hover { transform: scale(1.1); box-shadow: none; }
